@@ -1,11 +1,8 @@
 import React from "react";
 import { useState, useImperativeHandle, forwardRef } from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions} from "@mui/material";
 import { Button } from "@mui/material"
-import { Box, Fab } from "@mui/material";
-import Avatar from '@mui/material/Avatar';
-import { ListItem, ListItemAvatar, ListItemText, ListItemIcon } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import UserRow from "./UserRow";
 
 const API = [
     {
@@ -13,7 +10,20 @@ const API = [
         "gmail": "lechithinh.developer@gmail.com",
         "sim": 78,
         "MSSV": 21522634,
-    }
+    },
+    {
+        "name": "Lê Chí Thịnh 2",
+        "gmail": "lechithinh.developer@gmail.com",
+        "sim": 78,
+        "MSSV": 21522244,
+    },
+    {
+        "name": "Lê Chí Thịnh 3",
+        "gmail": "lechithinh.developer@gmail.com",
+        "sim": 78,
+        "MSSV": 21523311,
+    },
+
 ]
 const Modal = (props, ref) => {
     const [showModal, setshowModal] = useState(false);
@@ -27,34 +37,14 @@ const Modal = (props, ref) => {
         <>
             <Dialog open={showModal} onClose={() => { setshowModal(!showModal) }}>
                 <DialogTitle>
-                    Bạn có phải là
+                    Bạn có phải là?
                 </DialogTitle>
                 <DialogContent> 
 
-                    {/* DISPLAY PREDICTION */}
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar
-                                src=""
-                                sx={{ width: 56, height: 56 }}
-                            />
-                        </ListItemAvatar>
-
-                        <ListItemText
-                            primary={API[0].name}
-                            secondary={API[0].MSSV}
-                            sx={{ margin: "6px 15px 6px 15px" }}
-                        />
-
-                        <ListItemIcon>
-                            <Box sx={{ m: 1, position: "relative" }}>
-                                <Fab>
-                                    <EditIcon />
-                                </Fab>
-                            </Box>
-                        </ListItemIcon>
-                        
-                    </ListItem>
+                    {/* API to each row */}
+                    {API.map((user, index) => (
+                        <UserRow key={index}  user={user}/>
+                    ))}
 
 
                 </DialogContent>

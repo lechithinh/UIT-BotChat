@@ -20,6 +20,7 @@ import isFiveTipsUp from "./modules/CheckFingersUp";
 
 //Utils
 import DataURLtoFile from "./utils/DataURLtoFile"
+import axios from 'axios';
 
 function App() {
   const webCamRef = useRef(null);
@@ -57,9 +58,27 @@ function App() {
     if (fiveTipsUpRef.current && !inProcessRef.current)
     {
         inProcessRef.current = true; 
-        let file = DataURLtoFile(canvasElement.toDataURL("image/jpeg"), `${"1"}.jpeg`);
+        let file = DataURLtoFile(canvasElement.toDataURL("image/jpeg"), `${1}.jpeg`);
         console.log(file)
+
+        //Call api for modal
+        const formData = new FormData();
+        formData.append("files", file);
+        axios
+          .post(process.env.REACT_APP_RECOGNIZE_URL + "api/recognize", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }).then((res) => {
+            console.log("res:",res)
+          }) 
+
+        // reset 
         modalRef.current.setshowModal(true);
+        setTimeout(() => {
+          inProcessRef.current = false; 
+          modalRef.current.setshowModal(false);
+        }, 10000);
 
     }
 
