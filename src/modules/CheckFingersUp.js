@@ -34,8 +34,6 @@ const isFiveTipsUp = (multiHandLandmarks, width, height) => {
             }
         }
     }
-
-    console.log("Fingers up: ", fingersUp)
     return (fingersUp >= 4);
 }
 

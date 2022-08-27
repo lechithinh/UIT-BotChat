@@ -5,22 +5,28 @@ import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import Webcam from "react-webcam";
 import { Hands, HAND_CONNECTIONS } from "@mediapipe/hands";
 
+
 //React 
 import React from 'react';
 import {useEffect,useRef,useState} from 'react'
+
+
+//Components
+import Modal from './components/Modal';
 
 //Modules
 import isFiveTipsUp from "./modules/CheckFingersUp";
 
 
-//Ultilities
-import DataURLtoFile from "./utilities/DataURLtoFile"
+//Utils
+import DataURLtoFile from "./utils/DataURLtoFile"
 
 function App() {
   const webCamRef = useRef(null);
   const canvasRef = useRef(null);
   const inProcessRef = useRef(false);
   const fiveTipsUpRef = useRef(false);
+  const modalRef = useRef(null);
   const screenSize = useRef({
     width: 0,
     height: 0,
@@ -51,8 +57,10 @@ function App() {
     if (fiveTipsUpRef.current && !inProcessRef.current)
     {
         inProcessRef.current = true; 
-        let file = DataURLtoFile(canvasElement.toDataURL("image/jpeg"), `${1}.jpeg`);
+        let file = DataURLtoFile(canvasElement.toDataURL("image/jpeg"), `${"1"}.jpeg`);
         console.log(file)
+        modalRef.current.setshowModal(true);
+
     }
 
 
@@ -102,6 +110,8 @@ function App() {
     <div className="App">
       <Webcam ref={webCamRef} style={{ visibility: "hidden", position: "absolute" }}/>
       <canvas ref={canvasRef}></canvas>
+
+      {<Modal ref={modalRef} />}
     </div>
   );
 }
