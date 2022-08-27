@@ -3,6 +3,7 @@ import { useState, useImperativeHandle, forwardRef } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions} from "@mui/material";
 import { Button } from "@mui/material"
 import UserRow from "./UserRow";
+import Schedule from "./Schedule";
 
 const API = [
     {
@@ -25,6 +26,19 @@ const API = [
     },
 
 ]
+
+const Subject = [
+    {
+        "subject": "Lập trình hướng đối tượng",
+        "time": "13h30",
+        "room": "B201",
+    },
+    {
+        "subject": "Cấu trúc dữ liệu và giải thuật",
+        "time": "8h00",
+        "room": "C301",
+    },
+]
 const Modal = (props, ref) => {
     const [showModal, setshowModal] = useState(false);
 
@@ -39,14 +53,10 @@ const Modal = (props, ref) => {
                 <DialogTitle>
                     Bạn có phải là?
                 </DialogTitle>
-                <DialogContent> 
-
-                    {/* API to each row */}
+                <DialogContent>        
                     {API.map((user, index) => (
                         <UserRow key={index}  user={user}/>
                     ))}
-
-
                 </DialogContent>
                 <DialogActions>
                     <Button variant="outlined">Đăng kí người mới</Button>

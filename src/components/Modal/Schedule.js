@@ -1,19 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, Fab } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 import { ListItem, ListItemAvatar, ListItemText, ListItemIcon } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import TodayIcon from '@mui/icons-material/Today';
-import Schedule from "./Schedule";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-
-const UserRow = (props) => {
-    
-    const [show, setShow] = useState(true);
+const Schedule = (props) => {
     return (
         <>
-            {show ? 
-            (<ListItem>
+            <ListItem>
                 <ListItemAvatar>
                     <Avatar
                         src=""
@@ -22,30 +17,23 @@ const UserRow = (props) => {
                 </ListItemAvatar>
 
                 <ListItemText
-                    primary={props['user'].name}
-                    secondary={props['user'].MSSV}
+                    primary={"Lập trình hướng đối tượng"}
+                    secondary={"13h30"}
                     sx={{ margin: "6px 15px 6px 15px" }}
-                    onClick={()=>{console.log("Show personal data")}}
                 />
 
                 <ListItemIcon>
                     <Box sx={{ m: 1, position: "relative" }}>
                         <Fab sx={{ mr: 2 }} color="info">
-                            <EditIcon onClick={()=>{console.log("Edit infor")}}/>
-                        </Fab>
-
-                        <Fab color="success">
-                            <TodayIcon onClick={() => {setShow(!show)}} />
+                            <CheckCircleIcon onClick={() => {props.setShow(true)}} />
                         </Fab>
                     </Box>
                 </ListItemIcon>
 
-            </ListItem>)
-            : <Schedule setShow={setShow} />
-            }
-            
+            </ListItem>
         </>
     )
-}; 
+};
 
-export default UserRow;
+
+export default Schedule;
