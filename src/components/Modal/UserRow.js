@@ -2,18 +2,24 @@ import React, { useState } from "react";
 import { Box, Fab } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 import { ListItem, ListItemAvatar, ListItemText, ListItemIcon } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import TodayIcon from '@mui/icons-material/Today';
-import Schedule from "./Schedule";
-
+import DaySchedule from "./DaySchedule";
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import WeekSchedule from "./WeekSchedule"
 
 const UserRow = (props) => {
     
-    const [show, setShow] = useState(true);
+    const [showDay, setShowDay] = useState(false);
+    const [showWeek, setShowWeek] = useState(false);
+
+    const [value, setValue] = useState(0);
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
     return (
         <>
-            {show ? 
-            (<ListItem>
+            <ListItem>
                 <ListItemAvatar>
                     <Avatar
                         src= {props["user"].picture}
@@ -24,25 +30,24 @@ const UserRow = (props) => {
                 <ListItemText
                     primary={props['user'].name}
                     secondary={props['user'].MSSV}
-                    sx={{ margin: "6px 15px 6px 15px" }}
-                    onClick={()=>{console.log("thời khóa biểu cả tuần")}}
+                    sx={{ margin: "10px 20px 2px 20px"}}
+                   
                 />
 
                 <ListItemIcon>
-                    <Box sx={{ m: 1, position: "relative" }}>
-                        <Fab sx={{ mr: 2 }} color="info">
-                            <EditIcon onClick={()=>{console.log("Edit infor")}}/>
-                        </Fab>
-
-                        <Fab color="success">
-                            <TodayIcon onClick={() => {setShow(!show)}} />
-                        </Fab>
+                    <Box sx={{ mb: 1, position: "relative" }}>
+                        <Tabs value={value} onChange={handleChange} centered>
+                            <Tab label="Chỉnh sửa" onClick={() => { setShowDay(false); setShowWeek(false)  }} />
+                            <Tab label="TKB Ngày" onClick={() => { setShowDay(!showDay)}}/>
+                            <Tab label="TKB Tuần" onClick={() => { setShowWeek(!showWeek)}} />
+                        </Tabs>                     
                     </Box>
                 </ListItemIcon>
 
-            </ListItem>)
-            : <Schedule setShow={setShow} subject={props["user"]} />
-            }
+            </ListItem>
+
+            {showDay && <DaySchedule subject={props['user']}/>}
+            {showWeek && <WeekSchedule /> }
             
         </>
     )

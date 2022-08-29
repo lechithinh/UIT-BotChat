@@ -1,23 +1,13 @@
 import React from "react";
 import { Box, Fab } from "@mui/material";
-import Avatar from '@mui/material/Avatar';
 import { ListItem, ListItemAvatar, ListItemText, ListItemIcon } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DirectionsIcon from '@mui/icons-material/Directions';
 
-const Schedule = (props) => {
+const DaySchedule = (props) => {
     console.log("props: ", props)
     return (
         <>
             <ListItem>
-                <ListItemAvatar>
-                    <Avatar
-                        src={props["subject"].picture}
-                        sx={{ width: 56, height: 56 }}
-                    />
-                </ListItemAvatar>
-
                 <ListItemText
                     primary={props["subject"].subject1}
                     secondary={props["subject"].time1 + "  |  " + props["subject"].room1}
@@ -31,13 +21,10 @@ const Schedule = (props) => {
                 />}
 
                 <ListItemIcon>
-                    <Box sx={{ m: 1, position: "relative" }}>
-                        <Fab sx={{ mr: 2 }} color="info">
-                            <CheckCircleIcon onClick={() => {props.setShow(true)}} />
-                        </Fab>
-
-                        <Fab sx={{ mr: 2 }} color="info">
-                            <DirectionsIcon onClick={() => { console.log("Chỉ đường")}} />
+                    <Box sx={{ mr: -5, position: "relative" }}>
+                        <Fab sx={{ m: 2 }} color="info" variant="extended">
+                            <DirectionsIcon onClick={() => { console.log("Chỉ đường") }} sx={{ mr: 1 }} />
+                            Chỉ đường
                         </Fab>
 
                         
@@ -50,4 +37,4 @@ const Schedule = (props) => {
 };
 
 
-export default Schedule;
+export default DaySchedule;
