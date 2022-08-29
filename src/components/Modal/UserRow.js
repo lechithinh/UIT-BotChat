@@ -16,7 +16,7 @@ const UserRow = (props) => {
             (<ListItem>
                 <ListItemAvatar>
                     <Avatar
-                        src=""
+                        src= {props["user"].picture}
                         sx={{ width: 56, height: 56 }}
                     />
                 </ListItemAvatar>
@@ -25,7 +25,7 @@ const UserRow = (props) => {
                     primary={props['user'].name}
                     secondary={props['user'].MSSV}
                     sx={{ margin: "6px 15px 6px 15px" }}
-                    onClick={()=>{console.log("Show personal data")}}
+                    onClick={()=>{console.log("thời khóa biểu cả tuần")}}
                 />
 
                 <ListItemIcon>
@@ -41,7 +41,7 @@ const UserRow = (props) => {
                 </ListItemIcon>
 
             </ListItem>)
-            : <Schedule setShow={setShow} />
+            : <Schedule setShow={setShow} subject={props["user"]} />
             }
             
         </>

@@ -62,23 +62,13 @@ function App() {
         console.log(file)
 
         //Call api for modal
-        const formData = new FormData();
-        formData.append("files", file);
-        axios
-          .post(process.env.REACT_APP_RECOGNIZE_URL + "api/recognize", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }).then((res) => {
-            console.log("res:",res)
-          }) 
 
         // reset 
         modalRef.current.setshowModal(true);
         setTimeout(() => {
           inProcessRef.current = false; 
           modalRef.current.setshowModal(false);
-        }, 10000);
+        }, 500000);
 
     }
 
