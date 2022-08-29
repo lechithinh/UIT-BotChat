@@ -7,6 +7,7 @@
     "@emotion/styled": "^11.10.0",
     "@mediapipe/camera_utils": "^0.3.1640029074",
     "@mediapipe/drawing_utils": "^0.3.1620248257",
+    "@mediapipe/face_detection": "^0.4.1646425229",
     "@mediapipe/hands": "^0.4.1646424915",
     "@mui/icons-material": "^5.10.2",
     "@mui/material": "^5.10.2",

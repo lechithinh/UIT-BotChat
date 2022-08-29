@@ -1,33 +1,36 @@
 import './App.css';
 //Libaries
 import * as cam from "@mediapipe/camera_utils";
-import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
+import { drawConnectors, drawLandmarks, drawRectangle } from "@mediapipe/drawing_utils";
 import Webcam from "react-webcam";
 import { Hands, HAND_CONNECTIONS } from "@mediapipe/hands";
-
+import { FaceDetection } from "@mediapipe/face_detection";
 
 //React 
 import React from 'react';
-import {useEffect,useRef,useState} from 'react'
+import {useEffect,useRef,useState, createContext} from 'react'
 
 
 //Components
 import Modal from './components/Modal';
 
 //Modules
-import isFiveTipsUp from "./modules/CheckFingersUp";
+
 
 
 //Utils
 import DataURLtoFile from "./utils/DataURLtoFile"
 import axios from 'axios';
 
+export const context = createContext(null); 
+export const dispatch = createContext(null);
+
 function App() {
   const webCamRef = useRef(null);
   const canvasRef = useRef(null);
   const inProcessRef = useRef(false);
-  const fiveTipsUpRef = useRef(false);
   const modalRef = useRef(null);
+  const prediction = useRef(null); //store all data here
   const screenSize = useRef({
     width: 0,
     height: 0,
@@ -35,7 +38,15 @@ function App() {
 
   var camera = null;
 
-  async function HandDetectionOnResults(results){
+  const Contents = useRef({
+    prediction,
+  })
+
+  const Actions = {
+    setName: (res) => {prediction.current = res},
+  }
+
+  async function onResults(results){
     canvasRef.current.width = screenSize.current.width;
     canvasRef.current.height = screenSize.current.height;
     const canvasElement = canvasRef.current;
@@ -45,30 +56,41 @@ function App() {
     canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
     canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
 
-    if (results.multiHandLandmarks) {
-      for (const landmarks of results.multiHandLandmarks) {
-        drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {color: "#00FF00", lineWidth: 5,});
-        drawLandmarks(canvasCtx, landmarks, {color: "#FF0000", lineWidth: 2,});
-      }
+    if (results.detections.length > 0) {
+      drawRectangle(canvasCtx, results.detections[0].boundingBox, { color: 'blue', lineWidth: 4, fillColor: '#00000000' });
+      drawLandmarks(canvasCtx, results.detections[0].landmarks, { color: 'red', radius: 5, });
     }
 
 
-    fiveTipsUpRef.current = isFiveTipsUp(results.multiHandLandmarks, canvasRef.current.width, canvasRef.current.height);
-
-    if (fiveTipsUpRef.current && !inProcessRef.current)
-    {
-        inProcessRef.current = true; 
+    if (results.detections.length > 0) {
+      const size = canvasElement.height;
+      const sHeight = results.detections[0].boundingBox["height"] * size;
+      const sWidth = results.detections[0].boundingBox["width"] * size;
+      
+      if (sHeight > 300 && sWidth > 225 && !inProcessRef.current) {
+        inProcessRef.current = true;
         let file = DataURLtoFile(canvasElement.toDataURL("image/jpeg"), `${1}.jpeg`);
         console.log(file)
 
         //Call api for modal
+        const formData = new FormData();
+        formData.append("files", file);
+        axios
+          .post(process.env.REACT_APP_RECOGNIZE_URL + "api/recognize", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }).then((res) => {
+              prediction.current = res
+          }) 
 
         // reset 
         modalRef.current.setshowModal(true);
         setTimeout(() => {
-          inProcessRef.current = false; 
+          inProcessRef.current = false;
           modalRef.current.setshowModal(false);
         }, 500000);
+      }
 
     }
 
@@ -87,40 +109,46 @@ function App() {
       screenSize.current.height = h;
       screenSize.current.width = h * (4 / 3);
     }
-    const hands = new Hands({
+    const faceDetection = new FaceDetection({
       locateFile: (file) => {
-        return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+        return `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`;
       },
     });
 
-    hands.setOptions({
-      maxNumHands: 1,
-      modelComplexity: 1,
-      minDetectionConfidence: 0.7,
-      minTrackingConfidence: 0.7,
+
+    faceDetection.setOptions({
+      selfieMode: true,
+      model: "short",
+      minDetectionConfidence: 0.5
     });
 
-    hands.onResults(HandDetectionOnResults);
+    faceDetection.onResults(onResults);
 
     if (typeof webCamRef.current !== "undefined" && webCamRef.current !== null) {
       camera = new cam.Camera(webCamRef.current.video, {
         onFrame: async () => {
-          await hands.send({ image: webCamRef.current.video });
+          await faceDetection.send({ image: webCamRef.current.video });
         },
         width: 640,
         height: 480,
       });
+      
     }
- 
+
     camera.start();
   }, []);
   
   return (
     <div className="App">
-      <Webcam ref={webCamRef} style={{ visibility: "hidden", position: "absolute" }}/>
-      <canvas ref={canvasRef}></canvas>
+      <context.Provider value={Contents}>
+        <dispatch.Provider value={Actions}>
+          <Webcam ref={webCamRef} style={{ visibility: "hidden", position: "absolute" }} />
+          <canvas ref={canvasRef}></canvas>
 
-      {<Modal ref={modalRef} />}
+          {<Modal ref={modalRef} />}
+        </dispatch.Provider>
+      </context.Provider>
+
     </div>
   );
 }

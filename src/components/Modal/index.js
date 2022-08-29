@@ -1,8 +1,9 @@
 import React from "react";
-import { useState, useImperativeHandle, forwardRef } from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions} from "@mui/material";
+import { useState, useImperativeHandle, forwardRef, useContext } from "react";
+import { Dialog, DialogTitle, DialogContent} from "@mui/material";
 import { Button } from "@mui/material"
 import UserRow from "./UserRow";
+import { context, dispatch } from "../../App"
 
 
 const API = [
@@ -28,6 +29,10 @@ const API = [
 const Modal = (props, ref) => {
     const [showModal, setshowModal] = useState(false);
 
+    const data = useContext(context)
+    const funcs = useContext(dispatch)
+
+    console.log(data);
 
     useImperativeHandle(ref, () => ({
         setshowModal,
