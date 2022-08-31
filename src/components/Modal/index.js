@@ -1,33 +1,22 @@
-import React from "react";
-import { useState, useImperativeHandle, forwardRef } from "react";
+import React, { useRef } from "react";
+import { useState, useImperativeHandle, forwardRef, useContext } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions} from "@mui/material";
 import { Button } from "@mui/material"
 import UserRow from "./UserRow";
+import { context, dispatch } from "../../App"
 
-const API = [
-    {
-        "name": "Lê Chí Thịnh",
-        "gmail": "lechithinh.developer@gmail.com",
-        "sim": 78,
-        "MSSV": 21522634,
-    },
-    {
-        "name": "Lê Chí Thịnh 2",
-        "gmail": "lechithinh.developer@gmail.com",
-        "sim": 78,
-        "MSSV": 21522244,
-    },
-    {
-        "name": "Lê Chí Thịnh 3",
-        "gmail": "lechithinh.developer@gmail.com",
-        "sim": 78,
-        "MSSV": 21523311,
-    },
 
-]
+
+
+
+
 const Modal = (props, ref) => {
     const [showModal, setshowModal] = useState(false);
 
+    const Contents = useContext(context)
+    const Actions = useContext(dispatch)
+
+    console.log("Data: ", Contents.current.dataRef.current)
 
     useImperativeHandle(ref, () => ({
         setshowModal,
@@ -37,20 +26,14 @@ const Modal = (props, ref) => {
         <>
             <Dialog open={showModal} onClose={() => { setshowModal(!showModal) }}>
                 <DialogTitle>
-                    Bạn có phải là?
+                    Thông tin thời khóa biểu: 
                 </DialogTitle>
-                <DialogContent> 
-
-                    {/* API to each row */}
-                    {API.map((user, index) => (
-                        <UserRow key={index}  user={user}/>
-                    ))}
-
-
+                <DialogContent>        
+                    <UserRow user={Contents.current.dataRef.current} setshowModal={setshowModal}/>
                 </DialogContent>
-                <DialogActions>
-                    <Button variant="outlined">Đăng kí người mới</Button>
-                </DialogActions>
+
+
+
             </Dialog>
         </>
     )
