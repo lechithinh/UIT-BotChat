@@ -5,11 +5,9 @@ import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import Webcam from "react-webcam";
 import { Hands, HAND_CONNECTIONS } from "@mediapipe/hands";
 
-
 //React 
 import React from 'react';
 import {useEffect,useRef,useState} from 'react'
-
 
 //Components
 import Modal from './components/Modal';
