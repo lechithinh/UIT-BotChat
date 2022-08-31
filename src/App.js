@@ -13,7 +13,8 @@ import {useEffect,useRef,useState, createContext} from 'react'
 //Components
 import Modal from './components/Modal';
 import Noti from './components/Notifications';
-
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import Fab from '@mui/material/Fab';
 //Modules
 
 
@@ -192,6 +193,10 @@ function App() {
       <context.Provider value={Contents}>
         <dispatch.Provider value={Actions}>
           <Webcam ref={webCamRef} style={{ visibility: "hidden", position: "absolute" }} />
+          <Fab variant="extended" color="primary" sx={{ position: "absolute", top: "22px", left: "12px",}} href="http://map.mmlab.uit.edu.vn">
+            <ArrowBackIosNewIcon sx={{ mr: 1 }} />
+            Quay lại
+          </Fab>
           <canvas ref={canvasRef} style={{ position: "absolute", top : "100px", left: "0"}}></canvas>
           <Noti ref={notiRef} />
           <Modal ref={modalRef} />

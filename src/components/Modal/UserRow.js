@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Box, Fab } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 import { ListItem, ListItemAvatar, ListItemText, ListItemIcon } from '@mui/material';
@@ -9,7 +9,7 @@ import WeekSchedule from "./WeekSchedule"
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-
+import axios from "axios";
 
 const steps = [
     'Nhận diện',
@@ -27,6 +27,7 @@ const UserRow = (props) => {
     const [showWeek, setShowWeek] = useState(false);
     const [step, setStep] = useState(1)
     const [value, setValue] = useState(0);
+    const tkbRef = useRef(null);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -54,6 +55,56 @@ const UserRow = (props) => {
         }
     }
 
+  
+    const getSchedule = async (uid, hocky, namhoc) => {
+            const url = "http://localhost:3001/";
+
+            const data = JSON.stringify({
+                uid,
+                hocky,
+                namhoc,
+            });
+
+            const config = {
+                method: "post",
+                url: url + "get-schedule",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+            const res = await axios(config);
+            
+            const storage = []
+
+
+            for (const item of res.data["data"]) {
+                const temp = []
+                Object.keys(item).forEach(function (key) {
+                    if (key == "tenmh" || key == "thu" || key == "tiet" || key == "phonghoc") {
+                        temp.push(item[key]);
+                    }
+                });
+                storage.push(temp);
+            }
+                
+            for (let i = 0; i < storage.length; i++) {
+                for (let j = 0; j < storage.length; j++) {
+                    const thu1 = parseInt(storage[i][1]);
+                    const thu2 = parseInt(storage[j][1]);
+                    if (thu1 < thu2) {
+                        let t = storage[i];
+                        storage[i] = storage[j];
+                        storage[j] = t;
+                    }
+                }
+            }
+
+            console.log("store", storage)
+            return storage;
+            
+        };
+    
     
 
     return (
@@ -78,7 +129,7 @@ const UserRow = (props) => {
                         <Tabs value={value} onChange={handleChange} centered>
                             <Tab label="Chỉnh sửa" onClick={() => { setShowDay(false); setShowWeek(false); setStep(1)  }} />
                             <Tab label="TKB Ngày" onClick={() => { setShowDay(!showDay); setStep(2) }}/>
-                            <Tab label="TKB Tuần" onClick={() => { setShowWeek(!showWeek); setStep(2); }} />
+                            <Tab label="TKB Tuần" onClick={async () => { setShowWeek(!showWeek); setStep(2); tkbRef.current = await getSchedule("tiepnv", 1, 2022); }} />
                         </Tabs>                     
                     </Box>
                 </ListItemIcon>
@@ -96,7 +147,7 @@ const UserRow = (props) => {
             </Box>
 
             {showDay && <DaySchedule user={props['user']}/>}
-            {showWeek && <WeekSchedule /> }
+            {showWeek && <WeekSchedule tkb={tkbRef.current}/> }
             
         </>
     )

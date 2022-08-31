@@ -19,7 +19,8 @@ const rows = [
     createData('7', "Kĩ năng nghề nghiệp", "Giới thiệu ngành"),
 ];
 
-const WeekSchedule = () => {
+const WeekSchedule = (props) => {
+    console.log("TKB: ", props.tkb)
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 450 }} aria-label="simple table">
