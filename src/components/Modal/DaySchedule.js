@@ -25,8 +25,6 @@ const DaySchedule = (props) => {
                             <DirectionsIcon onClick={() => { console.log("Chỉ đường") }} sx={{ mr: 1 }} />
                             Chỉ đường
                         </Fab>
-
-                        
                     </Box>
                 </ListItemIcon>
 

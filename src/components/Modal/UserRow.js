@@ -79,6 +79,9 @@ const UserRow = (props) => {
 
 
             for (const item of res.data["data"]) {
+                if (item["thu"] == "*") {
+                    continue;
+                }
                 const temp = []
                 Object.keys(item).forEach(function (key) {
                     if (key == "tenmh" || key == "thu" || key == "tiet" || key == "phonghoc") {
@@ -100,12 +103,82 @@ const UserRow = (props) => {
                 }
             }
 
-            console.log("store", storage)
-            return storage;
+            for (const subarr of storage) {
+                if (subarr[2][0] == "1" || subarr[2][0] == "2" || subarr[2][0] == "3" || subarr[2][0] == "4" || subarr[2][0] == "5") {
+                    subarr[2] = "Sáng";
+                }
+                else {
+                    subarr[2] = "Chiều";
+                }
+            }
+
+            const result = [
+                ["2", 0, 1],
+                ["3", 0, 1],
+                ["4", 0, 1],
+                ["5", 0, 1],
+                ["6", 0, 1],
+                ["7", 0, 1],
+            ]
+
+            for (const ele of storage) {
+                if (ele[1] == "2") {
+                    if (ele[2] == "Sáng") {
+                        result[0][1] = ele[0];
+                    }
+                    else {
+                        result[0][2] = ele[0];
+                    }
+                }
+                else if (ele[1] == "3") {
+                    if (ele[2] == "Sáng") {
+                        result[1][1] = ele[0];
+                    }
+                    else {
+                        result[1][2] = ele[0];
+                    }
+                }
+                else if (ele[1] == "4") {
+                    if (ele[2] == "Sáng") {
+                        result[2][1] = ele[0];
+                    }
+                    else {
+                        result[2][2] = ele[0];
+                    }
+                }
+                else if (ele[1] == "5") {
+                    if (ele[2] == "Sáng") {
+                        result[3][1] = ele[0];
+                    }
+                    else {
+                        result[3][2] = ele[0];
+                    }
+                }
+                else if (ele[1] == "6") {
+                    if (ele[2] == "Sáng") {
+                        result[4][1] = ele[0];
+                    }
+                    else {
+                        result[4][2] = ele[0];
+                    }
+                }
+                else if (ele[1] == "7") {
+                    if (ele[2] == "Sáng") {
+                        result[5][1] = ele[0];
+                    }
+                    else {
+                        result[5][2] = ele[0];
+                    }
+                }
+            }
+
+            console.log("Raw TKB: ", res.data["data"])
+            console.log("Full TKB: ", result)
+            return result;
             
         };
     
-    
+    // case 2-4 môn ngày?
 
     return (
         <>
@@ -119,7 +192,7 @@ const UserRow = (props) => {
 
                 <ListItemText
                     primary={props['user'].name}
-                    secondary={props['user'].MSSV}
+                    secondary={props['user'].uui}
                     sx={{ margin: "10px 20px 2px 20px"}}
                    
                 />
@@ -129,7 +202,7 @@ const UserRow = (props) => {
                         <Tabs value={value} onChange={handleChange} centered>
                             <Tab label="Chỉnh sửa" onClick={() => { setShowDay(false); setShowWeek(false); setStep(1)  }} />
                             <Tab label="TKB Ngày" onClick={() => { setShowDay(!showDay); setStep(2) }}/>
-                            <Tab label="TKB Tuần" onClick={async () => { setShowWeek(!showWeek); setStep(2); tkbRef.current = await getSchedule("tiepnv", 1, 2022); }} />
+                            <Tab label="TKB Tuần" onClick={async () => { setShowWeek(!showWeek); setStep(2); tkbRef.current = await getSchedule(props['user'].uui, 1, 2022); }} />
                         </Tabs>                     
                     </Box>
                 </ListItemIcon>

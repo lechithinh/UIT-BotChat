@@ -28,8 +28,7 @@ export const dispatch = createContext(null);
 
 const InitData = {
     "name": "Tên mặc định",
-    "gmail": "tiepnv",
-    "MSSV": 21522634,
+    "uui" : "tiepnv",
     "path": "https://previews.123rf.com/images/rido/rido1204/rido120400047/13283722-happy-smiling-guy-showing-thumb-up-hand-sign-isolated-on-white-background.jpg",
     "subject1": "Cơ sở dữ liệu",
     "time1": "13h30 - 15h30",
@@ -103,7 +102,6 @@ function App() {
       //Process
       if (sHeight > 300 && sWidth > 225 && !inProcessRef.current) {
         inProcessRef.current = true;
-        notiRef.current.setshowNoti(false);
         let file = DataURLtoFile(webCamRef.current.getScreenshot(), `${1}.jpeg`);
         console.log("file: ", file)
 
@@ -121,28 +119,40 @@ function App() {
                 if (res["data"][0]["name"] != '')
                 {
                   dataRef.current.name = res["data"][0]["name"].split("-")[0];
-                  dataRef.current.gmail = res["data"][0]["name"].split("-")[1];
+                  const text = res["data"][0]["name"].split("-")[1];
+                  let uui = '';
+                  for (let i = 1; i < text.length; i++) {
+                    uui += text[i];
+                    if (text[i+1] == "@") { break }
+                  }
+                  dataRef.current.uui = uui;
                 }
                 else{
-                  dataRef.current.name = "Tôi là người mới";
-                  dataRef.current.MSSV ="Nhập ID"
+                  dataRef.current.name = "Người mới";
+                  dataRef.current.uui ="Nhập ID"
                 }
  
                 dataRef.current.path = "https://api.mmlab.uit.edu.vn/face/" + res["data"][0]["path"];
               }
       
+              notiRef.current.setshowNoti(false);
               modalRef.current.setshowModal(true);
           }) 
 
       }
     }
   
-    //Reset
+    //Reset nếu không có forehead thì mới reset 
     if (results.detections.length === 0 && inProcessRef.current == true) {
       setTimeout(() => {
         inProcessRef.current = false;
         modalRef.current.setshowModal(false);
       }, 5000);
+
+      //3 giây nữa mới restart lại
+      setTimeout(() => {
+        inProcessRef.current = false;
+      }, 3000);
     }
 
     canvasCtx.restore();
