@@ -6,31 +6,17 @@ import UserRow from "./UserRow";
 import { context, dispatch } from "../../App"
 
 
-const API = [
-    {
-        "name": "Lê Chí Thịnh",
-        "gmail": "lechithinh.developer@gmail.com",
-        "sim": 78,
-        "MSSV": 21522634,
-        "picture": "https://previews.123rf.com/images/rido/rido1204/rido120400047/13283722-happy-smiling-guy-showing-thumb-up-hand-sign-isolated-on-white-background.jpg",
-        "subject1": "Cơ sở dữ liệu",
-        "time1": "13h30 - 15h30",
-        "room1": "B201",
-        "subject2": "Toán rời rạc",
-        "time2": "13h30 - 17h30",
-        "room2": "B201",
-    },
-
-]
 
 
 
 
 const Modal = (props, ref) => {
     const [showModal, setshowModal] = useState(false);
-    const data = useContext(context)
-    const funcs = useContext(dispatch)
 
+    const Contents = useContext(context)
+    const Actions = useContext(dispatch)
+
+    console.log("Data: ", Contents.current.dataRef.current)
 
     useImperativeHandle(ref, () => ({
         setshowModal,
@@ -43,10 +29,7 @@ const Modal = (props, ref) => {
                     Thông tin thời khóa biểu: 
                 </DialogTitle>
                 <DialogContent>        
-                    {API.map((user, index) => (
-                        <UserRow key={index}  user={user} sx={{ width: "200px"}} setshowModal={setshowModal}/>
-                    ))}
-
+                    <UserRow user={Contents.current.dataRef.current} setshowModal={setshowModal}/>
                 </DialogContent>
 
 

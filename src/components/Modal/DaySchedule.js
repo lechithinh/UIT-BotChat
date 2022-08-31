@@ -4,19 +4,18 @@ import { ListItem, ListItemAvatar, ListItemText, ListItemIcon } from '@mui/mater
 import DirectionsIcon from '@mui/icons-material/Directions';
 
 const DaySchedule = (props) => {
-    console.log("props: ", props)
     return (
         <>
             <ListItem>
                 <ListItemText
-                    primary={props["subject"].subject1}
-                    secondary={props["subject"].time1 + "  |  " + props["subject"].room1}
+                    primary={props["user"].subject1}
+                    secondary={props["user"].time1 + "  |  " + props["user"].room1}
                     sx={{ margin: "6px 15px 6px 15px" }}
                 />
 
-                {props["subject"].subject2 &&  <ListItemText
-                    primary={props["subject"].subject2}
-                    secondary={props["subject"].time2 + "  |  " + props["subject"].room2}
+                {props["user"].subject2 &&  <ListItemText
+                    primary={props["user"].subject2}
+                    secondary={props["user"].time2 + "  |  " + props["user"].room2}
                     sx={{ margin: "6px 15px 6px 15px" }}
                 />}
 

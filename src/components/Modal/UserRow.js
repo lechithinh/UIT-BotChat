@@ -6,17 +6,18 @@ import DaySchedule from "./DaySchedule";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import WeekSchedule from "./WeekSchedule"
-
-
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
+
 
 const steps = [
     'Nhận diện',
     'Kiểm tra thông tin',
     'Thời khóa biểu',
 ];
+
+
 
 
 const UserRow = (props) => {
@@ -26,6 +27,7 @@ const UserRow = (props) => {
     const [showWeek, setShowWeek] = useState(false);
     const [step, setStep] = useState(1)
     const [value, setValue] = useState(0);
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -52,12 +54,14 @@ const UserRow = (props) => {
         }
     }
 
+    
+
     return (
         <>
             <ListItem>
                 <ListItemAvatar>
                     <Avatar
-                        src= {props["user"].picture}
+                        src= {props["user"].path}
                         sx={{ width: 56, height: 56 }}
                     />
                 </ListItemAvatar>
@@ -74,7 +78,7 @@ const UserRow = (props) => {
                         <Tabs value={value} onChange={handleChange} centered>
                             <Tab label="Chỉnh sửa" onClick={() => { setShowDay(false); setShowWeek(false); setStep(1)  }} />
                             <Tab label="TKB Ngày" onClick={() => { setShowDay(!showDay); setStep(2) }}/>
-                            <Tab label="TKB Tuần" onClick={() => { setShowWeek(!showWeek); setStep(2) }} />
+                            <Tab label="TKB Tuần" onClick={() => { setShowWeek(!showWeek); setStep(2); }} />
                         </Tabs>                     
                     </Box>
                 </ListItemIcon>
@@ -91,7 +95,7 @@ const UserRow = (props) => {
                 </Stepper>
             </Box>
 
-            {showDay && <DaySchedule subject={props['user']}/>}
+            {showDay && <DaySchedule user={props['user']}/>}
             {showWeek && <WeekSchedule /> }
             
         </>
