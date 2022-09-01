@@ -143,17 +143,17 @@ function App() {
     }
   
     //Reset nếu không có forehead thì mới reset 
-    if (results.detections.length === 0 && inProcessRef.current == true) {
-      setTimeout(() => {
-        inProcessRef.current = false;
-        modalRef.current.setshowModal(false);
-      }, 5000);
+    // if (results.detections.length === 0 && inProcessRef.current == true) {
+    //   setTimeout(() => {
+    //     inProcessRef.current = false;
+    //     modalRef.current.setshowModal(false);
+    //   }, 5000);
 
-      //3 giây nữa mới restart lại
-      setTimeout(() => {
-        inProcessRef.current = false;
-      }, 3000);
-    }
+    //   //3 giây nữa mới restart lại
+    //   setTimeout(() => {
+    //     inProcessRef.current = false;
+    //   }, 3000);
+    // }
 
     canvasCtx.restore();
   }

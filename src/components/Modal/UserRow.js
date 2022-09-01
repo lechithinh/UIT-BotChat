@@ -28,6 +28,7 @@ const UserRow = (props) => {
     const [step, setStep] = useState(1)
     const [value, setValue] = useState(0);
     const tkbRef = useRef(null);
+    const todaytkbRef = useRef(null);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -177,6 +178,67 @@ const UserRow = (props) => {
             return result;
             
         };
+
+    const getTodaySchedule = async (uid, hocky, namhoc) => {
+        const url = "http://localhost:3001/";
+
+        const data = JSON.stringify({
+            uid,
+            hocky,
+            namhoc,
+        });
+
+        const config = {
+            method: "post",
+            url: url + "get-schedule",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: data,
+        };
+        const res = await axios(config);
+
+        const storage = []
+
+
+        for (const item of res.data["data"]) {
+            if (item["thu"] == "*") {
+                continue;
+            }
+            const temp = []
+            Object.keys(item).forEach(function (key) {
+                if (key == "tenmh" || key == "thu" || key == "tiet" || key == "phonghoc") {
+                    temp.push(item[key]);
+                }
+            });
+            storage.push(temp);
+        }
+
+        for (let i = 0; i < storage.length; i++) {
+            for (let j = 0; j < storage.length; j++) {
+                const thu1 = parseInt(storage[i][1]);
+                const thu2 = parseInt(storage[j][1]);
+                if (thu1 < thu2) {
+                    let t = storage[i];
+                    storage[i] = storage[j];
+                    storage[j] = t;
+                }
+            }
+        }
+
+        
+        const daySchedule = []
+        const today = "3";
+        for (const element of storage) {
+            if (element[1] === today) {
+                daySchedule.push(element);
+            }
+        }
+
+        console.log(daySchedule)
+        return daySchedule;
+
+    };
     
     // case 2-4 môn ngày?
 
@@ -191,8 +253,8 @@ const UserRow = (props) => {
                 </ListItemAvatar>
 
                 <ListItemText
-                    primary={props['user'].name}
-                    secondary={props['user'].uui}
+                    primary={props['user'].name} //name
+                    secondary={props['user'].uui} //uui
                     sx={{ margin: "10px 20px 2px 20px"}}
                    
                 />
@@ -201,8 +263,8 @@ const UserRow = (props) => {
                     <Box sx={{ mb: 1, position: "relative" }}>
                         <Tabs value={value} onChange={handleChange} centered>
                             <Tab label="Chỉnh sửa" onClick={() => { setShowDay(false); setShowWeek(false); setStep(1)  }} />
-                            <Tab label="TKB Ngày" onClick={() => { setShowDay(!showDay); setStep(2) }}/>
-                            <Tab label="TKB Tuần" onClick={async () => { setShowWeek(!showWeek); setStep(2); tkbRef.current = await getSchedule(props['user'].uui, 1, 2022); }} />
+                            <Tab label="TKB Ngày" onClick={async () => { setStep(2); todaytkbRef.current = await getTodaySchedule("tiepnv", 1, 2022); setShowDay(!showDay); }}/>
+                            <Tab label="TKB Tuần" onClick={async () => { setStep(2); tkbRef.current = await getSchedule("tiepnv", 1, 2022); setShowWeek(!showWeek) }} />
                         </Tabs>                     
                     </Box>
                 </ListItemIcon>
@@ -219,7 +281,7 @@ const UserRow = (props) => {
                 </Stepper>
             </Box>
 
-            {showDay && <DaySchedule user={props['user']}/>}
+            {showDay && <DaySchedule user={props['user']} todaytkb={todaytkbRef.current} />}
             {showWeek && <WeekSchedule tkb={tkbRef.current}/> }
             
         </>

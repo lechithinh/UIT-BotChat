@@ -4,20 +4,21 @@ import { ListItem, ListItemAvatar, ListItemText, ListItemIcon } from '@mui/mater
 import DirectionsIcon from '@mui/icons-material/Directions';
 
 const DaySchedule = (props) => {
+    console.log("TodaySchedule: ", props.todaytkb)
     return (
         <>
             <ListItem>
-                <ListItemText
-                    primary={props["user"].subject1}
-                    secondary={props["user"].time1 + "  |  " + props["user"].room1}
-                    sx={{ margin: "6px 15px 6px 15px" }}
-                />
+                
+                {props.todaytkb ?
+                    (props.todaytkb.map((row, index) => (
+                        <ListItemText
+                            key={index}
+                            primary={row[0]}
+                            secondary={row[2] + "  |  " + row[3]}
+                            sx={{ margin: "6px 15px 6px 15px" }}
+                        />
+                    ))) : <ListItem />} 
 
-                {props["user"].subject2 &&  <ListItemText
-                    primary={props["user"].subject2}
-                    secondary={props["user"].time2 + "  |  " + props["user"].room2}
-                    sx={{ margin: "6px 15px 6px 15px" }}
-                />}
 
                 <ListItemIcon>
                     <Box sx={{ mr: -5, position: "relative" }}>
