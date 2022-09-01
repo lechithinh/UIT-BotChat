@@ -12,6 +12,7 @@ import StepLabel from '@mui/material/StepLabel';
 import axios from "axios";
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import GetNameById from "../../utils/GetNameById";
 
 const steps = [
     'Nhận diện',
@@ -265,16 +266,22 @@ const UserRow = (props) => {
                 <ListItemIcon>
                     <Box sx={{ mb: 1, position: "relative" }}>
                         <Tabs value={value} onChange={handleChange} centered>
+        
                             <Tab label="Chỉnh sửa" onClick={() => { setShowSave(true); setShowDay(false); setShowWeek(false); setStep(1)  }} />
-                            <Tab label="TKB Ngày" onClick={async () => { setStep(2); todaytkbRef.current = await getTodaySchedule("tiepnv", 1, 2022); setShowDay(!showDay); }}/>
-                            <Tab label="TKB Tuần" onClick={async () => { setStep(2); tkbRef.current = await getSchedule("tiepnv", 1, 2022); setShowWeek(!showWeek) }} />
+                            <Tab label="TKB Ngày" onClick={async () => { setShowSave(false); setStep(2); todaytkbRef.current = await getTodaySchedule("tiepnv", 1, 2022); setShowDay(!showDay); }}/>
+                            <Tab label="TKB Tuần" onClick={async () => { setShowSave(false); setStep(2); tkbRef.current = await getSchedule("tiepnv", 1, 2022); setShowWeek(!showWeek) }} />
                         </Tabs>                     
                     </Box>
                 </ListItemIcon>
 
             </ListItem>
 
-            {showSave && <Button variant="contained">Save</Button>}
+            {showSave && 
+                <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
+                    <Button variant="contained" onClick={async () => { await GetNameById("21522634")}}>Save</Button>
+                </Stack>
+                }
+            
             <Box sx={{ width: '500px', ml: 3, mt: 2 }}>
                 <Stepper activeStep={step} alternativeLabel>
                     {steps.map((label,index) => (
