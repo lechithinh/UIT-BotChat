@@ -25,15 +25,9 @@ const Modal = (props, ref) => {
     return (
         <>
             <Dialog open={showModal} onClose={() => { setshowModal(!showModal) }}>
-                <DialogTitle>
-                    Thông tin thời khóa biểu: 
-                </DialogTitle>
                 <DialogContent>        
                     <UserRow user={Contents.current.dataRef.current} setshowModal={setshowModal}/>
                 </DialogContent>
-
-
-
             </Dialog>
         </>
     )

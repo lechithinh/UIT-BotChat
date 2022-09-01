@@ -13,6 +13,8 @@ import axios from "axios";
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import GetNameById from "../../utils/GetNameById";
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 
 const steps = [
     'Nhận diện',
@@ -21,14 +23,18 @@ const steps = [
 ];
 
 
-
+// Focus to Edit + save => api getName => Update model
+// Handle auto close
+// Clean code
+// Clean TKB
+// Clean Css
 
 const UserRow = (props) => {
     
     
     const [showDay, setShowDay] = useState(false);
     const [showWeek, setShowWeek] = useState(false);
-    const [showSave, setShowSave] = useState(false);
+    const [showEdit, setShowEdit] = useState(true);
     const [step, setStep] = useState(1)
     const [value, setValue] = useState(0);
     const tkbRef = useRef(null);
@@ -248,10 +254,31 @@ const UserRow = (props) => {
 
     return (
         <>
+            <Box sx={{ width: '500px', ml: 3, mt: 2 }}>
+                <Stepper activeStep={step} alternativeLabel>
+                    {steps.map((label, index) => (
+                        <Step key={label}>
+                            <StepLabel onClick={() => { handleTabs(index) }}>{label}</StepLabel>
+                        </Step>
+                    ))}
+                </Stepper>
+            </Box>
+
+
+         
+            <Box sx={{ mb: 2, position: "relative", mt: 2 }}>
+                <Tabs value={value} onChange={handleChange} centered>
+                    <Tab label="Thông tin" onClick={() => {  setShowDay(false); setShowWeek(false); setStep(1)  }} />
+                    <Tab label="TKB Ngày" onClick={async () => {  setStep(2); todaytkbRef.current = await getTodaySchedule("tiepnv", 1, 2022); setShowDay(!showDay); }}/>
+                    <Tab label="TKB Tuần" onClick={async () => {  setStep(2); tkbRef.current = await getSchedule("tiepnv", 1, 2022); setShowWeek(!showWeek) }} />
+                </Tabs>                     
+            </Box>
+     
+
             <ListItem>
                 <ListItemAvatar>
                     <Avatar
-                        src= {props["user"].path}
+                        src={props["user"].path}
                         sx={{ width: 56, height: 56 }}
                     />
                 </ListItemAvatar>
@@ -259,38 +286,23 @@ const UserRow = (props) => {
                 <ListItemText
                     primary={props['user'].name} //name
                     secondary={props['user'].uui} //uui
-                    sx={{ margin: "10px 20px 2px 20px"}}
-                   
+                    sx={{ margin: "10px 20px 2px 20px" }}
                 />
 
                 <ListItemIcon>
-                    <Box sx={{ mb: 1, position: "relative" }}>
-                        <Tabs value={value} onChange={handleChange} centered>
-        
-                            <Tab label="Chỉnh sửa" onClick={() => { setShowSave(true); setShowDay(false); setShowWeek(false); setStep(1)  }} />
-                            <Tab label="TKB Ngày" onClick={async () => { setShowSave(false); setStep(2); todaytkbRef.current = await getTodaySchedule("tiepnv", 1, 2022); setShowDay(!showDay); }}/>
-                            <Tab label="TKB Tuần" onClick={async () => { setShowSave(false); setStep(2); tkbRef.current = await getSchedule("tiepnv", 1, 2022); setShowWeek(!showWeek) }} />
-                        </Tabs>                     
-                    </Box>
+                        {showEdit ? 
+                        <Fab variant="extended" onClick={() => { setShowEdit(false); console.log("Input fill") }}>
+                            <EditIcon sx={{ mr:2 }} />
+                            Chỉnh sửa
+                        </Fab> 
+                        : 
+                        <Fab variant="extended" onClick={async () => { await GetNameById("21522634"); setShowEdit(true) }}>
+                            <SaveIcon sx={{ mr: 2 }} />
+                            Lưu
+                        </Fab>}
                 </ListItemIcon>
-
             </ListItem>
 
-            {showSave && 
-                <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                    <Button variant="contained" onClick={async () => { await GetNameById("21522634")}}>Save</Button>
-                </Stack>
-                }
-            
-            <Box sx={{ width: '500px', ml: 3, mt: 2 }}>
-                <Stepper activeStep={step} alternativeLabel>
-                    {steps.map((label,index) => (
-                        <Step key={label}>
-                            <StepLabel onClick={() => { handleTabs(index)}}>{label}</StepLabel>
-                        </Step>
-                    ))}
-                </Stepper>
-            </Box>
                     
             {showDay && <DaySchedule user={props['user']} todaytkb={todaytkbRef.current} />}
             {showWeek && <WeekSchedule tkb={tkbRef.current}/> }

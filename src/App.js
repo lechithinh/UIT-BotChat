@@ -119,13 +119,17 @@ function App() {
                 if (res["data"][0]["name"] != '')
                 {
                   dataRef.current.name = res["data"][0]["name"].split("-")[0];
+              
                   const text = res["data"][0]["name"].split("-")[1];
                   let uui = '';
-                  for (let i = 1; i < text.length; i++) {
-                    uui += text[i];
-                    if (text[i+1] == "@") { break }
+                  if(text){
+                    for (let i = 1; i < text.length; i++) {
+                      uui += text[i];
+                      if (text[i + 1] == "@") { break }
+                    }
+                    dataRef.current.uui = uui;
                   }
-                  dataRef.current.uui = uui;
+
                 }
                 else{
                   dataRef.current.name = "Người mới";
