@@ -24,6 +24,7 @@ const Modal = (props, ref) => {
 
     return (
         <>
+            {/* MODAL */}
             <Dialog open={showModal} onClose={() => { setshowModal(!showModal) }}>
                 <DialogContent>        
                     <UserRow user={Contents.current.dataRef.current} setshowModal={setshowModal}/>

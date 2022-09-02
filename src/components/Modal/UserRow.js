@@ -15,7 +15,7 @@ import Button from '@mui/material/Button';
 import GetNameById from "../../utils/GetNameById";
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
-
+import TextEdit from "./Textedit";
 const steps = [
     'Nhận diện',
     'Kiểm tra thông tin',
@@ -37,36 +37,36 @@ const UserRow = (props) => {
     const [showEdit, setShowEdit] = useState(true);
     const [step, setStep] = useState(1)
     const [value, setValue] = useState(0);
+    const [newName, setNewName] = useState(props['user'].name)
+    const [hideEdit, togglehideEdit] = useState(true)
     const tkbRef = useRef(null);
     const todaytkbRef = useRef(null);
+    const editRef = useRef(null);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
-    const handleTabs = (index) => {
+    const handleTabs = async (index) => {
         if(index == 1){
             setStep(1);
             setValue(0);
             setShowDay(false); 
             setShowWeek(false);
+            togglehideEdit(true);
         }
         else if (index == 2)
         {
             setStep(2);
             setValue(2);
+            todaytkbRef.current = await getTodaySchedule(props["user"].uui, 1, 2022);
+            tkbRef.current = await getSchedule(props["user"].uui, 1, 2022);
             setShowDay(true);
             setShowWeek(true);
-        }
-        else if(index == 3)
-        {
-            setStep(3); 
-            setTimeout(() => { props.setshowModal(false)}, 1000)
-            
+            togglehideEdit(false);
         }
     }
 
-  
     const getSchedule = async (uid, hocky, namhoc) => {
             const url = "http://localhost:3001/";
 
@@ -238,7 +238,9 @@ const UserRow = (props) => {
 
         
         const daySchedule = []
-        const today = "3";
+        var num =  new Date().getDay();
+        num += 1;
+        let today = num.toString()
         for (const element of storage) {
             if (element[1] === today) {
                 daySchedule.push(element);
@@ -250,10 +252,11 @@ const UserRow = (props) => {
 
     };
     
-    // case 2-4 môn ngày?
+   
 
     return (
         <>
+            {/* PROGRESS */}
             <Box sx={{ width: '500px', ml: 3, mt: 2 }}>
                 <Stepper activeStep={step} alternativeLabel>
                     {steps.map((label, index) => (
@@ -265,16 +268,17 @@ const UserRow = (props) => {
             </Box>
 
 
-         
+            {/* TABS */}
             <Box sx={{ mb: 2, position: "relative", mt: 2 }}>
                 <Tabs value={value} onChange={handleChange} centered>
-                    <Tab label="Thông tin" onClick={() => {  setShowDay(false); setShowWeek(false); setStep(1)  }} />
-                    <Tab label="TKB Ngày" onClick={async () => {  setStep(2); todaytkbRef.current = await getTodaySchedule("tiepnv", 1, 2022); setShowDay(!showDay); }}/>
-                    <Tab label="TKB Tuần" onClick={async () => {  setStep(2); tkbRef.current = await getSchedule("tiepnv", 1, 2022); setShowWeek(!showWeek) }} />
+                    <Tab label="Thông tin" onClick={() => { setShowDay(false); setShowWeek(false); setStep(1); togglehideEdit(true);  }} />
+                    <Tab label="TKB Ngày" onClick={async () => { setStep(2); todaytkbRef.current = await getTodaySchedule(props["user"].uui, 1, 2022); setShowDay(!showDay); togglehideEdit(false); }}/>
+                    <Tab label="TKB Tuần" onClick={async () => { setStep(2); tkbRef.current = await getSchedule(props["user"].uui, 1, 2022); setShowWeek(!showWeek); togglehideEdit(false); }} />
                 </Tabs>                     
             </Box>
      
 
+            {/* USER */}
             <ListItem>
                 <ListItemAvatar>
                     <Avatar
@@ -284,26 +288,27 @@ const UserRow = (props) => {
                 </ListItemAvatar>
 
                 <ListItemText
-                    primary={props['user'].name} //name
-                    secondary={props['user'].uui} //uui
+                    primary={newName}
+                    secondary={<TextEdit user={props['user']} ref={editRef}/>} //uui
                     sx={{ margin: "10px 20px 2px 20px" }}
                 />
 
-                <ListItemIcon>
+                {hideEdit && (<ListItemIcon >
                         {showEdit ? 
-                        <Fab variant="extended" onClick={() => { setShowEdit(false); console.log("Input fill") }}>
+                        <Fab variant="extended" onClick={() => { setShowEdit(false); setNewName(""); editRef.current.toggleEdit(true) }}>
                             <EditIcon sx={{ mr:2 }} />
                             Chỉnh sửa
                         </Fab> 
                         : 
-                        <Fab variant="extended" onClick={async () => { await GetNameById("21522634"); setShowEdit(true) }}>
+                        <Fab variant="extended" color="success" onClick={async () => { const getNameData = await GetNameById(editRef.current.getData()); setShowEdit(true); setNewName(getNameData.data.hoten); props['user'].uui = editRef.current.getData() ;editRef.current.toggleEdit(false);  }}>
                             <SaveIcon sx={{ mr: 2 }} />
                             Lưu
                         </Fab>}
-                </ListItemIcon>
+                </ListItemIcon>)}
             </ListItem>
 
                     
+            {/* Day and Week Schedule */}
             {showDay && <DaySchedule user={props['user']} todaytkb={todaytkbRef.current} />}
             {showWeek && <WeekSchedule tkb={tkbRef.current}/> }
             

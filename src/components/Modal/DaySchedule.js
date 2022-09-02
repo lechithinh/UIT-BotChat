@@ -20,6 +20,7 @@ const DaySchedule = (props) => {
                     ))) : <ListItem />} 
 
 
+                {props.todaytkb.length != 0 && 
                 <ListItemIcon>
                     <Box sx={{ mr: -5, position: "relative" }}>
                         <Fab sx={{ m: 2 }} color="info" variant="extended">
@@ -27,7 +28,8 @@ const DaySchedule = (props) => {
                             Chỉ đường
                         </Fab>
                     </Box>
-                </ListItemIcon>
+                </ListItemIcon>}
+               
 
             </ListItem>
         </>

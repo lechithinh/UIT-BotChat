@@ -15,7 +15,7 @@ const WeekSchedule = (props) => {
             <Table sx={{ minWidth: 450 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        <TableCell>Thứ</TableCell>
+                        <TableCell align="center">Thứ</TableCell>
                         <TableCell align="center">Sáng</TableCell>
                         <TableCell align="center">Chiều</TableCell>
                     </TableRow>
