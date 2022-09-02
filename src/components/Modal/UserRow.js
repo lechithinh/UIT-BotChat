@@ -16,6 +16,7 @@ import GetNameById from "../../utils/GetNameById";
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import TextEdit from "./Textedit";
+import Alert from '@mui/material/Alert';
 const steps = [
     'Nhận diện',
     'Kiểm tra thông tin',
@@ -39,6 +40,7 @@ const UserRow = (props) => {
     const [value, setValue] = useState(0);
     const [newName, setNewName] = useState(props['user'].name)
     const [hideEdit, togglehideEdit] = useState(true)
+    const [showAlert, toggleShowAler] = useState(false);
     const tkbRef = useRef(null);
     const todaytkbRef = useRef(null);
     const editRef = useRef(null);
@@ -295,18 +297,22 @@ const UserRow = (props) => {
 
                 {hideEdit && (<ListItemIcon >
                         {showEdit ? 
-                        <Fab variant="extended" onClick={() => { setShowEdit(false); setNewName(""); editRef.current.toggleEdit(true) }}>
+                        <Fab variant="extended" onClick={() => { setShowEdit(false); setNewName(""); editRef.current.toggleEdit(true); toggleShowAler(false) }}>
                             <EditIcon sx={{ mr:2 }} />
                             Chỉnh sửa
                         </Fab> 
                         : 
-                        <Fab variant="extended" color="success" onClick={async () => { const getNameData = await GetNameById(editRef.current.getData()); setShowEdit(true); setNewName(getNameData.data.hoten); props['user'].uui = editRef.current.getData() ;editRef.current.toggleEdit(false);  }}>
+                        <Fab variant="extended" color="success" onClick={async () => { const getNameData = await GetNameById(editRef.current.getData()); getNameData.code == 0 ? toggleShowAler(true) : toggleShowAler(false); setShowEdit(true); setNewName(getNameData.data.hoten); props['user'].uui = editRef.current.getData() ;editRef.current.toggleEdit(false);  }}>
                             <SaveIcon sx={{ mr: 2 }} />
                             Lưu
                         </Fab>}
                 </ListItemIcon>)}
             </ListItem>
 
+            {/* Noti */}
+            {showAlert && <Alert sx={{ mt: 2 }} variant="outlined" severity="error">
+                ID không hợp lệ!
+            </Alert>}
                     
             {/* Day and Week Schedule */}
             {showDay && <DaySchedule user={props['user']} todaytkb={todaytkbRef.current} />}
