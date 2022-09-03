@@ -1,5 +1,5 @@
 //React
-import React, { useState, useRef, useContext, useEffect } from "react";
+import React, { useState, useRef, useContext, useEffect, useReducer } from "react";
 
 //Libaries
 import axios from "axios";
@@ -176,6 +176,98 @@ const HandleToDaySchedule = (res) => {
 
     return daySchedule;
 }
+const state_init = {
+    showDay: false,
+    showWeek: false,
+    showIcon: true,
+    showEditIcon: true,
+    showAlert: false,
+    step: 1,
+    value: 0,
+
+}
+const reducer = (state, action) => {
+    switch (action.type){
+        case "PROGRESS_ONE":
+            return {
+                showIcon: true, 
+                showEditIcon: true,
+                showDay: false,
+                showWeek: false,
+                step: 1,
+                value: 0,
+            }
+        case "PROGRESS_TWO":
+            return {
+                showIcon: false,
+                showDay: true,
+                showWeek: true,
+                step: 2,
+                value: 2,
+            }
+        case "INFOR":
+            return {
+                showIcon: true,
+                showEditIcon: true,
+                showDay: false,
+                showWeek: false,
+                step: 1,
+                value: 0,
+            }
+        case "TODAY_SCHEDULE":
+            return {
+                showIcon: false,
+                showDay: !state.showDay,
+                step: 2,
+                value: 1,
+            }
+        case "WEEK_SCHEDULE":
+            return {
+                showIcon: false,
+                showDay: state.showDay,
+                showWeek: !state.showWeek,
+                step: 2,
+                value: 2,
+            }
+        case "EDIT_BUTTON":
+            return {
+                showIcon: true,
+                showEditIcon: false,
+                showAlert: false,
+                step: 1,
+                value: 0,
+            }
+        case "SAVE_BUTTON":
+            return {
+                showIcon: true,
+                showEditIcon: true,
+                showAlert: state.showAlert,
+                step: 1,
+                value: 0,
+            }
+        case "INVALID_ID":
+            return {
+                showAlert: true,
+                step: 1,
+                value: 0,
+            }
+        case "VALID_ID":
+            return {
+                showAlert: false,
+                step: 1,
+                value: 0,
+            }
+        case "CHANGE_TABS":
+            return {
+                value: action.payload,
+            }
+
+    }
+
+}
+
+
+
 
 const UserRow = (props) => {
     
@@ -183,70 +275,47 @@ const UserRow = (props) => {
     const Contents = useContext(context)
     const Actions = useContext(dispatch)
 
+    //All states
+    const [state, state_action] = useReducer(reducer, state_init)
+
     console.log("Current Data: ", Contents.current.dataRef.current)
-
-    //Components control
-    const [showDay, setShowDay] = useState(false);
-    const [showWeek, setShowWeek] = useState(false);
-    const [showIcon, setShowIcon] = useState(true)
-    const [showEditIcon, setShowEditIcon] = useState(true);
-    const [showAlert, setShowAlert] = useState(false);
-
-    //Tabs and progress control
-    const [step, setStep] = useState(1)
-    const [value, setValue] = useState(0);
 
     //Ref to control sub components
     const editRef = useRef(null);
 
     //OnClick Tabs
     const HandleTabs = (event, newValue) => {
-        setValue(newValue);
+        state_action({ type: "CHANGE_TABS", payload: newValue })
     };
 
     // OnClick Progress
     const HandleProgress = async (index) => {
         if(index === 1){
-            setStep(1);
-            setValue(0);
-            setShowDay(false); 
-            setShowWeek(false);
-            setShowIcon(true);
+            state_action({ type: "PROGRESS_ONE"})
         }
         else if (index === 2)
         {
-            setStep(2);
-            setValue(2);
             await getTodaySchedule(Contents.current.dataRef.current.uid, 1, 2022);
             await getSchedule(Contents.current.dataRef.current.uid, 1, 2022);
-            setShowDay(true);
-            setShowWeek(true);
-            setShowIcon(false);
+            state_action({ type: "PROGRESS_TWO" })
         }
     }
 
     //OnClick Infor
     const HandleInfor = () => {
-        setShowDay(false); 
-        setShowWeek(false); 
-        setStep(1); 
-        setShowIcon(true);
+        state_action({ type: "INFOR" })
     }
 
     //OnClick ToDay Schedule
     const HandleToDay = async () => {
-        setStep(2); 
         await getTodaySchedule(Contents.current.dataRef.current.uid, 1, 2022); 
-        setShowDay(!showDay); 
-        setShowIcon(false);
+        state_action({ type: "TODAY_SCHEDULE" })
     }
 
     //OnClick Week Schedule
     const HandleWeek = async () => {
-        setStep(2); 
         await getSchedule(Contents.current.dataRef.current.uid, 1, 2022); 
-        setShowWeek(!showWeek); 
-        setShowIcon(false); 
+        state_action({ type: "WEEK_SCHEDULE" })
     }
 
     //Week Schedule API
@@ -301,28 +370,26 @@ const UserRow = (props) => {
     
     // OnClick Edit Button
     const HandleEditButton = async () => {
-        setShowEditIcon(false); 
         Actions.setName("");
         editRef.current.toggleEdit(true); 
-        setShowAlert(false) 
+        state_action({ type: "EDIT_BUTTON" })
     }
 
     //OnClick Save Button
     const HandleSaveButton = async () => {
         const getNameData = await GetNameById(editRef.current.getData()); 
         if (getNameData.code === 0){ //ID không hợp lệ => disable những cái tabs khác
-            setShowAlert(true)
+            state_action({ type: "INVALID_ID" })
            
         }
         else{
-            setShowAlert(false); 
+            state_action({ type: "VALID_ID" })
+            const newName = getNameData.data.hoten;
+            Actions.setName(newName);
+            const newUid = editRef.current.getData();
+            Actions.setUid(newUid)
         }
-        setShowEditIcon(true);
-        Actions.setName(getNameData.data.hoten);
-        const newUid = editRef.current.getData(); 
-        Actions.setUid(newUid)
-        const newName = getNameData.data.hoten;
-        Actions.setName(newName);
+        state_action({ type: "SAVE_BUTTON" })
         editRef.current.toggleEdit(false); 
     }
    
@@ -335,7 +402,7 @@ const UserRow = (props) => {
         <>
             {/* PROGRESS */}
             <Box sx={{ width: '500px', ml: 3, mt: 2 }}>
-                <Stepper activeStep={step} alternativeLabel>
+                <Stepper activeStep={state.step} alternativeLabel>
                     {steps.map((label, index) => (
                         <Step key={label}>
                             <StepLabel onClick={() => { HandleProgress(index) }}>{label}</StepLabel>
@@ -347,7 +414,7 @@ const UserRow = (props) => {
 
             {/* TABS */}
             <Box sx={{ mb: 2, position: "relative", mt: 2 }}>
-                <Tabs value={value} onChange={HandleTabs} centered>
+                <Tabs value={state.value} onChange={HandleTabs} centered>
                     <Tab label="Thông tin" onClick={HandleInfor} />
                     <Tab label="TKB Ngày" onClick={HandleToDay}/>
                     <Tab label="TKB Tuần" onClick={HandleWeek} />
@@ -374,9 +441,9 @@ const UserRow = (props) => {
                 />
 
                 {/* EDIT vs SAVE ICON */}
-                {showIcon && 
+                {state.showIcon && 
                 (<ListItemIcon >
-                        {showEditIcon ? 
+                        {state.showEditIcon ? 
                         <Fab variant="extended" onClick={HandleEditButton}>
                             <EditIcon sx={{ mr:2 }} />
                             Chỉnh sửa
@@ -391,14 +458,14 @@ const UserRow = (props) => {
             </ListItem>
 
             {/* ALERT */}
-            {showAlert && 
+            {state.showAlert && 
             <Alert sx={{ mt: 2 }} variant="outlined" severity="error">
                 ID không hợp lệ!
             </Alert>}
                     
             {/* SCHEDULE */}
-            {showDay && <DaySchedule />}
-            {showWeek && <WeekSchedule /> }
+            {state.showDay && <DaySchedule />}
+            {state.showWeek && <WeekSchedule /> }
             
         </>
     )
