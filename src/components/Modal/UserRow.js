@@ -229,7 +229,7 @@ const UserRow = (props) => {
     //OnClick ToDay Schedule
     const HandleToDay = async () => {
         setStep(2); 
-        todaytkbRef.current = await getTodaySchedule(props["user"].uui, 1, 2022); 
+        todaytkbRef.current = await getTodaySchedule(props["user"].uid, 1, 2022); 
         setShowDay(!showDay); 
         togglehideEdit(false);
     }
@@ -237,7 +237,7 @@ const UserRow = (props) => {
     //OnClick Week Schedule
     const HandleWeek = async () => {
         setStep(2); 
-        tkbRef.current = await getSchedule(props["user"].uui, 1, 2022); 
+        tkbRef.current = await getSchedule(props["user"].uid, 1, 2022); 
         setShowWeek(!showWeek); 
         togglehideEdit(false); 
     }
@@ -308,7 +308,7 @@ const UserRow = (props) => {
         getNameData.code === 0 ? toggleShowAler(true) : toggleShowAler(false); 
         setShowEdit(true); 
         setNewName(getNameData.data.hoten);
-        props['user'].uui = editRef.current.getData(); 
+        props['user'].uid = editRef.current.getData(); 
         editRef.current.toggleEdit(false); 
     }
    
@@ -379,8 +379,8 @@ const UserRow = (props) => {
             </Alert>}
                     
             {/* SCHEDULE */}
-            {showDay && <DaySchedule user={props['user']} todaytkb={todaytkbRef.current} />}
-            {showWeek && <WeekSchedule tkb={tkbRef.current}/> }
+            {showDay && <DaySchedule user={props['user']} dayschedule={todaytkbRef.current} />}
+            {showWeek && <WeekSchedule weekschedule={tkbRef.current}/> }
             
         </>
     )

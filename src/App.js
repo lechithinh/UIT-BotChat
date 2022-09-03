@@ -27,7 +27,7 @@ export const dispatch = createContext(null);
 
 const InitData = {
     "name": "Tên mặc định",
-    "uui" : "tiepnv",
+    "uid" : "tiepnv",
     "path": "https://previews.123rf.com/images/rido/rido1204/rido120400047/13283722-happy-smiling-guy-showing-thumb-up-hand-sign-isolated-on-white-background.jpg",
   }
 
@@ -35,12 +35,21 @@ const InitData = {
 
 
 function App() {
+  
   const webCamRef = useRef(null);
   const canvasRef = useRef(null);
+
+  //Ref to control process
   const inProcessRef = useRef(false);
+
+
+  //Ref to control compoents
   const modalRef = useRef(null);
   const notiRef = useRef(null);
-  const dataRef = useRef(InitData); //store all data here
+
+  //Ref to control data
+  const dataRef = useRef(InitData); 
+
   const screenSize = useRef({
     width: 0,
     height: 0,
@@ -114,19 +123,19 @@ function App() {
                   dataRef.current.name = res["data"][0]["name"].split("-")[0];
               
                   const text = res["data"][0]["name"].split("-")[1];
-                  let uui = '';
+                  let uid = '';
                   if(text){
                     for (let i = 1; i < text.length; i++) {
-                      uui += text[i];
+                      uid += text[i];
                       if (text[i + 1] == "@") { break }
                     }
-                    dataRef.current.uui = uui;
+                    dataRef.current.uid = uid;
                   }
 
                 }
                 else{
                   dataRef.current.name = "Người mới";
-                  dataRef.current.uui ="Nhập ID"
+                  dataRef.current.uid ="Nhập ID"
                 }
  
                 dataRef.current.path = "https://api.mmlab.uit.edu.vn/face/" + res["data"][0]["path"];

@@ -33,7 +33,7 @@ const TextEdit = (props, ref) => {
                         value={data}
                         sx={{ my: 1 }}
                     />
-                </FormControl>) : props["user"].uui}
+                </FormControl>) : props["user"].uid}
         </>
     )
 };

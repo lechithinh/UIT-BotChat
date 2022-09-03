@@ -13,6 +13,7 @@ import Paper from '@mui/material/Paper';
 
 
 const WeekSchedule = (props) => {
+    console.log("TKB Week: ", props.weekschedule)
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 450 }} aria-label="simple table">
@@ -25,8 +26,8 @@ const WeekSchedule = (props) => {
                 </TableHead>
                 <TableBody>
                     
-                    {props.tkb ? 
-                        (props.tkb.map((row,index) => (
+                    {props.weekschedule ? 
+                        (props.weekschedule.map((row,index) => (
                             <TableRow  key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 
                                 {<TableCell component="th" scope="row" align='center'> {row[0]} </TableCell>}

@@ -7,13 +7,13 @@ import { ListItem, ListItemText, ListItemIcon } from '@mui/material';
 import DirectionsIcon from '@mui/icons-material/Directions';
 
 const DaySchedule = (props) => {
-    
+    console.log("TKB ToDay: ", props.dayschedule)
     return (
         <>
             <ListItem>
                 
-                {props.todaytkb ?
-                    (props.todaytkb.map((row, index) => (
+                {props.dayschedule ?
+                    (props.dayschedule.map((row, index) => (
                         <ListItemText
                             key={index}
                             primary={row[0]}
@@ -23,7 +23,7 @@ const DaySchedule = (props) => {
                     ))) : <ListItem />} 
 
 
-                {props.todaytkb.length != 0 && 
+                {props.dayschedule.length != 0 && 
                 <ListItemIcon>
                     <Box sx={{ mr: -5, position: "relative" }}>
                         <Fab sx={{ m: 2 }} color="info" variant="extended">
