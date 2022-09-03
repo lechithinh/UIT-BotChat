@@ -1,10 +1,13 @@
+//React
 import React from "react";
+
+//Components
 import { Box, Fab } from "@mui/material";
-import { ListItem, ListItemAvatar, ListItemText, ListItemIcon } from '@mui/material';
+import { ListItem, ListItemText, ListItemIcon } from '@mui/material';
 import DirectionsIcon from '@mui/icons-material/Directions';
 
 const DaySchedule = (props) => {
-    console.log("TodaySchedule: ", props.todaytkb)
+    
     return (
         <>
             <ListItem>

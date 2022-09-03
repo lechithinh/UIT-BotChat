@@ -1,19 +1,16 @@
+//React 
 import React, { useState, forwardRef, useImperativeHandle } from "react";
-import {
-    Typography,
-    InputAdornment,
-    OutlinedInput,
-    InputLabel,
-    FormControl,
-} from "@mui/material";
+
+//Components
+import { OutlinedInput, InputLabel, FormControl} from "@mui/material";
 
 const TextEdit = (props, ref) => {
     const [edit, toggleEdit] = useState(false);
     const [data, setData] = useState("");
 
+
     const HandleChange = (event) => {
         setData(event.target.value);
-        console.log(data)
     };
 
     useImperativeHandle(ref, () => ({
