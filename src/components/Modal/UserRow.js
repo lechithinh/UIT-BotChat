@@ -218,16 +218,16 @@ const reducer = (state, action) => {
             return {
                 showIcon: false,
                 showDay: !state.showDay,
-                step: 2,
-                value: 1,
+                step: state.step,
+                value: state.value,
             }
         case "WEEK_SCHEDULE":
             return {
                 showIcon: false,
                 showDay: state.showDay,
                 showWeek: !state.showWeek,
-                step: 2,
-                value: 2,
+                step: state.step,
+                value: state.value,
             }
         case "EDIT_BUTTON":
             return {
@@ -260,6 +260,24 @@ const reducer = (state, action) => {
         case "CHANGE_TABS":
             return {
                 value: action.payload,
+            }
+        case "NO_SCHEDULE":
+            return {
+                showIcon: false,
+                showDay: !state.showDay,
+                showAlert: true,
+                step: 2,
+                value: 1,
+            }
+        case "WAITING_DAY_SCHEDULE":
+            return {
+                step: 2,
+                value: 1,
+            }
+        case "WAITING_WEEK_SCHEDULE":
+            return {
+                step: 2,
+                value: 2,
             }
 
     }
@@ -296,7 +314,7 @@ const UserRow = (props) => {
         else if (index === 2)
         {
             await getTodaySchedule(Contents.current.dataRef.current.uid, 1, 2022);
-            await getSchedule(Contents.current.dataRef.current.uid, 1, 2022);
+            await getWeekSchedule(Contents.current.dataRef.current.uid, 1, 2022);
             state_action({ type: "PROGRESS_TWO" })
         }
     }
@@ -308,18 +326,25 @@ const UserRow = (props) => {
 
     //OnClick ToDay Schedule
     const HandleToDay = async () => {
+        state_action({ type: "WAITING_DAY_SCHEDULE" })
         await getTodaySchedule(Contents.current.dataRef.current.uid, 1, 2022); 
         state_action({ type: "TODAY_SCHEDULE" })
+
+        if (Contents.current.dataRef.current.DaySchedule.length === 0){
+            Actions.setStatus("Hôm nay bạn không có lịch học!")
+            state_action({ type: "NO_SCHEDULE" })
+        }
     }
 
     //OnClick Week Schedule
     const HandleWeek = async () => {
-        await getSchedule(Contents.current.dataRef.current.uid, 1, 2022); 
+        state_action({ type: "WAITING_WEEK_SCHEDULE" })
+        await getWeekSchedule(Contents.current.dataRef.current.uid, 1, 2022); 
         state_action({ type: "WEEK_SCHEDULE" })
     }
 
     //Week Schedule API
-    const getSchedule = async (uid, hocky, namhoc) => {
+    const getWeekSchedule = async (uid, hocky, namhoc) => {
             const url = "http://localhost:3001/";
 
             const data = JSON.stringify({
@@ -364,6 +389,8 @@ const UserRow = (props) => {
 
         const daySchedule = HandleToDaySchedule(res);
         Actions.setDaySchedule(daySchedule);
+    
+        
         return daySchedule;
 
     };
@@ -379,6 +406,7 @@ const UserRow = (props) => {
     const HandleSaveButton = async () => {
         const getNameData = await GetNameById(editRef.current.getData()); 
         if (getNameData.code === 0){ //ID không hợp lệ => disable những cái tabs khác
+            Actions.setStatus("ID không hợp lệ!")
             state_action({ type: "INVALID_ID" })
            
         }
@@ -459,8 +487,11 @@ const UserRow = (props) => {
 
             {/* ALERT */}
             {state.showAlert && 
-            <Alert sx={{ mt: 2 }} variant="outlined" severity="error">
-                ID không hợp lệ!
+                <Alert 
+                sx={{ mt: 2 }} 
+                variant="outlined" 
+                severity={Contents.current.dataRef.current.Status === "ID không hợp lệ!" ? "error" : "info"}>
+                {Contents.current.dataRef.current.Status}
             </Alert>}
                     
             {/* SCHEDULE */}

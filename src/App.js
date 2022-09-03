@@ -31,6 +31,7 @@ const InitData = {
     "path": "https://previews.123rf.com/images/rido/rido1204/rido120400047/13283722-happy-smiling-guy-showing-thumb-up-hand-sign-isolated-on-white-background.jpg",
     "DaySchedule": [],
     "WeekSchedule": [],
+    "Status": "",
   }
 
 
@@ -71,7 +72,8 @@ function App() {
     setUid: (newUid) => {dataRef.current.uid = newUid}, 
     setPath: (newPath) => {dataRef.current.path = newPath},
     setDaySchedule: (newDaySchedule) => { dataRef.current.DaySchedule = [].concat(newDaySchedule)},
-    setWeekSchedule: (newWeekSchedule) => { dataRef.current.WeekSchedule = [].concat(newWeekSchedule) }
+    setWeekSchedule: (newWeekSchedule) => { dataRef.current.WeekSchedule = [].concat(newWeekSchedule)},
+    setStatus: (newStatus) => { dataRef.current.Status = newStatus }
   }
 
   async function onResults(results){
