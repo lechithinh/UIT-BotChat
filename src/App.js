@@ -13,8 +13,7 @@ import {useEffect,useRef,useState, createContext} from 'react'
 //Components
 import Modal from './components/Modal';
 import Noti from './components/Notifications';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import Fab from '@mui/material/Fab';
+import BackButton from './components/BackButton';
 //Modules
 
 
@@ -30,12 +29,6 @@ const InitData = {
     "name": "Tên mặc định",
     "uui" : "tiepnv",
     "path": "https://previews.123rf.com/images/rido/rido1204/rido120400047/13283722-happy-smiling-guy-showing-thumb-up-hand-sign-isolated-on-white-background.jpg",
-    "subject1": "Cơ sở dữ liệu",
-    "time1": "13h30 - 15h30",
-    "room1": "B201",
-    "subject2": "Toán rời rạc",
-    "time2": "13h30 - 17h30",
-    "room2": "B201",
   }
 
 
@@ -199,11 +192,7 @@ function App() {
           <Webcam ref={webCamRef} style={{ visibility: "hidden", position: "absolute" }} />
           
           {/* Go Back Button */}
-          <Fab variant="extended" color="primary" sx={{ position: "absolute", top: "22px", left: "12px",}} href="http://map.mmlab.uit.edu.vn">
-            <ArrowBackIosNewIcon sx={{ mr: 1 }} />
-            Quay lại
-          
-          </Fab>
+          <BackButton />
 
           {/* Output Video */}
           <canvas ref={canvasRef} style={{ position: "absolute", top : "100px", left: "0"}}></canvas>
@@ -213,7 +202,7 @@ function App() {
 
           {/* Main Modal */}
           <Modal ref={modalRef} />
-          
+
         </dispatch.Provider>
       </context.Provider>
 
