@@ -38,8 +38,7 @@ const InitData = {
     "room2": "B201",
   }
 
-// back + điều kiện + redirect 
-// call api tkb
+
 
 
 function App() {
@@ -58,6 +57,7 @@ function App() {
   const img = new Image();
   img.src = require("./Banner.png")
 
+  // Contents and Dispatch
   const Contents = useRef({
     dataRef,
   })
@@ -91,7 +91,7 @@ function App() {
       const sWidth = results.detections[0].boundingBox["width"] * size;
       
 
-      //Noti
+      // Show Notifications Condition
       if (sHeight < 300 && sWidth < 255 && !inProcessRef.current){
         setTimeout(()=>{
           notiRef.current.setshowNoti(true);
@@ -99,13 +99,13 @@ function App() {
         
       }
       
-      //Process
+      //Process Condition
       if (sHeight > 300 && sWidth > 225 && !inProcessRef.current) {
         inProcessRef.current = true;
         let file = DataURLtoFile(webCamRef.current.getScreenshot(), `${1}.jpeg`);
         console.log("file: ", file)
 
-        //Call api for modal
+        //API Face Recognition
         const formData = new FormData();
         formData.append("files", file);
         axios
@@ -142,23 +142,10 @@ function App() {
               notiRef.current.setshowNoti(false);
               modalRef.current.setshowModal(true);
           }) 
-
       }
     }
   
-    //Reset nếu không có forehead thì mới reset 
-    // if (results.detections.length === 0 && inProcessRef.current == true) {
-    //   setTimeout(() => {
-    //     inProcessRef.current = false;
-    //     modalRef.current.setshowModal(false);
-    //   }, 5000);
-
-    //   //3 giây nữa mới restart lại
-    //   setTimeout(() => {
-    //     inProcessRef.current = false;
-    //   }, 3000);
-    // }
-
+      // Auto Close Condiction (On Work)
     canvasCtx.restore();
   }
 
@@ -202,18 +189,31 @@ function App() {
     camera.start();
   }, []);
   
+
   return (
     <div className="App">
       <context.Provider value={Contents}>
         <dispatch.Provider value={Actions}>
+
+          {/* Input Video */}
           <Webcam ref={webCamRef} style={{ visibility: "hidden", position: "absolute" }} />
+          
+          {/* Go Back Button */}
           <Fab variant="extended" color="primary" sx={{ position: "absolute", top: "22px", left: "12px",}} href="http://map.mmlab.uit.edu.vn">
             <ArrowBackIosNewIcon sx={{ mr: 1 }} />
             Quay lại
+          
           </Fab>
+
+          {/* Output Video */}
           <canvas ref={canvasRef} style={{ position: "absolute", top : "100px", left: "0"}}></canvas>
+         
+          {/* Notifications */}
           <Noti ref={notiRef} />
+
+          {/* Main Modal */}
           <Modal ref={modalRef} />
+          
         </dispatch.Provider>
       </context.Provider>
 

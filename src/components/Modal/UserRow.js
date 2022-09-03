@@ -10,8 +10,6 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import axios from "axios";
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import GetNameById from "../../utils/GetNameById";
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
@@ -24,11 +22,15 @@ const steps = [
 ];
 
 
-// Focus to Edit + save => api getName => Update model
-// Handle auto close
-// Clean code
-// Clean TKB
-// Clean Css
+// Clean Code
+// Add ngày hôm nay + giờ 
+// Add register khi save
+// Xử lí tkb
+// Thuật toán auto tắt 
+// Cách không gọi api lại 
+// store dữ liệu tốt hơn
+// add spiner đang call api
+// add thông báo khi không có data
 
 const UserRow = (props) => {
     
@@ -50,14 +52,14 @@ const UserRow = (props) => {
     };
 
     const handleTabs = async (index) => {
-        if(index == 1){
+        if(index === 1){
             setStep(1);
             setValue(0);
             setShowDay(false); 
             setShowWeek(false);
             togglehideEdit(true);
         }
-        else if (index == 2)
+        else if (index === 2)
         {
             setStep(2);
             setValue(2);
@@ -92,12 +94,12 @@ const UserRow = (props) => {
 
 
             for (const item of res.data["data"]) {
-                if (item["thu"] == "*") {
+                if (item["thu"] === "*") {
                     continue;
                 }
                 const temp = []
                 Object.keys(item).forEach(function (key) {
-                    if (key == "tenmh" || key == "thu" || key == "tiet" || key == "phonghoc") {
+                    if (key === "tenmh" || key === "thu" || key === "tiet" || key === "phonghoc") {
                         temp.push(item[key]);
                     }
                 });
@@ -117,7 +119,7 @@ const UserRow = (props) => {
             }
 
             for (const subarr of storage) {
-                if (subarr[2][0] == "1" || subarr[2][0] == "2" || subarr[2][0] == "3" || subarr[2][0] == "4" || subarr[2][0] == "5") {
+                if (subarr[2][0] === "1" || subarr[2][0] === "2" || subarr[2][0] === "3" || subarr[2][0] === "4" || subarr[2][0] === "5") {
                     subarr[2] = "Sáng";
                 }
                 else {
@@ -135,48 +137,48 @@ const UserRow = (props) => {
             ]
 
             for (const ele of storage) {
-                if (ele[1] == "2") {
-                    if (ele[2] == "Sáng") {
+                if (ele[1] === "2") {
+                    if (ele[2] === "Sáng") {
                         result[0][1] = ele[0];
                     }
                     else {
                         result[0][2] = ele[0];
                     }
                 }
-                else if (ele[1] == "3") {
-                    if (ele[2] == "Sáng") {
+                else if (ele[1] === "3") {
+                    if (ele[2] === "Sáng") {
                         result[1][1] = ele[0];
                     }
                     else {
                         result[1][2] = ele[0];
                     }
                 }
-                else if (ele[1] == "4") {
-                    if (ele[2] == "Sáng") {
+                else if (ele[1] === "4") {
+                    if (ele[2] === "Sáng") {
                         result[2][1] = ele[0];
                     }
                     else {
                         result[2][2] = ele[0];
                     }
                 }
-                else if (ele[1] == "5") {
-                    if (ele[2] == "Sáng") {
+                else if (ele[1] === "5") {
+                    if (ele[2] === "Sáng") {
                         result[3][1] = ele[0];
                     }
                     else {
                         result[3][2] = ele[0];
                     }
                 }
-                else if (ele[1] == "6") {
-                    if (ele[2] == "Sáng") {
+                else if (ele[1] === "6") {
+                    if (ele[2] === "Sáng") {
                         result[4][1] = ele[0];
                     }
                     else {
                         result[4][2] = ele[0];
                     }
                 }
-                else if (ele[1] == "7") {
-                    if (ele[2] == "Sáng") {
+                else if (ele[1] === "7") {
+                    if (ele[2] === "Sáng") {
                         result[5][1] = ele[0];
                     }
                     else {
@@ -214,12 +216,12 @@ const UserRow = (props) => {
 
 
         for (const item of res.data["data"]) {
-            if (item["thu"] == "*") {
+            if (item["thu"] === "*") {
                 continue;
             }
             const temp = []
             Object.keys(item).forEach(function (key) {
-                if (key == "tenmh" || key == "thu" || key == "tiet" || key == "phonghoc") {
+                if (key === "tenmh" || key === "thu" || key === "tiet" || key === "phonghoc") {
                     temp.push(item[key]);
                 }
             });
@@ -302,7 +304,7 @@ const UserRow = (props) => {
                             Chỉnh sửa
                         </Fab> 
                         : 
-                        <Fab variant="extended" color="success" onClick={async () => { const getNameData = await GetNameById(editRef.current.getData()); getNameData.code == 0 ? toggleShowAler(true) : toggleShowAler(false); setShowEdit(true); setNewName(getNameData.data.hoten); props['user'].uui = editRef.current.getData() ;editRef.current.toggleEdit(false);  }}>
+                        <Fab variant="extended" color="success" onClick={async () => { const getNameData = await GetNameById(editRef.current.getData()); getNameData.code === 0 ? toggleShowAler(true) : toggleShowAler(false); setShowEdit(true); setNewName(getNameData.data.hoten); props['user'].uui = editRef.current.getData() ;editRef.current.toggleEdit(false);  }}>
                             <SaveIcon sx={{ mr: 2 }} />
                             Lưu
                         </Fab>}
