@@ -28,10 +28,16 @@ const Modal = (props, ref) => {
         setshowModal,
     }));
 
+    const HandleClose = () => {
+        Actions.setProcess(false)
+        setshowModal(!showModal)
+        console.log("Đợi 3 giây để bắt đầu lại")
+    }
+
     return (
         <>
             {/* Main Modal */}
-            <Dialog open={showModal} onClose={() => { setshowModal(!showModal) }}>
+            <Dialog open={showModal} onClose={HandleClose}>
 
                 {/* Content Modal */}
                 <DialogContent>        

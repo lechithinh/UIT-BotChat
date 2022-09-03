@@ -65,6 +65,7 @@ function App() {
   // Contents and Dispatch
   const Contents = useRef({
     dataRef,
+    inProcessRef,
   })
 
   const Actions = {
@@ -73,7 +74,9 @@ function App() {
     setPath: (newPath) => {dataRef.current.path = newPath},
     setDaySchedule: (newDaySchedule) => { dataRef.current.DaySchedule = [].concat(newDaySchedule)},
     setWeekSchedule: (newWeekSchedule) => { dataRef.current.WeekSchedule = [].concat(newWeekSchedule)},
-    setStatus: (newStatus) => { dataRef.current.Status = newStatus }
+    setStatus: (newStatus) => { dataRef.current.Status = newStatus },
+
+    setProcess: (newProcess) => { inProcessRef.current = newProcess}
   }
 
   async function onResults(results){
@@ -199,6 +202,7 @@ function App() {
     camera.start();
   }, []);
   
+
 
   return (
     <div className="App">
