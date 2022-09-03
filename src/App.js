@@ -26,9 +26,11 @@ export const context = createContext(null);
 export const dispatch = createContext(null);
 
 const InitData = {
-    "name": "Tên mặc định",
-    "uid" : "tiepnv",
+    "name": "Người mới",
+    "uid" : "id",
     "path": "https://previews.123rf.com/images/rido/rido1204/rido120400047/13283722-happy-smiling-guy-showing-thumb-up-hand-sign-isolated-on-white-background.jpg",
+    "DaySchedule": [],
+    "WeekSchedule": [],
   }
 
 
@@ -65,7 +67,11 @@ function App() {
   })
 
   const Actions = {
-    setData: (res) => { dataRef.current = res},
+    setName: (newName) => {dataRef.current.name = newName},
+    setUid: (newUid) => {dataRef.current.uid = newUid}, 
+    setPath: (newPath) => {dataRef.current.path = newPath},
+    setDaySchedule: (newDaySchedule) => { dataRef.current.DaySchedule = [].concat(newDaySchedule)},
+    setWeekSchedule: (newWeekSchedule) => { dataRef.current.WeekSchedule = [].concat(newWeekSchedule) }
   }
 
   async function onResults(results){

@@ -1,6 +1,6 @@
 //React
 import * as React from 'react';
-
+import { useContext } from 'react';
 //Components
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,10 +10,18 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
+//Global contents and dispatch from App
+import { context, dispatch } from "../../App"
 
 
 const WeekSchedule = (props) => {
-    console.log("TKB Week: ", props.weekschedule)
+    
+    //Global contents and dispatch
+    const Contents = useContext(context)
+    const Actions = useContext(dispatch)
+
+    const Schedule = Contents.current.dataRef.current.WeekSchedule;
+
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 450 }} aria-label="simple table">
@@ -26,8 +34,8 @@ const WeekSchedule = (props) => {
                 </TableHead>
                 <TableBody>
                     
-                    {props.weekschedule ? 
-                        (props.weekschedule.map((row,index) => (
+                    {Schedule ? 
+                        (Schedule.map((row,index) => (
                             <TableRow  key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 
                                 {<TableCell component="th" scope="row" align='center'> {row[0]} </TableCell>}

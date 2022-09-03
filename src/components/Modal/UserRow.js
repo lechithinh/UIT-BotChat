@@ -1,5 +1,5 @@
 //React
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 
 //Libaries
 import axios from "axios";
@@ -25,7 +25,8 @@ import WeekSchedule from "./WeekSchedule"
 //Utils
 import GetNameById from "../../utils/GetNameById";
 
-
+//Global contents and dispatch from App
+import { context, dispatch } from "../../App"
 
 
 // Content Progress
@@ -178,18 +179,24 @@ const HandleToDaySchedule = (res) => {
 
 const UserRow = (props) => {
     
-    
+    //Global contents and dispatch
+    const Contents = useContext(context)
+    const Actions = useContext(dispatch)
+
+    console.log("Current Data: ", Contents.current.dataRef.current)
+
+    //Components control
     const [showDay, setShowDay] = useState(false);
     const [showWeek, setShowWeek] = useState(false);
-    const [showEdit, setShowEdit] = useState(true);
+    const [showIcon, setShowIcon] = useState(true)
+    const [showEditIcon, setShowEditIcon] = useState(true);
+    const [showAlert, setShowAlert] = useState(false);
+
+    //Tabs and progress control
     const [step, setStep] = useState(1)
     const [value, setValue] = useState(0);
-    const [newName, setNewName] = useState(props['user'].name)
-    const [hideEdit, togglehideEdit] = useState(true)
-    const [showAlert, toggleShowAler] = useState(false);
 
-    const tkbRef = useRef(null);
-    const todaytkbRef = useRef(null);
+    //Ref to control sub components
     const editRef = useRef(null);
 
     //OnClick Tabs
@@ -204,17 +211,17 @@ const UserRow = (props) => {
             setValue(0);
             setShowDay(false); 
             setShowWeek(false);
-            togglehideEdit(true);
+            setShowIcon(true);
         }
         else if (index === 2)
         {
             setStep(2);
             setValue(2);
-            todaytkbRef.current = await getTodaySchedule(props["user"].uui, 1, 2022);
-            tkbRef.current = await getSchedule(props["user"].uui, 1, 2022);
+            await getTodaySchedule(Contents.current.dataRef.current.uid, 1, 2022);
+            await getSchedule(Contents.current.dataRef.current.uid, 1, 2022);
             setShowDay(true);
             setShowWeek(true);
-            togglehideEdit(false);
+            setShowIcon(false);
         }
     }
 
@@ -223,23 +230,23 @@ const UserRow = (props) => {
         setShowDay(false); 
         setShowWeek(false); 
         setStep(1); 
-        togglehideEdit(true);
+        setShowIcon(true);
     }
 
     //OnClick ToDay Schedule
     const HandleToDay = async () => {
         setStep(2); 
-        todaytkbRef.current = await getTodaySchedule(props["user"].uid, 1, 2022); 
+        await getTodaySchedule(Contents.current.dataRef.current.uid, 1, 2022); 
         setShowDay(!showDay); 
-        togglehideEdit(false);
+        setShowIcon(false);
     }
 
     //OnClick Week Schedule
     const HandleWeek = async () => {
         setStep(2); 
-        tkbRef.current = await getSchedule(props["user"].uid, 1, 2022); 
+        await getSchedule(Contents.current.dataRef.current.uid, 1, 2022); 
         setShowWeek(!showWeek); 
-        togglehideEdit(false); 
+        setShowIcon(false); 
     }
 
     //Week Schedule API
@@ -261,11 +268,9 @@ const UserRow = (props) => {
                 data: data,
             };
             const res = await axios(config);
-            
             const result = HandleWeekSchedule(res);
-
+            Actions.setWeekSchedule(result);
             return result;
-            
         };
 
     // Today Schedule API
@@ -289,29 +294,42 @@ const UserRow = (props) => {
         const res = await axios(config);
 
         const daySchedule = HandleToDaySchedule(res);
-       
+        Actions.setDaySchedule(daySchedule);
         return daySchedule;
 
     };
     
     // OnClick Edit Button
     const HandleEditButton = async () => {
-        setShowEdit(false); 
-        setNewName(""); 
+        setShowEditIcon(false); 
+        Actions.setName("");
         editRef.current.toggleEdit(true); 
-        toggleShowAler(false) 
+        setShowAlert(false) 
     }
 
     //OnClick Save Button
     const HandleSaveButton = async () => {
         const getNameData = await GetNameById(editRef.current.getData()); 
-        getNameData.code === 0 ? toggleShowAler(true) : toggleShowAler(false); 
-        setShowEdit(true); 
-        setNewName(getNameData.data.hoten);
-        props['user'].uid = editRef.current.getData(); 
+        if (getNameData.code === 0){ //ID không hợp lệ => disable những cái tabs khác
+            setShowAlert(true)
+           
+        }
+        else{
+            setShowAlert(false); 
+        }
+        setShowEditIcon(true);
+        Actions.setName(getNameData.data.hoten);
+        const newUid = editRef.current.getData(); 
+        Actions.setUid(newUid)
+        const newName = getNameData.data.hoten;
+        Actions.setName(newName);
         editRef.current.toggleEdit(false); 
     }
    
+
+    useEffect(()=>{
+        console.log("Re-render")
+    })
 
     return (
         <>
@@ -343,22 +361,22 @@ const UserRow = (props) => {
                 {/* AVATATAR */}
                 <ListItemAvatar>
                     <Avatar
-                        src={props["user"].path}
+                        src={Contents.current.dataRef.current.path}
                         sx={{ width: 56, height: 56 }}
                     />
                 </ListItemAvatar>
 
                 {/* NAME vs uid */}
                 <ListItemText
-                    primary={newName} 
-                    secondary={<TextEdit user={props['user']} ref={editRef}/>} 
+                    primary={Contents.current.dataRef.current.name} 
+                    secondary={<TextEdit ref={editRef}/>} 
                     sx={{ margin: "10px 20px 2px 20px" }}
                 />
 
                 {/* EDIT vs SAVE ICON */}
-                {hideEdit && 
+                {showIcon && 
                 (<ListItemIcon >
-                        {showEdit ? 
+                        {showEditIcon ? 
                         <Fab variant="extended" onClick={HandleEditButton}>
                             <EditIcon sx={{ mr:2 }} />
                             Chỉnh sửa
@@ -379,8 +397,8 @@ const UserRow = (props) => {
             </Alert>}
                     
             {/* SCHEDULE */}
-            {showDay && <DaySchedule user={props['user']} dayschedule={todaytkbRef.current} />}
-            {showWeek && <WeekSchedule weekschedule={tkbRef.current}/> }
+            {showDay && <DaySchedule />}
+            {showWeek && <WeekSchedule /> }
             
         </>
     )

@@ -1,19 +1,28 @@
 //React
-import React from "react";
+import React, {useContext} from "react";
 
 //Components
 import { Box, Fab } from "@mui/material";
 import { ListItem, ListItemText, ListItemIcon } from '@mui/material';
 import DirectionsIcon from '@mui/icons-material/Directions';
 
+//Global contents and dispatch from App
+import { context, dispatch } from "../../App"
+
 const DaySchedule = (props) => {
-    console.log("TKB ToDay: ", props.dayschedule)
+
+    //Global contents and dispatch
+    const Contents = useContext(context)
+    const Actions = useContext(dispatch)
+
+    const Schedule = Contents.current.dataRef.current.DaySchedule;
+
     return (
         <>
             <ListItem>
                 
-                {props.dayschedule ?
-                    (props.dayschedule.map((row, index) => (
+                {Schedule ?
+                    (Schedule.map((row, index) => (
                         <ListItemText
                             key={index}
                             primary={row[0]}
@@ -23,7 +32,7 @@ const DaySchedule = (props) => {
                     ))) : <ListItem />} 
 
 
-                {props.dayschedule.length != 0 && 
+                {Schedule.length != 0 && 
                 <ListItemIcon>
                     <Box sx={{ mr: -5, position: "relative" }}>
                         <Fab sx={{ m: 2 }} color="info" variant="extended">
