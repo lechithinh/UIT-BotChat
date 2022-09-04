@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 const GetNameById = async (username) => {
-  const url = "http://localhost:3001/";
+  const url = "http://localhost:5555/";
   const data = JSON.stringify({
     username,
   });

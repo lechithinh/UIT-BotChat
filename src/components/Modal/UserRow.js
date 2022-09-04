@@ -345,7 +345,7 @@ const UserRow = (props) => {
 
     //Week Schedule API
     const getWeekSchedule = async (uid, hocky, namhoc) => {
-            const url = "http://localhost:3001/";
+            const url = "http://localhost:5555/";
 
             const data = JSON.stringify({
                 uid,
@@ -369,7 +369,7 @@ const UserRow = (props) => {
 
     // Today Schedule API
     const getTodaySchedule = async (uid, hocky, namhoc) => {
-        const url = "http://localhost:3001/";
+        const url = "http://localhost:5555/";
 
         const data = JSON.stringify({
             uid,
