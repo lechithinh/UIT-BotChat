@@ -181,9 +181,11 @@ const state_init = {
     showWeek: false,
     showIcon: true,
     showEditIcon: true,
+    showTime: false,
     showAlert: false,
     step: 1,
     value: 0,
+    
 
 }
 const reducer = (state, action) => {
@@ -202,6 +204,7 @@ const reducer = (state, action) => {
                 showIcon: false,
                 showDay: true,
                 showWeek: true,
+                showTime: true,
                 step: 2,
                 value: 2,
             }
@@ -211,6 +214,7 @@ const reducer = (state, action) => {
                 showEditIcon: true,
                 showDay: false,
                 showWeek: false,
+                showTime: false,
                 step: 1,
                 value: 0,
             }
@@ -218,6 +222,7 @@ const reducer = (state, action) => {
             return {
                 showIcon: false,
                 showDay: !state.showDay,
+                showTime: true,
                 step: state.step,
                 value: state.value,
             }
@@ -226,6 +231,7 @@ const reducer = (state, action) => {
                 showIcon: false,
                 showDay: state.showDay,
                 showWeek: !state.showWeek,
+                showTime: true,
                 step: state.step,
                 value: state.value,
             }
@@ -266,6 +272,7 @@ const reducer = (state, action) => {
                 showIcon: false,
                 showDay: !state.showDay,
                 showAlert: true,
+                showTime: true,
                 step: 2,
                 value: 1,
             }
@@ -311,7 +318,7 @@ const UserRow = (props) => {
         if(index === 1){
             state_action({ type: "PROGRESS_ONE"})
         }
-        else if (index === 2)
+        else if (index === 2 && Contents.current.dataRef.current.Status != "ID không hợp lệ!")
         {
             await getTodaySchedule(Contents.current.dataRef.current.uid, 1, 2022);
             await getWeekSchedule(Contents.current.dataRef.current.uid, 1, 2022);
@@ -404,6 +411,7 @@ const UserRow = (props) => {
 
     //OnClick Save Button
     const HandleSaveButton = async () => {
+        Actions.setUid(editRef.current.getData());
         const getNameData = await GetNameById(editRef.current.getData()); 
         if (getNameData.code === 0){ //ID không hợp lệ => disable những cái tabs khác
             Actions.setStatus("ID không hợp lệ!")
@@ -412,6 +420,7 @@ const UserRow = (props) => {
         }
         else{
             state_action({ type: "VALID_ID" })
+            Actions.setStatus("ID hợp lệ!")
             const newName = getNameData.data.hoten;
             Actions.setName(newName);
             const newUid = editRef.current.getData();
@@ -426,14 +435,20 @@ const UserRow = (props) => {
         console.log("Re-render")
     })
 
+    const currentTime = new Date().toLocaleString();;
+
     return (
         <>
             {/* PROGRESS */}
             <Box sx={{ width: '500px', ml: 3, mt: 2 }}>
-                <Stepper activeStep={state.step} alternativeLabel>
+                <Stepper activeStep={state.step} alternativeLabel={true}>
                     {steps.map((label, index) => (
                         <Step key={label}>
-                            <StepLabel onClick={() => { HandleProgress(index) }}>{label}</StepLabel>
+                            <StepLabel 
+                            error={(index == 2 && Contents.current.dataRef.current.Status === "ID không hợp lệ!") ? true : false }
+                            disabled={(index == 2 && Contents.current.dataRef.current.Status === "ID không hợp lệ!") ? true : false} 
+                            onClick={() => { HandleProgress(index) }}>{label}
+                            </StepLabel>
                         </Step>
                     ))}
                 </Stepper>
@@ -443,9 +458,9 @@ const UserRow = (props) => {
             {/* TABS */}
             <Box sx={{ mb: 2, position: "relative", mt: 2 }}>
                 <Tabs value={state.value} onChange={HandleTabs} centered>
-                    <Tab label="Thông tin" onClick={HandleInfor} />
-                    <Tab label="TKB Ngày" onClick={HandleToDay}/>
-                    <Tab label="TKB Tuần" onClick={HandleWeek} />
+                    <Tab label="Thông tin"  onClick={HandleInfor}  />
+                    <Tab label="TKB Ngày" disabled={Contents.current.dataRef.current.Status === "ID không hợp lệ!" ? true : false} onClick={HandleToDay} />
+                    <Tab label="TKB Tuần" disabled={Contents.current.dataRef.current.Status === "ID không hợp lệ!" ? true : false} onClick={HandleWeek} />
                 </Tabs>                     
             </Box>
      
@@ -472,7 +487,7 @@ const UserRow = (props) => {
                 {state.showIcon && 
                 (<ListItemIcon >
                         {state.showEditIcon ? 
-                        <Fab variant="extended" onClick={HandleEditButton}>
+                        <Fab variant="extended" color={Contents.current.dataRef.current.Status === "ID không hợp lệ!" ? "error" : "default"} onClick={HandleEditButton}>
                             <EditIcon sx={{ mr:2 }} />
                             Chỉnh sửa
                         </Fab> 
@@ -482,6 +497,8 @@ const UserRow = (props) => {
                             Lưu
                         </Fab>}
                 </ListItemIcon>)}
+
+                {state.showTime && currentTime}
                 
             </ListItem>
 
