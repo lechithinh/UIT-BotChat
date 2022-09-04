@@ -2,11 +2,17 @@ const express = require('express')
 const app = express();
 const {getSchedule} = require('./server/schedule.js')
 const {GetNameById} = require('./server/getNameById.js')
+const path = require('path')
 const cors = require('cors')
 
 app.use(cors())
 app.use(express.json())
 
+app.use(express.static(path.join(__dirname, "build")));
+
+app.get("/", function(req, res) {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 app.post('/get-schedule', async(req, res) => {
     try {
@@ -36,6 +42,6 @@ app.post("/get-name", async (req, res) => {
     }
 });
 
-app.listen(3001, () => {
-    console.log('server is running at http://localhost:3001')
+app.listen(5555, () => {
+    console.log('server is running at http://localhost:5555')
 })
