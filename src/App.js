@@ -66,6 +66,7 @@ function App() {
   const Contents = useRef({
     dataRef,
     inProcessRef,
+    notiRef,
   })
 
   const Actions = {
@@ -76,7 +77,12 @@ function App() {
     setWeekSchedule: (newWeekSchedule) => { dataRef.current.WeekSchedule = [].concat(newWeekSchedule)},
     setStatus: (newStatus) => { dataRef.current.Status = newStatus },
 
-    setProcess: (newProcess) => { inProcessRef.current = newProcess}
+    //Process
+    setProcess: (newProcess) => { inProcessRef.current = newProcess},
+
+    //Message
+    setNotiMessage: (newNoti, newTime) => { notiRef.current.setMessage(newNoti, newTime)},
+    setNotiShow: (isShow) => { notiRef.current.setshowNoti(isShow)}
   }
 
   async function onResults(results){

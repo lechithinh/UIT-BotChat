@@ -29,9 +29,17 @@ const Modal = (props, ref) => {
     }));
 
     const HandleClose = () => {
-        Actions.setProcess(false)
+        Actions.setNotiMessage("Hãy đợi 3 giây để bắt đầu lại!", 3000);
+        Actions.setNotiShow(true);
         setshowModal(!showModal)
-        console.log("Đợi 3 giây để bắt đầu lại")
+        setTimeout(() => {
+            Actions.setProcess(false);
+
+            Actions.setNotiMessage("Xin hãy lại gần hơn!", 1000);
+            Actions.setNotiShow(false);
+        }, 4000);
+        
+        
     }
 
     return (
