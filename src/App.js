@@ -59,13 +59,13 @@ function App() {
   });
 
   var camera = null;
-  const img = new Image();
-  img.src = require("./Banner.png")
+ 
 
   // Contents and Dispatch
   const Contents = useRef({
     dataRef,
     inProcessRef,
+    notiRef,
   })
 
   const Actions = {
@@ -76,7 +76,12 @@ function App() {
     setWeekSchedule: (newWeekSchedule) => { dataRef.current.WeekSchedule = [].concat(newWeekSchedule)},
     setStatus: (newStatus) => { dataRef.current.Status = newStatus },
 
-    setProcess: (newProcess) => { inProcessRef.current = newProcess}
+    //Process
+    setProcess: (newProcess) => { inProcessRef.current = newProcess},
+
+    //Message
+    setNotiMessage: (newNoti, newTime) => { notiRef.current.setMessage(newNoti, newTime)},
+    setNotiShow: (isShow) => { notiRef.current.setshowNoti(isShow)}
   }
 
   async function onResults(results){
@@ -88,7 +93,8 @@ function App() {
     canvasCtx.save();
     canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
     canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
-    canvasCtx.drawImage(img, 0, 0, canvasElement.width, canvasElement.height);
+
+    canvasCtx.drawImage(document.getElementById("img-frame"),0,0,canvasElement.width,canvasElement.height);
     
 
     if (results.detections.length > 0) {

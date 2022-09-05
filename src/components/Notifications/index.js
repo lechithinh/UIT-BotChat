@@ -1,6 +1,6 @@
 //React
 import * as React from 'react';
-import { useImperativeHandle, forwardRef, useState } from 'react';
+import { useImperativeHandle, forwardRef, useState, useRef } from 'react';
 
 //Components
 import Stack from '@mui/material/Stack';
@@ -15,16 +15,18 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 const Noti = (props, ref) => {
     const [showNoti, setshowNoti] = useState(false);
     const [message, setMessage] = useState("Xin hãy lại gần hơn!")
+    const TimeDurration = useRef(1000);
 
     // Position alert
     const vertical = 'top'
     const horizontal = 'center'
 
 
+
     // For App to use
     useImperativeHandle(ref, () => ({
         setshowNoti,
-        setMessage,
+        setMessage: (message, time) => { setMessage(message); TimeDurration.current = time}
     }));
     
 
@@ -37,7 +39,7 @@ const Noti = (props, ref) => {
 
     return (
         <Stack  sx={{ width: '100%' }}>
-            <Snackbar anchorOrigin={{ vertical, horizontal }}  open={showNoti} autoHideDuration={1000} onClose={handleClose}>
+            <Snackbar anchorOrigin={{ vertical, horizontal }} open={showNoti} autoHideDuration={TimeDurration.current} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }}>
                     {message}
                 </Alert>
