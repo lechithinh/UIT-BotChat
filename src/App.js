@@ -59,8 +59,7 @@ function App() {
   });
 
   var camera = null;
-  const img = new Image();
-  img.src = require("./Banner.png")
+ 
 
   // Contents and Dispatch
   const Contents = useRef({
@@ -94,7 +93,8 @@ function App() {
     canvasCtx.save();
     canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
     canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
-    canvasCtx.drawImage(img, 0, 0, canvasElement.width, canvasElement.height);
+
+    canvasCtx.drawImage(document.getElementById("img-frame"),0,0,canvasElement.width,canvasElement.height);
     
 
     if (results.detections.length > 0) {
