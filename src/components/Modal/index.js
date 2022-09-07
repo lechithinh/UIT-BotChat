@@ -1,5 +1,5 @@
 //React
-import React from "react";
+import React, { useRef } from "react";
 import { useState, useImperativeHandle, forwardRef, useContext } from "react";
 
 //Compoents
@@ -26,8 +26,8 @@ const Modal = (props, ref) => {
     //Global contents and dispatch
     const Contents = useContext(context)
     const Actions = useContext(dispatch)
-
-    const [activeStep, setActiveStep] = useState(0);
+    
+    const [step, setStep] = useState(1);
 
     // For App to use
     useImperativeHandle(ref, () => ({
@@ -51,13 +51,13 @@ const Modal = (props, ref) => {
     return (
         <>
             {/* Main Modal */}
-            <CustomStepper steps={steps} activeStep={activeStep} setActiveStep={setActiveStep} />
+            {showModal && <CustomStepper steps={steps} activeStep={step} setActiveStep={setStep} />}
 
-            <Dialog sx={{zIndex: 0}}open={showModal} onClose={HandleClose}>
+            <Dialog sx={{zIndex: 0}} open={showModal} onClose={HandleClose}>
 
                 {/* Content Modal */}
                 <DialogContent>        
-                    <UserRow user={Contents.current.dataRef.current} setshowModal={setshowModal}/>
+                    <UserRow user={Contents.current.dataRef.current} setStep={setStep}/>
                 </DialogContent>
 
             </Dialog>

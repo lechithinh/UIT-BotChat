@@ -1,5 +1,5 @@
 //React
-import React, { useState, useRef, useContext, useEffect, useReducer } from "react";
+import React, { useState, useRef, useContext, useEffect, useReducer, forwardRef, useImperativeHandle } from "react";
 
 //Libaries
 import axios from "axios";
@@ -29,12 +29,6 @@ import GetNameById from "../../utils/GetNameById";
 import { context, dispatch } from "../../App"
 
 
-// Content Progress
-const steps = [
-    'Nhận diện',
-    'Kiểm tra thông tin',
-    'Thời khóa biểu',
-];
 
 const HandleWeekSchedule = (res) => {
     const storage = []
@@ -183,31 +177,12 @@ const state_init = {
     showEditIcon: true,
     showTime: false,
     showAlert: false,
-    step: 1,
     value: 0,
     
 
 }
 const reducer = (state, action) => {
     switch (action.type){
-        case "PROGRESS_ONE":
-            return {
-                showIcon: true, 
-                showEditIcon: true,
-                showDay: false,
-                showWeek: false,
-                step: 1,
-                value: 0,
-            }
-        case "PROGRESS_TWO":
-            return {
-                showIcon: false,
-                showDay: true,
-                showWeek: true,
-                showTime: true,
-                step: 2,
-                value: 2,
-            }
         case "INFOR":
             return {
                 showIcon: true,
@@ -215,7 +190,6 @@ const reducer = (state, action) => {
                 showDay: false,
                 showWeek: false,
                 showTime: false,
-                step: 1,
                 value: 0,
             }
         case "TODAY_SCHEDULE":
@@ -223,7 +197,6 @@ const reducer = (state, action) => {
                 showIcon: false,
                 showDay: !state.showDay,
                 showTime: true,
-                step: state.step,
                 value: state.value,
             }
         case "WEEK_SCHEDULE":
@@ -232,7 +205,6 @@ const reducer = (state, action) => {
                 showDay: state.showDay,
                 showWeek: !state.showWeek,
                 showTime: true,
-                step: state.step,
                 value: state.value,
             }
         case "EDIT_BUTTON":
@@ -240,7 +212,6 @@ const reducer = (state, action) => {
                 showIcon: true,
                 showEditIcon: false,
                 showAlert: false,
-                step: 1,
                 value: 0,
             }
         case "SAVE_BUTTON":
@@ -248,19 +219,16 @@ const reducer = (state, action) => {
                 showIcon: true,
                 showEditIcon: true,
                 showAlert: state.showAlert,
-                step: 1,
                 value: 0,
             }
         case "INVALID_ID":
             return {
                 showAlert: true,
-                step: 1,
                 value: 0,
             }
         case "VALID_ID":
             return {
                 showAlert: false,
-                step: 1,
                 value: 0,
             }
         case "CHANGE_TABS":
@@ -273,18 +241,7 @@ const reducer = (state, action) => {
                 showDay: !state.showDay,
                 showAlert: true,
                 showTime: true,
-                step: 2,
                 value: 1,
-            }
-        case "WAITING_DAY_SCHEDULE":
-            return {
-                step: 2,
-                value: 1,
-            }
-        case "WAITING_WEEK_SCHEDULE":
-            return {
-                step: 2,
-                value: 2,
             }
 
     }
@@ -294,11 +251,13 @@ const reducer = (state, action) => {
 
 
 
-const UserRow = (props) => {
+const UserRow = (props, ref) => {
     
     //Global contents and dispatch
     const Contents = useContext(context)
     const Actions = useContext(dispatch)
+    const currentTime = new Date().toLocaleString();
+
 
     //All states
     const [state, state_action] = useReducer(reducer, state_init)
@@ -308,32 +267,22 @@ const UserRow = (props) => {
     //Ref to control sub components
     const editRef = useRef(null);
 
+
     //OnClick Tabs
     const HandleTabs = (event, newValue) => {
         state_action({ type: "CHANGE_TABS", payload: newValue })
     };
 
-    // OnClick Progress
-    const HandleProgress = async (index) => {
-        if(index === 1){
-            state_action({ type: "PROGRESS_ONE"})
-        }
-        else if (index === 2 && Contents.current.dataRef.current.Status != "ID không hợp lệ!")
-        {
-            await getTodaySchedule(Contents.current.dataRef.current.uid, 1, 2022);
-            await getWeekSchedule(Contents.current.dataRef.current.uid, 1, 2022);
-            state_action({ type: "PROGRESS_TWO" })
-        }
-    }
 
     //OnClick Infor
     const HandleInfor = () => {
-        state_action({ type: "INFOR" })
+        props.setStep(1)
+        state_action({ type: "INFOR" }) 
     }
 
     //OnClick ToDay Schedule
-    const HandleToDay = async () => {
-        state_action({ type: "WAITING_DAY_SCHEDULE" })
+    const HandleToDay = async () => { 
+        props.setStep(2)
         await getTodaySchedule(Contents.current.dataRef.current.uid, 1, 2022); 
         state_action({ type: "TODAY_SCHEDULE" })
 
@@ -345,7 +294,7 @@ const UserRow = (props) => {
 
     //OnClick Week Schedule
     const HandleWeek = async () => {
-        state_action({ type: "WAITING_WEEK_SCHEDULE" })
+        props.setStep(2)
         await getWeekSchedule(Contents.current.dataRef.current.uid, 1, 2022); 
         state_action({ type: "WEEK_SCHEDULE" })
     }
@@ -435,26 +384,11 @@ const UserRow = (props) => {
         console.log("Re-render")
     })
 
-    const currentTime = new Date().toLocaleString();;
+
+    
 
     return (
         <>
-            {/* PROGRESS */}
-            <Box sx={{ width: '500px', ml: 3, mt: 2 }}>
-                <Stepper activeStep={state.step} alternativeLabel={true}>
-                    {steps.map((label, index) => (
-                        <Step key={label}>
-                            <StepLabel 
-                            error={(index == 2 && Contents.current.dataRef.current.Status === "ID không hợp lệ!") ? true : false }
-                            disabled={(index == 2 && Contents.current.dataRef.current.Status === "ID không hợp lệ!") ? true : false} 
-                            onClick={() => { HandleProgress(index) }}>{label}
-                            </StepLabel>
-                        </Step>
-                    ))}
-                </Stepper>
-            </Box>
-
-
             {/* TABS */}
             <Box sx={{ mb: 2, position: "relative", mt: 2 }}>
                 <Tabs value={state.value} onChange={HandleTabs} centered>
