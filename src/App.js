@@ -53,6 +53,8 @@ function App() {
   //Ref to control data
   const dataRef = useRef(InitData); 
 
+  
+
   const screenSize = useRef({
     width: 0,
     height: 0,
@@ -222,7 +224,7 @@ function App() {
           <BackButton />
 
           {/* Output Video */}
-          <canvas ref={canvasRef} style={{ position: "absolute", top : "100px", left: "0"}}></canvas>
+          <canvas ref={canvasRef} style={{ position: "absolute", top : "200px", left: "0"}}></canvas>
          
           {/* Notifications */}
           <Noti ref={notiRef} />

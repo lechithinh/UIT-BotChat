@@ -4,7 +4,7 @@ import { useState, useImperativeHandle, forwardRef, useContext } from "react";
 
 //Compoents
 import { Dialog, DialogContent} from "@mui/material";
-
+import CustomStepper from "../Stepper";
 //Sub components itself
 import UserRow from "./UserRow";
 
@@ -12,7 +12,11 @@ import UserRow from "./UserRow";
 import { context, dispatch } from "../../App"
 
 
-
+const steps = [
+    "1. Nhận diện.",
+    "2. Kiểm tra thông tin.",
+    "3. Thời khóa biểu.",
+];
 
 
 
@@ -22,6 +26,8 @@ const Modal = (props, ref) => {
     //Global contents and dispatch
     const Contents = useContext(context)
     const Actions = useContext(dispatch)
+
+    const [activeStep, setActiveStep] = useState(0);
 
     // For App to use
     useImperativeHandle(ref, () => ({
@@ -45,7 +51,9 @@ const Modal = (props, ref) => {
     return (
         <>
             {/* Main Modal */}
-            <Dialog open={showModal} onClose={HandleClose}>
+            <CustomStepper steps={steps} activeStep={activeStep} setActiveStep={setActiveStep} />
+
+            <Dialog sx={{zIndex: 0}}open={showModal} onClose={HandleClose}>
 
                 {/* Content Modal */}
                 <DialogContent>        
