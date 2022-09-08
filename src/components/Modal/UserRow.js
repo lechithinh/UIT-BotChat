@@ -202,7 +202,7 @@ const reducer = (state, action) => {
         case "WEEK_SCHEDULE":
             return {
                 showIcon: false,
-                showDay: state.showDay,
+                showDay: true,
                 showWeek: !state.showWeek,
                 showTime: true,
                 value: state.value,
@@ -288,6 +288,11 @@ const UserRow = (props, ref) => {
 
         if (Contents.current.dataRef.current.DaySchedule.length === 0){
             Actions.setStatus("Hôm nay bạn không có lịch học!")
+            state_action({ type: "NO_SCHEDULE" })
+        }
+
+        if (Contents.current.dataRef.current.DaySchedule.length > 5){
+            Actions.setStatus("ID không hợp lệ!")
             state_action({ type: "NO_SCHEDULE" })
         }
     }
@@ -393,8 +398,8 @@ const UserRow = (props, ref) => {
             <Box sx={{ mb: 2, position: "relative", mt: 2, '& .MuiTab-root': {fontSize: "23px", fontWeight: "700"} }}>
                 <Tabs value={state.value} onChange={HandleTabs} centered>
                     <Tab label="Thông tin"  onClick={HandleInfor}  />
-                    <Tab label="TKB Ngày" disabled={Contents.current.dataRef.current.Status === "ID không hợp lệ!" ? true : false} onClick={HandleToDay} />
-                    <Tab label="TKB Tuần" disabled={Contents.current.dataRef.current.Status === "ID không hợp lệ!" ? true : false} onClick={HandleWeek} />
+                    <Tab label="TKB Ngày" disabled={Contents.current.dataRef.current.Status === "ID không hợp lệ!" || Contents.current.dataRef.current.name === "Người mới" ? true : false} onClick={HandleToDay} />
+                    <Tab label="TKB Tuần" disabled={Contents.current.dataRef.current.Status === "ID không hợp lệ!" || Contents.current.dataRef.current.name === "Người mới" ? true : false} onClick={HandleWeek} />
                 </Tabs>                     
             </Box>
      
@@ -414,16 +419,16 @@ const UserRow = (props, ref) => {
                 <ListItemText
                     primary={Contents.current.dataRef.current.name} 
                     secondary={<TextEdit ref={editRef}/>} 
-                    sx={{ margin: "5px 15px 2px 20px", '& .MuiTypography-root':{fontSize: "25px"}}}
+                    sx={{ margin: "5px 15px 2px 20px", '& .MuiTypography-root':{fontSize: "25px", fontWeight: 600}}}
                 />
 
                 {/* EDIT vs SAVE ICON */}
                 {state.showIcon && 
-                (<ListItemIcon >
+                (<ListItemIcon sx={{ '& .MuiButtonBase-root': { fontWeight: 600, width: "200px"} }}>
                         {state.showEditIcon ? 
-                        <Fab  variant="extended" color={Contents.current.dataRef.current.Status === "ID không hợp lệ!" ? "error" : "default"} onClick={HandleEditButton}>
+                        <Fab variant="extended" color={Contents.current.dataRef.current.Status === "ID không hợp lệ!" ? "error" : "default"} onClick={HandleEditButton}>
                             <EditIcon sx={{ mr: 2}} />
-                            Chỉnh sửa
+                            {Contents.current.dataRef.current.name === "Người mới" ? "Đăng kí người mới" : "Chỉnh sửa"}
                         </Fab> 
                         : 
                         <Fab variant="extended" color="success" onClick={HandleSaveButton}>
@@ -432,7 +437,7 @@ const UserRow = (props, ref) => {
                         </Fab>}
                 </ListItemIcon>)}
 
-                {state.showTime && currentTime}
+                {state.showTime && <h2 style={{ paddingTop: '2rem'}}>{currentTime}</h2>}
                 
             </ListItem>
 

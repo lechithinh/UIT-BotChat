@@ -32,8 +32,8 @@ const TextEdit = (props, ref) => {
     return (
         <>
             {edit ? (
-                <FormControl sx={{ width: "170px" }}>
-                    <InputLabel htmlFor="name-input">ID</InputLabel>
+                <FormControl sx={{ width: "200px", '& .MuiOutlinedInput-input': { height: "2em" }, '& .MuiInputLabel-root': {fontSize: "25px"} }}>
+                    <InputLabel htmlFor="name-input">MSSV/GV</InputLabel>
                     <OutlinedInput
                         id="name-input"
                         onChange={HandleChange}

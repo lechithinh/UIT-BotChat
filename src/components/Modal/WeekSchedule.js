@@ -24,7 +24,7 @@ const WeekSchedule = (props) => {
 
     return (
         <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 450 }} aria-label="simple table">
+            <Table sx={{ minWidth: 450, "& .MuiTableCell-root": { fontSize: "1.3rem" } }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
                         <TableCell align="center">Thứ</TableCell>
@@ -36,7 +36,7 @@ const WeekSchedule = (props) => {
                     
                     {Schedule ? 
                         (Schedule.map((row,index) => (
-                            <TableRow  key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                            <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 }, "& .MuiTableCell-root": { fontSize: "1.3rem" } }}>
 
                                 {<TableCell component="th" scope="row" align='center'> {row[0]} </TableCell>}
                                 {row[1] == 0 ? <TableCell align="center">_</TableCell> : <TableCell  align="center">{row[1]}</TableCell>}

@@ -28,7 +28,7 @@ export const dispatch = createContext(null);
 const InitData = {
     "name": "Người mới",
     "uid" : "id",
-    "path": "https://previews.123rf.com/images/rido/rido1204/rido120400047/13283722-happy-smiling-guy-showing-thumb-up-hand-sign-isolated-on-white-background.jpg",
+    "path": "https://i.stack.imgur.com/l60Hf.png",
     "DaySchedule": [],
     "WeekSchedule": [],
     "Status": "",
@@ -113,7 +113,7 @@ function App() {
       
 
       // Show Notifications Condition
-      if (sHeight < 300 && sWidth < 255 && !inProcessRef.current){
+      if (sHeight < 150 && sWidth < 110 && !inProcessRef.current){
         setTimeout(()=>{
           notiRef.current.setshowNoti(true);
         },1500);
@@ -121,7 +121,7 @@ function App() {
       }
       
       //Process Condition
-      if (sHeight > 300 && sWidth > 225 && !inProcessRef.current) {
+      if (sHeight > 150 && sWidth > 110 && !inProcessRef.current) {
         inProcessRef.current = true;
         let file = DataURLtoFile(webCamRef.current.getScreenshot(), `${1}.jpeg`);
         console.log("file: ", file)

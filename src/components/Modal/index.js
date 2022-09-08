@@ -56,12 +56,17 @@ const Modal = (props, ref) => {
             <Dialog sx={{
                 zIndex: 0,
                 '& .MuiDialog-paper': {
-                    borderRadius: '25px',
-                }}} 
+                    borderRadius: '35px',
+                    maxWidth: "800px",
+                },
+
+                '& .MuiDialogContent-root': {width: "700px"},
+                }} 
                 open={showModal} onClose={HandleClose}> 
 
+
                 {/* Content Modal */}
-                <DialogContent sx={{ width: "570px", padding: "10px" }}>        
+                <DialogContent sx={{ width: "570px", padding: "10px", '& .MuiDialogContent-root': {width: "500px"} }}>        
                     <UserRow  user={Contents.current.dataRef.current} setStep={setStep}/>
                 </DialogContent>
 

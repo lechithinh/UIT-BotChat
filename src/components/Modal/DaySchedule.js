@@ -26,8 +26,8 @@ const DaySchedule = (props) => {
                         <ListItemText
                             key={index}
                             primary={row[0]}
-                            secondary={row[2] + "  |  " + row[3]}
-                            sx={{ margin: "6px 15px 6px 15px" }}
+                            secondary={"Tiết " + row[2] + "  |  " + row[3]}
+                            sx={{ margin: "6px 15px 6px 15px", "& .MuiTypography-root": {fontSize: "1.6rem"} }}
                         />
                     ))) : <ListItem />} 
 
@@ -35,8 +35,8 @@ const DaySchedule = (props) => {
                 {Schedule.length != 0 && 
                 <ListItemIcon>
                     <Box sx={{ mr: -5, position: "relative" }}>
-                        <Fab sx={{ m: 2 }} color="info" variant="extended">
-                            <DirectionsIcon onClick={() => { console.log("Chỉ đường") }} sx={{ mr: 1 }} />
+                        <Fab sx={{ m: 4 }} color="info" variant="extended">
+                            <DirectionsIcon onClick={() => { console.log("Chỉ đường") }} sx={{ mr: 2 }} />
                             Chỉ đường
                         </Fab>
                     </Box>
