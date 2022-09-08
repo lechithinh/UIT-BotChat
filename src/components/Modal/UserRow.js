@@ -325,7 +325,7 @@ const UserRow = (props, ref) => {
 
     // Today Schedule API
     const getTodaySchedule = async (uid, hocky, namhoc) => {
-        const url = "http://localhost:5555/";
+        const url = "http://localhost:5555/calendar/";
 
         const data = JSON.stringify({
             uid,
