@@ -301,7 +301,7 @@ const UserRow = (props, ref) => {
 
     //Week Schedule API
     const getWeekSchedule = async (uid, hocky, namhoc) => {
-            const url = "http://localhost:5555/";
+            const url = "https://api.mmlab.uit.edu.vn/calender/";
 
             const data = JSON.stringify({
                 uid,

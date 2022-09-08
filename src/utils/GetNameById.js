@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 const GetNameById = async (username) => {
-  const url = "http://localhost:5555/calendar/";
+  const url = "https://api.mmlab.uit.edu.vn/calendar/";
   const data = JSON.stringify({
     username,
   });
