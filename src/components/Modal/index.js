@@ -53,11 +53,16 @@ const Modal = (props, ref) => {
             {/* Main Modal */}
             {showModal && <CustomStepper steps={steps} activeStep={step} setActiveStep={setStep} />}
 
-            <Dialog sx={{zIndex: 0}} open={showModal} onClose={HandleClose}>
+            <Dialog sx={{
+                zIndex: 0,
+                '& .MuiDialog-paper': {
+                    borderRadius: '25px',
+                }}} 
+                open={showModal} onClose={HandleClose}> 
 
                 {/* Content Modal */}
-                <DialogContent>        
-                    <UserRow user={Contents.current.dataRef.current} setStep={setStep}/>
+                <DialogContent sx={{ width: "570px", padding: "10px" }}>        
+                    <UserRow  user={Contents.current.dataRef.current} setStep={setStep}/>
                 </DialogContent>
 
             </Dialog>

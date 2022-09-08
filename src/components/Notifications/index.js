@@ -6,7 +6,7 @@ import { useImperativeHandle, forwardRef, useState, useRef } from 'react';
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-
+import { Typography } from '@mui/material';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -41,7 +41,7 @@ const Noti = (props, ref) => {
         <Stack  sx={{ width: '100%' }}>
             <Snackbar anchorOrigin={{ vertical, horizontal }} open={showNoti} autoHideDuration={TimeDurration.current} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }}>
-                    {message}
+                    <Typography variant='h5'>{message}</Typography>
                 </Alert>
             </Snackbar>
         </Stack>

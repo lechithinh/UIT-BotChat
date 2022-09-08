@@ -390,7 +390,7 @@ const UserRow = (props, ref) => {
     return (
         <>
             {/* TABS */}
-            <Box sx={{ mb: 2, position: "relative", mt: 2 }}>
+            <Box sx={{ mb: 2, position: "relative", mt: 2, '& .MuiTab-root': {fontSize: "23px", fontWeight: "700"} }}>
                 <Tabs value={state.value} onChange={HandleTabs} centered>
                     <Tab label="Thông tin"  onClick={HandleInfor}  />
                     <Tab label="TKB Ngày" disabled={Contents.current.dataRef.current.Status === "ID không hợp lệ!" ? true : false} onClick={HandleToDay} />
@@ -414,15 +414,15 @@ const UserRow = (props, ref) => {
                 <ListItemText
                     primary={Contents.current.dataRef.current.name} 
                     secondary={<TextEdit ref={editRef}/>} 
-                    sx={{ margin: "10px 20px 2px 20px" }}
+                    sx={{ margin: "5px 15px 2px 20px", '& .MuiTypography-root':{fontSize: "25px"}}}
                 />
 
                 {/* EDIT vs SAVE ICON */}
                 {state.showIcon && 
                 (<ListItemIcon >
                         {state.showEditIcon ? 
-                        <Fab variant="extended" color={Contents.current.dataRef.current.Status === "ID không hợp lệ!" ? "error" : "default"} onClick={HandleEditButton}>
-                            <EditIcon sx={{ mr:2 }} />
+                        <Fab  variant="extended" color={Contents.current.dataRef.current.Status === "ID không hợp lệ!" ? "error" : "default"} onClick={HandleEditButton}>
+                            <EditIcon sx={{ mr: 2}} />
                             Chỉnh sửa
                         </Fab> 
                         : 
