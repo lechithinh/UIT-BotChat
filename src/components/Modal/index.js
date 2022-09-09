@@ -10,7 +10,7 @@ import UserRow from "./UserRow";
 
 //Global contents and dispatch from App
 import { context, dispatch } from "../../App"
-
+import PlayAudio from "../../utils/PlayAudio";
 
 const steps = [
     "1. Nhận diện.",
@@ -35,6 +35,7 @@ const Modal = (props, ref) => {
     }));
 
     const HandleClose = () => {
+        PlayAudio("thankyou");
         Actions.setNotiMessage("Hãy đợi 3 giây để bắt đầu lại!", 3000);
         //Reset step
         setStep(1)

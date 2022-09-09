@@ -20,6 +20,7 @@ import BackButton from './components/BackButton';
 
 //Utils
 import DataURLtoFile from "./utils/DataURLtoFile"
+import PlayAudio from './utils/PlayAudio';
 import axios from 'axios';
 
 export const context = createContext(null); 
@@ -145,6 +146,7 @@ function App() {
               "Content-Type": "multipart/form-data",
             },
           }).then((res) => {
+              console.log("Res", res)
               if(res["data"][0])
               {
                 if (res["data"][0]["name"] != '')
@@ -159,19 +161,22 @@ function App() {
                       if (text[i + 1] == "@") { break }
                     }
                     dataRef.current.uid = uid;
+                    PlayAudio('schedule');
                   }
-
                 }
-                else{
-                  dataRef.current.name = "Người mới";
-                  dataRef.current.uid ="Nhập ID"
+                else
+                {
+                  PlayAudio('makefriend');
                 }
- 
                 dataRef.current.path = "https://api.mmlab.uit.edu.vn/face/" + res["data"][0]["path"];
+              }
+              else {
+                PlayAudio('makefriend');
               }
       
               notiRef.current.setshowNoti(false);
               modalRef.current.setshowModal(true);
+              
           }) 
       }
     }

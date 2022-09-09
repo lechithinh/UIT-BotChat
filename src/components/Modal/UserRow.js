@@ -25,6 +25,7 @@ import LessonCode from "./LessonCode";
 
 //Utils
 import GetNameById from "../../utils/GetNameById";
+import PlayAudio from "../../utils/PlayAudio";
 
 //Global contents and dispatch from App
 import { context, dispatch } from "../../App"
@@ -546,15 +547,18 @@ const UserRow = (props, ref) => {
         Actions.setName("");
         editRef.current.toggleEdit(true); 
         state_action({ type: "EDIT_BUTTON" })
+        PlayAudio('edit')
     }
 
     //OnClick Save Button
     const HandleSaveButton = async () => {
         Actions.setUid(editRef.current.getData());
         const getNameData = await GetNameById(editRef.current.getData()); 
-        if (getNameData.code === 0){ //ID không hợp lệ => disable những cái tabs khác
+        if (getNameData.code === 0){ //ID không hợp lệ 
+            PlayAudio('errorsave')
             Actions.setStatus("ID không hợp lệ!")
             state_action({ type: "INVALID_ID" })
+            
            
         }
         else{
@@ -564,6 +568,7 @@ const UserRow = (props, ref) => {
             Actions.setName(newName);
             const newUid = editRef.current.getData();
             Actions.setUid(newUid)
+            PlayAudio('save')
         }
         state_action({ type: "SAVE_BUTTON" })
         editRef.current.toggleEdit(false); 
