@@ -27,7 +27,7 @@ export const dispatch = createContext(null);
 
 const InitData = {
     "name": "Người mới",
-    "uid" : "id",
+    "uid" : "MSSV/GV",
     "path": "https://i.stack.imgur.com/l60Hf.png",
     "DaySchedule": [],
     "WeekSchedule": [],
@@ -83,7 +83,17 @@ function App() {
 
     //Message
     setNotiMessage: (newNoti, newTime) => { notiRef.current.setMessage(newNoti, newTime)},
-    setNotiShow: (isShow) => { notiRef.current.setshowNoti(isShow)}
+    setNotiShow: (isShow) => { notiRef.current.setshowNoti(isShow)},
+
+    //Reset User
+    resetData: () => { 
+      Actions.setName("Người mới");
+      Actions.setUid("MSSV/GV")
+      Actions.setPath("https://i.stack.imgur.com/l60Hf.png")
+      Actions.setDaySchedule([]);
+      Actions.setWeekSchedule([]);
+      Actions.setStatus("")
+    }
   }
 
   async function onResults(results){

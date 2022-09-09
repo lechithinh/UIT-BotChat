@@ -3,9 +3,9 @@ import { styled } from "@mui/material/styles";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import SignLanguageIcon from "@mui/icons-material/SignLanguage";
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
-import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import StepConnector, {
     stepConnectorClasses,
 } from "@mui/material/StepConnector";
@@ -38,7 +38,7 @@ const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
 const ColorlibStepIconRoot = styled("div")(({ theme, ownerState }) => ({
     backgroundColor:
         theme.palette.mode === "dark" ? theme.palette.grey[700] : "#ccc",
-    zIndex: 1,
+    zIndex: 3,
     color: "#fff",
     width: 50,
     height: 50,
@@ -61,9 +61,9 @@ function ColorlibStepIcon(props) {
     const { active, completed, className } = props;
 
     const icons = {
-        1: <SignLanguageIcon sx={{ scale: '1.4' }} />,
+        1: <PersonSearchIcon sx={{ scale: '1.5' }} />,
         2: <ImageSearchIcon sx={{ scale: '1.4' }} />,
-        3: <MarkEmailReadIcon sx={{ scale: '1.4' }} />,
+        3: <CalendarMonthIcon sx={{ scale: '1.4' }} />,
     };
 
     return (

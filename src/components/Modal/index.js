@@ -36,11 +36,14 @@ const Modal = (props, ref) => {
 
     const HandleClose = () => {
         Actions.setNotiMessage("Hãy đợi 3 giây để bắt đầu lại!", 3000);
+        //Reset step
+        setStep(1)
+        //Reset data
+        Actions.resetData();
         Actions.setNotiShow(true);
         setshowModal(!showModal)
         setTimeout(() => {
             Actions.setProcess(false);
-
             Actions.setNotiMessage("Xin hãy lại gần hơn!", 1000);
             Actions.setNotiShow(false);
         }, 4000);
@@ -66,7 +69,7 @@ const Modal = (props, ref) => {
 
 
                 {/* Content Modal */}
-                <DialogContent sx={{ width: "570px", padding: "10px", '& .MuiDialogContent-root': {width: "500px"} }}>        
+                <DialogContent sx={{ width: "570px", padding: "40px", '& .MuiDialogContent-root': {width: "500px"} }}>        
                     <UserRow  user={Contents.current.dataRef.current} setStep={setStep}/>
                 </DialogContent>
 
