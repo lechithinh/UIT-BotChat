@@ -21,6 +21,7 @@ import Alert from '@mui/material/Alert';
 import TextEdit from "./Textedit";
 import DaySchedule from "./DaySchedule";
 import WeekSchedule from "./WeekSchedule"
+import LessonCode from "./LessonCode";
 
 //Utils
 import GetNameById from "../../utils/GetNameById";
@@ -142,7 +143,12 @@ const HandleWeekStudent  = (res) => {
     for (const item of res.data["data"]) {
         const temp = []
         Object.keys(item).forEach(function (key) {
-            if (key === "malop" || key === "thu" || key === "tiet" || key === "phonghoc") {
+            if (key === "malop") {
+                let code = item[key].split(".")
+                temp.push(LessonCode[code[0]]);
+            }
+
+            if (key === "thu" || key === "tiet" || key === "phonghoc") {
                 temp.push(item[key]);
             }
         });
@@ -258,7 +264,12 @@ const HandleForStudent = (res) => {
     for (const item of res.data["data"]) {
         const temp = []
         Object.keys(item).forEach(function (key) {
-            if (key === "malop" || key === "thu" || key === "tiet" || key === "phonghoc") {
+            if (key === "malop") {
+                let code = item[key].split(".")
+                temp.push(LessonCode[code[0]]);
+            }
+            
+            if (key === "thu" || key === "tiet" || key === "phonghoc") {
                 temp.push(item[key]);
             }
         });
