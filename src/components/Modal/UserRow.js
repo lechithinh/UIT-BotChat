@@ -130,7 +130,59 @@ const HandleWeekSchedule = (res) => {
     return result; 
 }
 
-const HandleToDaySchedule = (res) => {
+const HandleForStudent = (res) => {
+    Array.prototype.move = function (from, to) {
+        this.splice(to, 0, this.splice(from, 1)[0]);
+        return this;
+    };
+
+
+    const storage = []
+    for (const item of res.data["data"]) {
+        const temp = []
+        Object.keys(item).forEach(function (key) {
+            if (key === "malop" || key === "thu" || key === "tiet" || key === "phonghoc") {
+                temp.push(item[key]);
+            }
+        });
+        storage.push(temp);
+    }
+
+    console.log("storage1", storage)
+    for (const obj of storage) {
+        obj.move(2, 0);
+        obj.move(2, 3);
+    }
+
+
+
+
+    for (let i = 0; i < storage.length; i++) {
+        for (let j = 0; j < storage.length; j++) {
+            const thu1 = parseInt(storage[i][1]);
+            const thu2 = parseInt(storage[j][1]);
+            if (thu1 < thu2) {
+                let t = storage[i];
+                storage[i] = storage[j];
+                storage[j] = t;
+            }
+        }
+    }
+
+
+    const daySchedule = []
+    var num = new Date().getDay();
+    num += 1;
+    let today = num.toString()
+    for (const element of storage) {
+        if (element[1] === today) {
+            daySchedule.push(element);
+        }
+    }
+    return daySchedule;
+}
+
+const HandleForTeacher = (res) => {
     const storage = []
     for (const item of res.data["data"]) {
         if (item["thu"] === "*") {
@@ -169,6 +221,15 @@ const HandleToDaySchedule = (res) => {
     }
 
     return daySchedule;
+}
+
+const HandleTodaySchedule = (res) => {
+    if ('tenmh' in res.data["data"][0] ){
+        return HandleForTeacher(res);
+    }
+    else {
+        return HandleForStudent(res);
+    }
 }
 const state_init = {
     showDay: false,
@@ -291,7 +352,7 @@ const UserRow = (props, ref) => {
             state_action({ type: "NO_SCHEDULE" })
         }
 
-        if (Contents.current.dataRef.current.DaySchedule.length > 5){
+        if (Contents.current.dataRef.current.DaySchedule.length > 10){
             Actions.setStatus("ID không hợp lệ!")
             state_action({ type: "NO_SCHEDULE" })
         }
@@ -347,11 +408,8 @@ const UserRow = (props, ref) => {
             data: data,
         };
         const res = await axios(config);
-
-        const daySchedule = HandleToDaySchedule(res);
+        const daySchedule = HandleTodaySchedule(res);
         Actions.setDaySchedule(daySchedule);
-    
-        
         return daySchedule;
 
     };
@@ -428,7 +486,7 @@ const UserRow = (props, ref) => {
                         {state.showEditIcon ? 
                         <Fab variant="extended" color={Contents.current.dataRef.current.Status === "ID không hợp lệ!" ? "error" : "default"} onClick={HandleEditButton}>
                             <EditIcon sx={{ mr: 2}} />
-                            {Contents.current.dataRef.current.name === "Người mới" ? "Đăng kí người mới" : "Chỉnh sửa"}
+                            {Contents.current.dataRef.current.name === "Người mới" ? "Đăng kí" : "Chỉnh sửa"}
                         </Fab> 
                         : 
                         <Fab variant="extended" color="success" onClick={HandleSaveButton}>
