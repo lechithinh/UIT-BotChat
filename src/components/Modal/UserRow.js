@@ -30,7 +30,7 @@ import { context, dispatch } from "../../App"
 
 
 
-const HandleWeekSchedule = (res) => {
+const HandleWeekTeacher = (res) => {
     const storage = []
 
     for (const item of res.data["data"]) {
@@ -130,6 +130,123 @@ const HandleWeekSchedule = (res) => {
     return result; 
 }
 
+const HandleWeekStudent  = (res) => {
+    Array.prototype.move = function (from, to) {
+        this.splice(to, 0, this.splice(from, 1)[0]);
+        return this;
+    };
+
+
+    const storage = []
+
+    for (const item of res.data["data"]) {
+        const temp = []
+        Object.keys(item).forEach(function (key) {
+            if (key === "malop" || key === "thu" || key === "tiet" || key === "phonghoc") {
+                temp.push(item[key]);
+            }
+        });
+        storage.push(temp);
+    }
+
+    for (const obj of storage) {
+        obj.move(2, 0);
+        obj.move(2, 3);
+    }
+
+    for (let i = 0; i < storage.length; i++) {
+        for (let j = 0; j < storage.length; j++) {
+            const thu1 = parseInt(storage[i][1]);
+            const thu2 = parseInt(storage[j][1]);
+            if (thu1 < thu2) {
+                let t = storage[i];
+                storage[i] = storage[j];
+                storage[j] = t;
+            }
+        }
+    }
+
+    for (const subarr of storage) {
+        if (subarr[2][0] === "1" || subarr[2][0] === "2" || subarr[2][0] === "3" || subarr[2][0] === "4" || subarr[2][0] === "5") {
+            subarr[2] = "Sáng";
+        }
+        else {
+            subarr[2] = "Chiều";
+        }
+    }
+
+    const result = [
+        ["2", 0, 1],
+        ["3", 0, 1],
+        ["4", 0, 1],
+        ["5", 0, 1],
+        ["6", 0, 1],
+        ["7", 0, 1],
+    ]
+
+    for (const ele of storage) {
+        if (ele[1] === "2") {
+            if (ele[2] === "Sáng") {
+                result[0][1] = ele[0];
+            }
+            else {
+                result[0][2] = ele[0];
+            }
+        }
+        else if (ele[1] === "3") {
+            if (ele[2] === "Sáng") {
+                result[1][1] = ele[0];
+            }
+            else {
+                result[1][2] = ele[0];
+            }
+        }
+        else if (ele[1] === "4") {
+            if (ele[2] === "Sáng") {
+                result[2][1] = ele[0];
+            }
+            else {
+                result[2][2] = ele[0];
+            }
+        }
+        else if (ele[1] === "5") {
+            if (ele[2] === "Sáng") {
+                result[3][1] = ele[0];
+            }
+            else {
+                result[3][2] = ele[0];
+            }
+        }
+        else if (ele[1] === "6") {
+            if (ele[2] === "Sáng") {
+                result[4][1] = ele[0];
+            }
+            else {
+                result[4][2] = ele[0];
+            }
+        }
+        else if (ele[1] === "7") {
+            if (ele[2] === "Sáng") {
+                result[5][1] = ele[0];
+            }
+            else {
+                result[5][2] = ele[0];
+            }
+        }
+    }
+
+    return result;
+
+}
+const HandleWeekSchedule = (res) => {
+    if ('tenmh' in res.data["data"][0]) {
+        return HandleWeekTeacher(res);
+    }
+    else {
+        return HandleWeekStudent(res);
+    }
+}
+
 const HandleForStudent = (res) => {
     Array.prototype.move = function (from, to) {
         this.splice(to, 0, this.splice(from, 1)[0]);
@@ -181,7 +298,6 @@ const HandleForStudent = (res) => {
     }
     return daySchedule;
 }
-
 const HandleForTeacher = (res) => {
     const storage = []
     for (const item of res.data["data"]) {
