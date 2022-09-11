@@ -22,11 +22,11 @@ const WeekSchedule = (props) => {
 
     var num = new Date().getDay();
     num += 1;
-    let today = num.toString()
+    let today = num.toString();
 
     return (
         <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 450, "& .MuiTableCell-root": { fontSize: "1.3rem" } }} aria-label="simple table">
+            <Table sx={{ minWidth: 450, backgroundColor: "white","& .MuiTableCell-root": { fontSize: "1.3rem" } }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
                         <TableCell align="center">Thứ</TableCell>
