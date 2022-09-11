@@ -26,14 +26,7 @@ import axios from 'axios';
 export const context = createContext(null); 
 export const dispatch = createContext(null);
 
-const InitData = {
-    "name": "Người mới",
-    "uid" : "MSSV/GV",
-    "path": "https://i.stack.imgur.com/l60Hf.png",
-    "DaySchedule": [],
-    "WeekSchedule": [],
-    "Status": "",
-  }
+
 
 
 function App() {
@@ -50,7 +43,6 @@ function App() {
   const notiRef = useRef(null);
 
   //Ref to control data
-  const dataRef = useRef(InitData); 
   const data = useRef([]);
   
 
@@ -65,7 +57,6 @@ function App() {
   // Contents and Dispatch
   const Contents = useRef({
     data,
-    dataRef,
     inProcessRef,
     notiRef,
   })
@@ -84,10 +75,24 @@ function App() {
     setStatus: (index, newStatus) => { data.current[index].Status = newStatus },
     setDaySchedule: (index, newDaySchedule) => { data.current[index].DaySchedule = [].concat(newDaySchedule) },
     setWeekSchedule: (index, newWeekSchedule) => { data.current[index].WeekSchedule = [].concat(newWeekSchedule) },
-
+    setWorkingValue: (index, value) => { data.current[index].working = value },
+    setCurrentWorking: (index, value) => {
+      for(const user of data.current)
+      {
+        if(user.uid == data.current[index].uid)
+        {
+          user.working = value;
+        }
+        else
+        {
+          user.working = false;
+        }
+      }
+    },
     ResetUser: () => {
       data.current.length = 0;
     }
+
   }
 
   async function onResults(results){
@@ -167,6 +172,7 @@ function App() {
                     "DaySchedule": [],
                     "WeekSchedule": [],
                     "Status": "",
+                    "working": false,
                   }
                 )
               }

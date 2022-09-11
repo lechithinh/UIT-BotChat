@@ -15,8 +15,6 @@ const DaySchedule = (props) => {
     const Contents = useContext(context)
     const Actions = useContext(dispatch)
 
-    const Schedule = Contents.current.dataRef.current.DaySchedule;
-
     return (
         <>
             <ListItem>

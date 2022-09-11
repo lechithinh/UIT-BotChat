@@ -298,7 +298,7 @@ const HandleForStudent = (res) => {
     var num = new Date().getDay();
     num += 1;
     //let today = num.toString()
-    let today = '4';
+    let today = '7';
     for (const element of storage) {
         if (element[1] === today) {
             daySchedule.push(element);
@@ -472,7 +472,7 @@ const UserRow = (props, ref) => {
         const week = await getWeekSchedule(props.user.uid, 1, 2022);
         Actions.setDaySchedule(props.index, today)
         Actions.setWeekSchedule(props.index, week)
-
+        Actions.setCurrentWorking(props.index, true);
         if(today.length === 0)
         {
             Actions.setStatus(props.index, "Hôm nay bạn trống lịch");
@@ -492,8 +492,26 @@ const UserRow = (props, ref) => {
         setshowIcon(true);
         setshowEditIcon(true);
         setShowAlert(false);
+        Actions.setWorkingValue(props.index, false);
         props.setStep(1);
     }
+    
+    //Use current variable to control 1 viewer at the same time
+    useEffect(() => {
+        if(props.user.working)
+        {
+            setshowDay(true);
+            setshowWeek(true);
+            setshowIcon(false);
+        }
+        else{
+            setshowDay(false);
+            setshowWeek(false);
+            setshowIcon(true);
+            setshowEditIcon(true);
+            setShowAlert(false);
+        }
+    }, [props.user.working])
     
 
     return (

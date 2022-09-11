@@ -20,7 +20,6 @@ const WeekSchedule = (props) => {
     const Contents = useContext(context)
     const Actions = useContext(dispatch)
 
-    const Schedule = Contents.current.dataRef.current.WeekSchedule;
 
     return (
         <TableContainer component={Paper}>
