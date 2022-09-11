@@ -536,7 +536,7 @@ const UserRow = (props, ref) => {
 
                 {/* EDIT vs SAVE ICON */}
                 {showIcon ? 
-                    (<ListItemIcon sx={{ '& .MuiButtonBase-root': { fontWeight: 500, width: "150px" }}}>
+                    (<ListItemIcon sx={{ '& .MuiButtonBase-root': { fontWeight: 500, width: "180px", fontSize: "1.2rem" }}}>
                         {showEditIcon ? 
                         <>
                             <Fab variant="extended" color={props.user.Status === INVALID_ID ? "error" : "default"} onClick={HandleEditButton}>
@@ -573,8 +573,8 @@ const UserRow = (props, ref) => {
 
             {/* ALERT */}
             {showAlert && 
-                <Alert 
-                sx={{ mt: 2 }} 
+            <Alert 
+                    sx={{ mt: 2, '& .MuiAlert-message': { fontSize: '1.7rem' }, '& .MuiAlert-icon': {marginTop: "4px", fontSize: "35px"} }} 
                 variant="outlined" 
                 severity={props.user.Status === INVALID_ID ? "error" : "info"}>
                 {props.user.Status}

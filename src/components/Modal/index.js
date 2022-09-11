@@ -71,10 +71,10 @@ const Modal = (props, ref) => {
                 zIndex: 0,
                 '& .MuiDialog-paper': {
                     borderRadius: '35px',
-                    maxWidth: "800px",
+                    maxWidth: "900px",
                 },
 
-                '& .MuiDialogContent-root': {width: "700px"},
+                '& .MuiDialogContent-root': {width: "750px"},
                 }} 
                 open={showModal} onClose={HandleClose}> 
                 
