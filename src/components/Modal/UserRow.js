@@ -473,17 +473,28 @@ const UserRow = (props, ref) => {
         Actions.setDaySchedule(props.index, today)
         Actions.setWeekSchedule(props.index, week)
         Actions.setCurrentWorking(props.index, true);
-        if (today.length === 0 || today.length > 10)
+        if (today.length === 0)
         {
             Actions.setStatus(props.index, "Hôm nay bạn trống lịch");
             setShowAlert(true);
             PlayAudio('noschedule');
         }
-        props.setRender(!props.render)
-        setshowDay(!showDay);
-        setshowWeek(!showWeek);
-        setshowIcon(false);
-        props.setStep(2);
+
+        if (today.length > 10) {
+            Actions.setStatus(props.index, INVALID_ID);
+            setshowDay(false);
+            setShowAlert(true);
+            console.log("go")
+        }
+        else{
+            props.setRender(!props.render)
+            setshowDay(!showDay);
+            setshowWeek(!showWeek);
+            setshowIcon(false);
+            props.setStep(2);
+        }
+
+
        
     }
 
@@ -497,13 +508,24 @@ const UserRow = (props, ref) => {
         props.setStep(1);
     }
     
+
     //Use current variable to control 1 viewer at the same time
     useEffect(() => {
-        if(props.user.working)
+        if (props.user.working )
         {
-            setshowDay(true);
-            setshowWeek(true);
-            setshowIcon(false);
+            if (props.user.Status != INVALID_ID)
+            {
+                setshowDay(true);
+                setshowWeek(true);
+                setshowIcon(false);
+            }
+            else{
+                setshowDay(false);
+                setshowWeek(false);
+                setshowIcon(false);
+                setShowAlert(true);
+            }
+            
         }
         else{
             setshowDay(false);
