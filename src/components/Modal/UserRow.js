@@ -298,7 +298,7 @@ const HandleForStudent = (res) => {
     const daySchedule = []
     var num = new Date().getDay();
     num += 1;
-    let today ='4'
+    let today = num.toString()
     for (const element of storage) {
         if (element[1] === today) {
             daySchedule.push(element);
@@ -373,7 +373,6 @@ const UserRow = (props, ref) => {
     const [showTime, setShowTime] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     
-    console.log("Current: ", props.user)
 
     //Ref to control sub components
     const editRef = useRef(null);
@@ -440,7 +439,6 @@ const UserRow = (props, ref) => {
     const HandleSaveButton = async () => {
         Actions.setUid(props.index, editRef.current.getData());
         const getNameData = await GetNameById(editRef.current.getData());
-        console.log("Name: ", getNameData.hoten) 
         if (getNameData.code === 0 || getNameData.data.hoten === null){ //ID không hợp lệ 
             Actions.setStatus(props.index, INVALID_ID)
             setShowAlert(true);
@@ -475,7 +473,7 @@ const UserRow = (props, ref) => {
         Actions.setDaySchedule(props.index, today)
         Actions.setWeekSchedule(props.index, week)
         Actions.setCurrentWorking(props.index, true);
-        if(today.length === 0)
+        if (today.length === 0 || today.length > 10)
         {
             Actions.setStatus(props.index, "Hôm nay bạn trống lịch");
             setShowAlert(true);
@@ -550,7 +548,7 @@ const UserRow = (props, ref) => {
 
                                 <Fab variant="extended" color={'success'} sx={{ ml: 3 }} onClick={CheckTKB} disabled={props.user.Status === INVALID_ID || props.user.name === "Người mới" || props.user.uid === '' ? true : false}>
                                 <CalendarMonthIcon sx={{ mr: 1 }} /> 
-                                Xem
+                                Xem lịch
                         </Fab>
                         </>
                         :  

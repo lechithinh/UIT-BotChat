@@ -17,7 +17,7 @@ import UserRow from "./UserRow";
 //Global contents and dispatch from App
 import { context, dispatch } from "../../App"
 import PlayAudio from "../../utils/PlayAudio";
-
+import { SetSleepTime } from "../../utils/Redirect";
 const steps = [
     "1. Nhận diện.",
     "2. Kiểm tra thông tin.",
@@ -32,7 +32,6 @@ const Modal = (props, ref) => {
     //Global contents and dispatch
     const Contents = useContext(context)
     const Actions = useContext(dispatch)
-    console.log("Content: ", Contents.current.data.current);
 
     
     const [step, setStep] = useState(1);
@@ -44,6 +43,8 @@ const Modal = (props, ref) => {
     }));
 
     const HandleClose = () => {
+        const time_id = SetSleepTime();
+        Actions.setTimeID(time_id);
         PlayAudio("thankyou");
         Actions.ResetUser();
         Actions.setNotiMessage("Hãy đợi 3 giây để bắt đầu lại!", 3000);
@@ -88,7 +89,7 @@ const Modal = (props, ref) => {
                     <Box display="flex" alignItems="center">
                         <Box flexGrow={1} sx={{ mb: 2, position: "relative", mt: 2,ml: 4, '& .MuiTab-root': { fontSize: "23px", fontWeight: "700" } }}>
                             <Tabs value={0} centered>
-                                <Tab label="Thông tin thời khóa biểu" />
+                                <Tab label="Thời khóa biểu" />
                             </Tabs>
                         </Box>
                         <Box>

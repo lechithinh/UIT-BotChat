@@ -22,7 +22,7 @@ const WeekSchedule = (props) => {
 
     var num = new Date().getDay();
     num += 1;
-    let today = '4'
+    let today = num.toString();
 
     return (
         <TableContainer >

@@ -24,7 +24,7 @@ const DaySchedule = (props) => {
                         <ListItemText
                             key={index}
                             primary={row[0]}
-                            secondary={"Tiết " + row[2] + "  |  " + row[3]}
+                            secondary={"Tiết " + row[2] + "  | Phòng " + row[3]}
                             sx={{ margin: "6px 15px 6px 15px", "& .MuiTypography-root": {fontSize: "1.6rem"} }}
                         />
                     ))) : <ListItem />} 

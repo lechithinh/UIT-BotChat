@@ -21,6 +21,7 @@ import BackButton from './components/BackButton';
 //Utils
 import DataURLtoFile from "./utils/DataURLtoFile"
 import PlayAudio from './utils/PlayAudio';
+import { ClearSleepTime,SetSleepTime } from './utils/Redirect';
 import axios from 'axios';
 
 export const context = createContext(null); 
@@ -36,7 +37,7 @@ function App() {
 
   //Ref to control process
   const inProcessRef = useRef(false);
-
+  const timeIDRef = useRef(null);
 
   //Ref to control compoents
   const modalRef = useRef(null);
@@ -52,6 +53,11 @@ function App() {
   });
 
   var camera = null;
+
+  useEffect(() => {
+    const time_id = SetSleepTime()
+    timeIDRef.current = time_id;
+  },[])
  
 
   // Contents and Dispatch
@@ -59,6 +65,7 @@ function App() {
     data,
     inProcessRef,
     notiRef,
+    timeIDRef,
   })
 
   const Actions = {
@@ -66,6 +73,7 @@ function App() {
     setProcess: (newProcess) => { inProcessRef.current = newProcess},
 
     //Message
+    setTimeID: (newID) => {timeIDRef.current = newID},
     setNotiMessage: (newNoti, newTime) => { notiRef.current.setMessage(newNoti, newTime)},
     setNotiShow: (isShow) => { notiRef.current.setshowNoti(isShow)},
 
@@ -133,7 +141,6 @@ function App() {
       if (sHeight > 150 && sWidth > 110 && !inProcessRef.current) {
         inProcessRef.current = true;
         let file = DataURLtoFile(webCamRef.current.getScreenshot(), `${1}.jpeg`);
-        console.log("file: ", file)
 
         //API Face Recognition
         const formData = new FormData();
@@ -144,7 +151,6 @@ function App() {
               "Content-Type": "multipart/form-data",
             },
           }).then((res) => {
-              console.log("Res", res)
               for(const user of res['data'])
               {
                 let name_api = "Người mới";
@@ -179,6 +185,7 @@ function App() {
               notiRef.current.setshowNoti(false);
               modalRef.current.setshowModal(true);
               PlayAudio("schedule")
+              ClearSleepTime(timeIDRef.current);
           }) 
       }
     }
