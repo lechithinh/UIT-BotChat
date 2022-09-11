@@ -297,8 +297,7 @@ const HandleForStudent = (res) => {
     const daySchedule = []
     var num = new Date().getDay();
     num += 1;
-    //let today = num.toString()
-    let today = '7';
+    let today = num.toString()
     for (const element of storage) {
         if (element[1] === today) {
             daySchedule.push(element);
@@ -433,6 +432,7 @@ const UserRow = (props, ref) => {
         setshowIcon(true);
         setshowEditIcon(false);
         setShowAlert(false);
+        PlayAudio("edit")
     }
 
     //OnClick Save Button
@@ -445,7 +445,7 @@ const UserRow = (props, ref) => {
             setShowAlert(true);
             setshowIcon(true);
             setshowEditIcon(true);
-            console.log("Code here")
+            PlayAudio('errorsave')
         }
         else{
             Actions.setStatus(props.index, VALID_ID)
@@ -456,6 +456,7 @@ const UserRow = (props, ref) => {
             setShowAlert(false);
             setshowIcon(true);
             setshowEditIcon(true);
+            PlayAudio('save')
             
         }
         editRef.current.toggleEdit(false);
@@ -477,6 +478,7 @@ const UserRow = (props, ref) => {
         {
             Actions.setStatus(props.index, "Hôm nay bạn trống lịch");
             setShowAlert(true);
+            PlayAudio('noschedule');
         }
         props.setRender(!props.render)
         setshowDay(!showDay);

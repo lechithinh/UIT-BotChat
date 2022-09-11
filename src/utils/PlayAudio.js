@@ -7,12 +7,19 @@ import one_afternoon from "../audio/one_afternoon.mp3";
 import save from "../audio/save.mp3";
 import errorsave from "../audio/errorsave.mp3";
 import makefriend from "../audio/makefriend.mp3";
+import noschedule from "../audio/noschedule.mp3";
 let audio = new Audio();
 const PlayAudio = (type) => {
     switch (type) {
         case "thankyou":
             if (audio.paused) {
                 audio.src = thankyou;
+                audio.play();
+            }
+            break;
+        case "noschedule":
+            if (audio.paused) {
+                audio.src = noschedule;
                 audio.play();
             }
             break;

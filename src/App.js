@@ -178,7 +178,7 @@ function App() {
               }
               notiRef.current.setshowNoti(false);
               modalRef.current.setshowModal(true);
-              
+              PlayAudio("schedule")
           }) 
       }
     }
