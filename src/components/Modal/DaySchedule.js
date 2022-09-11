@@ -21,8 +21,8 @@ const DaySchedule = (props) => {
         <>
             <ListItem>
                 
-                {Schedule ?
-                    (Schedule.map((row, index) => (
+                {props.user.DaySchedule ?
+                    (props.user.DaySchedule.map((row, index) => (
                         <ListItemText
                             key={index}
                             primary={row[0]}
@@ -32,7 +32,7 @@ const DaySchedule = (props) => {
                     ))) : <ListItem />} 
 
 
-                {Schedule.length != 0 && 
+                {props.user.DaySchedule.length != 0 && 
                 <ListItemIcon>
                     <Box sx={{ mr: -5, position: "relative" }}>
                         <Fab sx={{ m: 4 }} color="info" variant="extended">

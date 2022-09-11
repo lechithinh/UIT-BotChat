@@ -41,7 +41,7 @@ const TextEdit = (props, ref) => {
                         value={data}
                         sx={{ my: 1 }}
                     />
-                </FormControl>) : Contents.current.dataRef.current.uid}
+                </FormControl>) : props.user.uid}
         </>
     )
 };

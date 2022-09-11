@@ -3,8 +3,14 @@ import React, { useRef } from "react";
 import { useState, useImperativeHandle, forwardRef, useContext } from "react";
 
 //Compoents
-import { Dialog, DialogContent} from "@mui/material";
+import { Dialog, DialogContent , DialogTitle} from "@mui/material";
 import CustomStepper from "../Stepper";
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import CancelIcon from '@mui/icons-material/Cancel';
 //Sub components itself
 import UserRow from "./UserRow";
 
@@ -26,8 +32,11 @@ const Modal = (props, ref) => {
     //Global contents and dispatch
     const Contents = useContext(context)
     const Actions = useContext(dispatch)
+    console.log("Content: ", Contents.current.data.current);
+
     
     const [step, setStep] = useState(1);
+    const [render, setRender] = useState(false);
 
     // For App to use
     useImperativeHandle(ref, () => ({
@@ -36,14 +45,15 @@ const Modal = (props, ref) => {
 
     const HandleClose = () => {
         PlayAudio("thankyou");
+        Actions.ResetUser();
         Actions.setNotiMessage("Hãy đợi 3 giây để bắt đầu lại!", 3000);
         //Reset step
         setStep(1)
         //Reset data
-        Actions.resetData();
         Actions.setNotiShow(true);
         setshowModal(!showModal)
         setTimeout(() => {
+           
             Actions.setProcess(false);
             Actions.setNotiMessage("Xin hãy lại gần hơn!", 1000);
             Actions.setNotiShow(false);
@@ -67,11 +77,34 @@ const Modal = (props, ref) => {
                 '& .MuiDialogContent-root': {width: "700px"},
                 }} 
                 open={showModal} onClose={HandleClose}> 
-
+                
+                <DialogTitle id="id">
+                    <Box display="flex" alignItems="center">
+                        <Box flexGrow={1} sx={{ mb: 2, position: "relative", mt: 2,ml: 4, '& .MuiTab-root': { fontSize: "23px", fontWeight: "700" } }}>
+                            <Tabs value={0} centered>
+                                <Tab label="Thông tin thời khóa biểu" />
+                            </Tabs>
+                        </Box>
+                        <Box>
+                            <IconButton sx={{'& .MuiSvgIcon-root': {fontSize: "3rem"}}}size="large" color='error' onClick={HandleClose}>
+                                <CancelIcon />
+                            </IconButton>
+                           
+                        </Box>
+                    </Box>
+                </DialogTitle>
 
                 {/* Content Modal */}
                 <DialogContent sx={{ width: "570px", padding: "40px", '& .MuiDialogContent-root': {width: "500px"} }}>        
-                    <UserRow  user={Contents.current.dataRef.current} setStep={setStep}/>
+                    
+                    {/* TABS */}
+                    <Box >
+                       
+                    </Box>
+
+                    {Contents.current.data.current.map((user, index) => (
+                        <UserRow key={index} user={user} index={index} render={render} setRender={setRender}/>
+                    ))}
                 </DialogContent>
 
             </Dialog>

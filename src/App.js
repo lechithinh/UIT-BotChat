@@ -36,8 +36,6 @@ const InitData = {
   }
 
 
-
-
 function App() {
   
   const webCamRef = useRef(null);
@@ -53,7 +51,7 @@ function App() {
 
   //Ref to control data
   const dataRef = useRef(InitData); 
-
+  const data = useRef([]);
   
 
   const screenSize = useRef({
@@ -66,19 +64,13 @@ function App() {
 
   // Contents and Dispatch
   const Contents = useRef({
+    data,
     dataRef,
     inProcessRef,
     notiRef,
   })
 
   const Actions = {
-    setName: (newName) => {dataRef.current.name = newName},
-    setUid: (newUid) => {dataRef.current.uid = newUid}, 
-    setPath: (newPath) => {dataRef.current.path = newPath},
-    setDaySchedule: (newDaySchedule) => { dataRef.current.DaySchedule = [].concat(newDaySchedule)},
-    setWeekSchedule: (newWeekSchedule) => { dataRef.current.WeekSchedule = [].concat(newWeekSchedule)},
-    setStatus: (newStatus) => { dataRef.current.Status = newStatus },
-
     //Process
     setProcess: (newProcess) => { inProcessRef.current = newProcess},
 
@@ -86,14 +78,15 @@ function App() {
     setNotiMessage: (newNoti, newTime) => { notiRef.current.setMessage(newNoti, newTime)},
     setNotiShow: (isShow) => { notiRef.current.setshowNoti(isShow)},
 
-    //Reset User
-    resetData: () => { 
-      Actions.setName("Người mới");
-      Actions.setUid("MSSV/GV")
-      Actions.setPath("https://i.stack.imgur.com/l60Hf.png")
-      Actions.setDaySchedule([]);
-      Actions.setWeekSchedule([]);
-      Actions.setStatus("")
+    setName: (index, newName) => { data.current[index].name = newName },
+    setUid: (index, newUid) => { data.current[index].uid = newUid },
+    setPath: (index, newPath) => { data.current[index].path = newPath },
+    setStatus: (index, newStatus) => { data.current[index].Status = newStatus },
+    setDaySchedule: (index, newDaySchedule) => { data.current[index].DaySchedule = [].concat(newDaySchedule) },
+    setWeekSchedule: (index, newWeekSchedule) => { data.current[index].WeekSchedule = [].concat(newWeekSchedule) },
+
+    ResetUser: () => {
+      data.current.length = 0;
     }
   }
 
@@ -147,33 +140,36 @@ function App() {
             },
           }).then((res) => {
               console.log("Res", res)
-              if(res["data"][0])
+              for(const user of res['data'])
               {
-                if (res["data"][0]["name"] != '')
+                let name_api = "Người mới";
+                let text = "";
+                let path = "https://api.mmlab.uit.edu.vn/face/" + user["path"];;
+                let uid = 'MSSV/GV';
+                if(user['name'] != '')
                 {
-                  dataRef.current.name = res["data"][0]["name"].split("-")[0];
-              
-                  const text = res["data"][0]["name"].split("-")[1];
-                  let uid = '';
-                  if(text){
+                  name_api = user['name'].split('-')[0];
+                  text = user['name'].split('-')[1];
+                  uid = '';
+                  if (text) {
                     for (let i = 1; i < text.length; i++) {
                       uid += text[i];
                       if (text[i + 1] == "@") { break }
                     }
-                    dataRef.current.uid = uid;
-                    PlayAudio('schedule');
                   }
+                  
                 }
-                else
-                {
-                  PlayAudio('makefriend');
-                }
-                dataRef.current.path = "https://api.mmlab.uit.edu.vn/face/" + res["data"][0]["path"];
+                data.current.push(
+                  {
+                    "name": name_api,
+                    "uid": uid,
+                    "path": path,
+                    "DaySchedule": [],
+                    "WeekSchedule": [],
+                    "Status": "",
+                  }
+                )
               }
-              else {
-                PlayAudio('makefriend');
-              }
-      
               notiRef.current.setshowNoti(false);
               modalRef.current.setshowModal(true);
               

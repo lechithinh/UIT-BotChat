@@ -34,8 +34,8 @@ const WeekSchedule = (props) => {
                 </TableHead>
                 <TableBody>
                     
-                    {Schedule ? 
-                        (Schedule.map((row,index) => (
+                    {props.user.WeekSchedule ? 
+                        (props.user.WeekSchedule.map((row,index) => (
                             <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 }, "& .MuiTableCell-root": { fontSize: "1.3rem" } }}>
 
                                 {<TableCell component="th" scope="row" align='center'> {row[0]} </TableCell>}

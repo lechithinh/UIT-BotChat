@@ -8,15 +8,11 @@ import axios from "axios";
 import { Box, Fab } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 import { ListItem, ListItemAvatar, ListItemText, ListItemIcon } from '@mui/material';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import Alert from '@mui/material/Alert';
-
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 //Sub components
 import TextEdit from "./Textedit";
 import DaySchedule from "./DaySchedule";
@@ -277,7 +273,6 @@ const HandleForStudent = (res) => {
         storage.push(temp);
     }
 
-    console.log("storage1", storage)
     for (const obj of storage) {
         obj.move(2, 0);
         obj.move(2, 3);
@@ -302,7 +297,8 @@ const HandleForStudent = (res) => {
     const daySchedule = []
     var num = new Date().getDay();
     num += 1;
-    let today = num.toString()
+    //let today = num.toString()
+    let today = '7';
     for (const element of storage) {
         if (element[1] === today) {
             daySchedule.push(element);
@@ -366,12 +362,27 @@ const state_init = {
     showEditIcon: true,
     showTime: false,
     showAlert: false,
-    value: 0,
     
 
 }
 const reducer = (state, action) => {
     switch (action.type){
+        case "OFF_ICON":
+            return {
+                showIcon: false,
+            }
+        case "SET_ALERT":
+            return {
+                showAlert: true,
+            }
+        case "HIDE_BUTTON":
+            return {
+                showIcon: true,
+                showEditIcon: true,
+                showAlert: false,
+
+            }
+
         case "INFOR":
             return {
                 showIcon: true,
@@ -379,59 +390,39 @@ const reducer = (state, action) => {
                 showDay: false,
                 showWeek: false,
                 showTime: false,
-                value: 0,
-            }
-        case "TODAY_SCHEDULE":
-            return {
-                showIcon: false,
-                showDay: !state.showDay,
-                showTime: true,
-                value: state.value,
-            }
-        case "WEEK_SCHEDULE":
-            return {
-                showIcon: false,
-                showDay: true,
-                showWeek: !state.showWeek,
-                showTime: true,
-                value: state.value,
             }
         case "EDIT_BUTTON":
             return {
                 showIcon: true,
                 showEditIcon: false,
                 showAlert: false,
-                value: 0,
             }
         case "SAVE_BUTTON":
             return {
                 showIcon: true,
                 showEditIcon: true,
                 showAlert: state.showAlert,
-                value: 0,
             }
         case "INVALID_ID":
             return {
                 showAlert: true,
-                value: 0,
             }
         case "VALID_ID":
             return {
+                showIcon: true,
+                showEditIcon: true,
                 showAlert: false,
-                value: 0,
-            }
-        case "CHANGE_TABS":
-            return {
-                value: action.payload,
+                
             }
         case "NO_SCHEDULE":
             return {
                 showIcon: false,
                 showDay: !state.showDay,
+                showWeek: true,
                 showAlert: true,
                 showTime: true,
-                value: 1,
             }
+
 
     }
 
@@ -446,52 +437,17 @@ const UserRow = (props, ref) => {
     const Contents = useContext(context)
     const Actions = useContext(dispatch)
     const currentTime = new Date().toLocaleString();
-
-
+    const [showDay, setshowDay] = useState(false);
+    const [showWeek, setshowWeek] = useState(false)
+    const [hideButton, sethideButton] = useState(false);
+    
     //All states
     const [state, state_action] = useReducer(reducer, state_init)
 
-    console.log("Current Data: ", Contents.current.dataRef.current)
 
     //Ref to control sub components
     const editRef = useRef(null);
 
-
-    //OnClick Tabs
-    const HandleTabs = (event, newValue) => {
-        state_action({ type: "CHANGE_TABS", payload: newValue })
-    };
-
-
-    //OnClick Infor
-    const HandleInfor = () => {
-        props.setStep(1)
-        state_action({ type: "INFOR" }) 
-    }
-
-    //OnClick ToDay Schedule
-    const HandleToDay = async () => { 
-        props.setStep(2)
-        await getTodaySchedule(Contents.current.dataRef.current.uid, 1, 2022); 
-        state_action({ type: "TODAY_SCHEDULE" })
-
-        if (Contents.current.dataRef.current.DaySchedule.length === 0){
-            Actions.setStatus("Hôm nay bạn không có lịch học!")
-            state_action({ type: "NO_SCHEDULE" })
-        }
-
-        if (Contents.current.dataRef.current.DaySchedule.length > 10){
-            Actions.setStatus("ID không hợp lệ!")
-            state_action({ type: "NO_SCHEDULE" })
-        }
-    }
-
-    //OnClick Week Schedule
-    const HandleWeek = async () => {
-        props.setStep(2)
-        await getWeekSchedule(Contents.current.dataRef.current.uid, 1, 2022); 
-        state_action({ type: "WEEK_SCHEDULE" })
-    }
 
     //Week Schedule API
     const getWeekSchedule = async (uid, hocky, namhoc) => {
@@ -513,7 +469,6 @@ const UserRow = (props, ref) => {
             };
             const res = await axios(config);
             const result = HandleWeekSchedule(res);
-            Actions.setWeekSchedule(result);
             return result;
         };
 
@@ -537,38 +492,34 @@ const UserRow = (props, ref) => {
         };
         const res = await axios(config);
         const daySchedule = HandleTodaySchedule(res);
-        Actions.setDaySchedule(daySchedule);
         return daySchedule;
 
     };
     
     // OnClick Edit Button
-    const HandleEditButton = async () => {
-        Actions.setName("");
+    const HandleEditButton = () => {
+        Actions.setName(props.index, "")
         editRef.current.toggleEdit(true); 
         state_action({ type: "EDIT_BUTTON" })
-        PlayAudio('edit')
     }
 
     //OnClick Save Button
     const HandleSaveButton = async () => {
-        Actions.setUid(editRef.current.getData());
+        Actions.setUid(props.index, editRef.current.getData());
         const getNameData = await GetNameById(editRef.current.getData()); 
         if (getNameData.code === 0){ //ID không hợp lệ 
-            PlayAudio('errorsave')
-            Actions.setStatus("ID không hợp lệ!")
+            Actions.setStatus(props.index, "ID không hợp lệ!")
             state_action({ type: "INVALID_ID" })
             
            
         }
         else{
             state_action({ type: "VALID_ID" })
-            Actions.setStatus("ID hợp lệ!")
+            Actions.setStatus(props.index, "ID hợp lệ!")
             const newName = getNameData.data.hoten;
-            Actions.setName(newName);
+            Actions.setName(props.index, newName);
             const newUid = editRef.current.getData();
-            Actions.setUid(newUid)
-            PlayAudio('save')
+            Actions.setUid(props.index, newUid)
         }
         state_action({ type: "SAVE_BUTTON" })
         editRef.current.toggleEdit(false); 
@@ -579,55 +530,85 @@ const UserRow = (props, ref) => {
         console.log("Re-render")
     })
 
+    const CheckTKB = async () => {
+        const today = await getTodaySchedule(props.user.uid, 1, 2022); 
+        const week = await getWeekSchedule(props.user.uid, 1, 2022);
+        Actions.setDaySchedule(props.index, today)
+        Actions.setWeekSchedule(props.index, week)
 
+        if(today.length === 0)
+        {
+            Actions.setStatus(props.index, "Hôm nay bạn không có lịch học");
+            state_action({ type: "NO_SCHEDULE" })
+        }
+        state_action({ type: "OFF_ICON" })
+        props.setRender(!props.render)
+        setshowDay(!showDay);
+        setshowWeek(!showWeek);
+        sethideButton(true); 
+    }
+
+    const HandleHide = () => {
+        setshowDay(false);
+        setshowWeek(false) ;
+        state_action({ type: "HIDE_BUTTON" });
+    }
     
 
     return (
         <>
-            {/* TABS */}
-            <Box sx={{ mb: 2, position: "relative", mt: 2, '& .MuiTab-root': {fontSize: "23px", fontWeight: "700"} }}>
-                <Tabs value={state.value} onChange={HandleTabs} centered>
-                    <Tab label="Thông tin"  onClick={HandleInfor}  />
-                    <Tab label="TKB Ngày" disabled={Contents.current.dataRef.current.Status === "ID không hợp lệ!" || Contents.current.dataRef.current.name === "Người mới" ? true : false} onClick={HandleToDay} />
-                    <Tab label="TKB Tuần" disabled={Contents.current.dataRef.current.Status === "ID không hợp lệ!" || Contents.current.dataRef.current.name === "Người mới" ? true : false} onClick={HandleWeek} />
-                </Tabs>                     
-            </Box>
-     
-
             {/* USER INFOR */}
-            <ListItem>
+            <ListItem >
 
                 {/* AVATATAR */}
                 <ListItemAvatar>
                     <Avatar
-                        src={Contents.current.dataRef.current.path}
+                        src={props.user.path}
                         sx={{ width: 56, height: 56 }}
                     />
                 </ListItemAvatar>
 
                 {/* NAME vs uid */}
                 <ListItemText
-                    primary={Contents.current.dataRef.current.name} 
-                    secondary={<TextEdit ref={editRef}/>} 
+                    primary={props.user.name} 
+                    secondary={<TextEdit user={props.user} ref={editRef}/>} 
                     sx={{ margin: "5px 15px 2px 20px", '& .MuiTypography-root':{fontSize: "25px", fontWeight: 600}}}
                 />
 
                 {/* EDIT vs SAVE ICON */}
-                {state.showIcon && 
-                (<ListItemIcon sx={{ '& .MuiButtonBase-root': { fontWeight: 600, width: "200px"} }}>
+                {state.showIcon ? 
+                    (<ListItemIcon sx={{ '& .MuiButtonBase-root': { fontWeight: 500, width: "150px" }}}>
                         {state.showEditIcon ? 
-                        <Fab variant="extended" color={Contents.current.dataRef.current.Status === "ID không hợp lệ!" ? "error" : "default"} onClick={HandleEditButton}>
+                        <>
+                        <Fab variant="extended" color={props.user.Status === "ID không hợp lệ!" ? "error" : "default"} onClick={HandleEditButton}>
                             <EditIcon sx={{ mr: 2}} />
-                            {Contents.current.dataRef.current.name === "Người mới" ? "Đăng kí" : "Chỉnh sửa"}
-                        </Fab> 
-                        : 
-                        <Fab variant="extended" color="success" onClick={HandleSaveButton}>
+                            {props.user.name === "Người mới" ? "Đăng kí" : "Chỉnh sửa"}
+                        </Fab>
+
+                        <Fab variant="extended" color={'success'} sx={{ ml: 3 }} onClick={CheckTKB}>
+                                <CalendarMonthIcon sx={{ mr: 1 }} /> 
+                                Xem
+                        </Fab>
+                        </>
+                        :  
+                        <Fab variant="extended" color="success" sx={{ padding: "20px" }} onClick={HandleSaveButton}>
                             <SaveIcon sx={{ mr: 2 }} />
                             Lưu
                         </Fab>}
-                </ListItemIcon>)}
+                </ListItemIcon>)
+                :
+                <ListItemIcon sx={{ '& .MuiButtonBase-root': { fontWeight: 500, width: "150px" } }}>
+                        <Fab variant="extended" color={'success'} sx={{ ml: 3 }} onClick={HandleHide}>
+                            <CalendarMonthIcon sx={{ mr: 1 }} />
+                            Ẩn
+                        </Fab>
+                </ListItemIcon>
+                   
+                }
 
-                {state.showTime && <h2 style={{ paddingTop: '2rem'}}>{currentTime}</h2>}
+                {/* SHOWTIME */}
+                {/* {state.showTime && <h2 style={{ paddingTop: '2rem'}}>{currentTime}</h2>} */}
+
                 
             </ListItem>
 
@@ -636,13 +617,13 @@ const UserRow = (props, ref) => {
                 <Alert 
                 sx={{ mt: 2 }} 
                 variant="outlined" 
-                severity={Contents.current.dataRef.current.Status === "ID không hợp lệ!" ? "error" : "info"}>
-                {Contents.current.dataRef.current.Status}
+                severity={props.user.Status === "ID không hợp lệ!" ? "error" : "info"}>
+                {props.user.Status}
             </Alert>}
                     
             {/* SCHEDULE */}
-            {state.showDay && <DaySchedule />}
-            {state.showWeek && <WeekSchedule /> }
+            {showDay && <DaySchedule user={props.user}/>}
+            {showWeek && <WeekSchedule user={props.user} /> }
             
         </>
     )
