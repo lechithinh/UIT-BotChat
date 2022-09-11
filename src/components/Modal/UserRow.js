@@ -242,7 +242,7 @@ const HandleWeekStudent  = (res) => {
 
 }
 const HandleWeekSchedule = (res) => {
-    if ('tenmh' in res.data["data"][0]) {
+    if (res.data["data"][0].hasOwnProperty("tenmh")) {
         return HandleWeekTeacher(res);
     }
     else {
@@ -298,7 +298,7 @@ const HandleForStudent = (res) => {
     var num = new Date().getDay();
     num += 1;
     //let today = num.toString()
-    let today = '7';
+    let today = '4';
     for (const element of storage) {
         if (element[1] === today) {
             daySchedule.push(element);
@@ -348,87 +348,16 @@ const HandleForTeacher = (res) => {
 }
 
 const HandleTodaySchedule = (res) => {
-    if ('tenmh' in res.data["data"][0] ){
+    if (res.data["data"][0].hasOwnProperty("tenmh") ){
         return HandleForTeacher(res);
     }
     else {
         return HandleForStudent(res);
     }
 }
-const state_init = {
-    showDay: false,
-    showWeek: false,
-    showIcon: true,
-    showEditIcon: true,
-    showTime: false,
-    showAlert: false,
-    
 
-}
-const reducer = (state, action) => {
-    switch (action.type){
-        case "OFF_ICON":
-            return {
-                showIcon: false,
-            }
-        case "SET_ALERT":
-            return {
-                showAlert: true,
-            }
-        case "HIDE_BUTTON":
-            return {
-                showIcon: true,
-                showEditIcon: true,
-                showAlert: false,
-
-            }
-
-        case "INFOR":
-            return {
-                showIcon: true,
-                showEditIcon: true,
-                showDay: false,
-                showWeek: false,
-                showTime: false,
-            }
-        case "EDIT_BUTTON":
-            return {
-                showIcon: true,
-                showEditIcon: false,
-                showAlert: false,
-            }
-        case "SAVE_BUTTON":
-            return {
-                showIcon: true,
-                showEditIcon: true,
-                showAlert: state.showAlert,
-            }
-        case "INVALID_ID":
-            return {
-                showAlert: true,
-            }
-        case "VALID_ID":
-            return {
-                showIcon: true,
-                showEditIcon: true,
-                showAlert: false,
-                
-            }
-        case "NO_SCHEDULE":
-            return {
-                showIcon: false,
-                showDay: !state.showDay,
-                showWeek: true,
-                showAlert: true,
-                showTime: true,
-            }
-
-
-    }
-
-}
-
-
+const INVALID_ID = "ID không hợp lệ!"
+const VALID_ID = "ID hợp lệ!"
 
 
 const UserRow = (props, ref) => {
@@ -439,11 +368,12 @@ const UserRow = (props, ref) => {
     const currentTime = new Date().toLocaleString();
     const [showDay, setshowDay] = useState(false);
     const [showWeek, setshowWeek] = useState(false)
-    const [hideButton, sethideButton] = useState(false);
+    const [showIcon, setshowIcon] = useState(true);
+    const [showEditIcon, setshowEditIcon] = useState(true);
+    const [showTime, setShowTime] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
     
-    //All states
-    const [state, state_action] = useReducer(reducer, state_init)
-
+    console.log("Current: ", props.user)
 
     //Ref to control sub components
     const editRef = useRef(null);
@@ -500,29 +430,36 @@ const UserRow = (props, ref) => {
     const HandleEditButton = () => {
         Actions.setName(props.index, "")
         editRef.current.toggleEdit(true); 
-        state_action({ type: "EDIT_BUTTON" })
+        setshowIcon(true);
+        setshowEditIcon(false);
+        setShowAlert(false);
     }
 
     //OnClick Save Button
     const HandleSaveButton = async () => {
         Actions.setUid(props.index, editRef.current.getData());
-        const getNameData = await GetNameById(editRef.current.getData()); 
-        if (getNameData.code === 0){ //ID không hợp lệ 
-            Actions.setStatus(props.index, "ID không hợp lệ!")
-            state_action({ type: "INVALID_ID" })
-            
-           
+        const getNameData = await GetNameById(editRef.current.getData());
+        console.log("Name: ", getNameData.hoten) 
+        if (getNameData.code === 0 || getNameData.data.hoten === null){ //ID không hợp lệ 
+            Actions.setStatus(props.index, INVALID_ID)
+            setShowAlert(true);
+            setshowIcon(true);
+            setshowEditIcon(true);
+            console.log("Code here")
         }
         else{
-            state_action({ type: "VALID_ID" })
-            Actions.setStatus(props.index, "ID hợp lệ!")
+            Actions.setStatus(props.index, VALID_ID)
             const newName = getNameData.data.hoten;
             Actions.setName(props.index, newName);
             const newUid = editRef.current.getData();
             Actions.setUid(props.index, newUid)
+            setShowAlert(false);
+            setshowIcon(true);
+            setshowEditIcon(true);
+            
         }
-        state_action({ type: "SAVE_BUTTON" })
-        editRef.current.toggleEdit(false); 
+        editRef.current.toggleEdit(false);
+        
     }
    
 
@@ -538,20 +475,24 @@ const UserRow = (props, ref) => {
 
         if(today.length === 0)
         {
-            Actions.setStatus(props.index, "Hôm nay bạn không có lịch học");
-            state_action({ type: "NO_SCHEDULE" })
+            Actions.setStatus(props.index, "Hôm nay bạn trống lịch");
+            setShowAlert(true);
         }
-        state_action({ type: "OFF_ICON" })
         props.setRender(!props.render)
         setshowDay(!showDay);
         setshowWeek(!showWeek);
-        sethideButton(true); 
+        setshowIcon(false);
+        props.setStep(2);
+       
     }
 
     const HandleHide = () => {
         setshowDay(false);
-        setshowWeek(false) ;
-        state_action({ type: "HIDE_BUTTON" });
+        setshowWeek(false);
+        setshowIcon(true);
+        setshowEditIcon(true);
+        setShowAlert(false);
+        props.setStep(1);
     }
     
 
@@ -576,22 +517,22 @@ const UserRow = (props, ref) => {
                 />
 
                 {/* EDIT vs SAVE ICON */}
-                {state.showIcon ? 
+                {showIcon ? 
                     (<ListItemIcon sx={{ '& .MuiButtonBase-root': { fontWeight: 500, width: "150px" }}}>
-                        {state.showEditIcon ? 
+                        {showEditIcon ? 
                         <>
-                        <Fab variant="extended" color={props.user.Status === "ID không hợp lệ!" ? "error" : "default"} onClick={HandleEditButton}>
+                            <Fab variant="extended" color={props.user.Status === INVALID_ID ? "error" : "default"} onClick={HandleEditButton}>
                             <EditIcon sx={{ mr: 2}} />
                             {props.user.name === "Người mới" ? "Đăng kí" : "Chỉnh sửa"}
                         </Fab>
 
-                        <Fab variant="extended" color={'success'} sx={{ ml: 3 }} onClick={CheckTKB}>
+                                <Fab variant="extended" color={'success'} sx={{ ml: 3 }} onClick={CheckTKB} disabled={props.user.Status === INVALID_ID || props.user.name === "Người mới" || props.user.uid === '' ? true : false}>
                                 <CalendarMonthIcon sx={{ mr: 1 }} /> 
                                 Xem
                         </Fab>
                         </>
                         :  
-                        <Fab variant="extended" color="success" sx={{ padding: "20px" }} onClick={HandleSaveButton}>
+                        <Fab variant="extended" color={"success"} sx={{ padding: "20px" }} onClick={HandleSaveButton}>
                             <SaveIcon sx={{ mr: 2 }} />
                             Lưu
                         </Fab>}
@@ -613,11 +554,11 @@ const UserRow = (props, ref) => {
             </ListItem>
 
             {/* ALERT */}
-            {state.showAlert && 
+            {showAlert && 
                 <Alert 
                 sx={{ mt: 2 }} 
                 variant="outlined" 
-                severity={props.user.Status === "ID không hợp lệ!" ? "error" : "info"}>
+                severity={props.user.Status === INVALID_ID ? "error" : "info"}>
                 {props.user.Status}
             </Alert>}
                     

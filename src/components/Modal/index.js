@@ -103,7 +103,7 @@ const Modal = (props, ref) => {
                     </Box>
 
                     {Contents.current.data.current.map((user, index) => (
-                        <UserRow key={index} user={user} index={index} render={render} setRender={setRender}/>
+                        <UserRow key={index} user={user} index={index} render={render} setRender={setRender} setStep={setStep}/>
                     ))}
                 </DialogContent>
 
