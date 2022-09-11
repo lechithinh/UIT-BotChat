@@ -74,7 +74,13 @@ const Modal = (props, ref) => {
                     maxWidth: "900px",
                 },
 
-                '& .MuiDialogContent-root': {width: "750px"},
+                '& .MuiDialogContent-root': {width: "750px"}, 
+                
+                '& .MuiListItem-root': {borderRadius: "40px"},
+
+                '& .MuiTableContainer-root': { borderRadius: "20px" },
+
+                '& .MuiTableHead-root': { backgroundColor: "#DEE9F3"}
                 }} 
                 open={showModal} onClose={HandleClose}> 
                 
@@ -96,12 +102,6 @@ const Modal = (props, ref) => {
 
                 {/* Content Modal */}
                 <DialogContent sx={{ width: "570px", padding: "40px", '& .MuiDialogContent-root': {width: "500px"} }}>        
-                    
-                    {/* TABS */}
-                    <Box >
-                       
-                    </Box>
-
                     {Contents.current.data.current.map((user, index) => (
                         <UserRow key={index} user={user} index={index} render={render} setRender={setRender} setStep={setStep}/>
                     ))}

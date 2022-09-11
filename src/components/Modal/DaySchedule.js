@@ -17,7 +17,7 @@ const DaySchedule = (props) => {
 
     return (
         <>
-            <ListItem>
+            <ListItem sx={{ backgroundColor: props.user.working ? "#ECEDEE" : "white", mt: 1, mb: 1 }}>
                 
                 {props.user.DaySchedule ?
                     (props.user.DaySchedule.map((row, index) => (

@@ -25,6 +25,7 @@ import PlayAudio from "../../utils/PlayAudio";
 
 //Global contents and dispatch from App
 import { context, dispatch } from "../../App"
+import { BorderTopRounded } from "@mui/icons-material";
 
 
 
@@ -297,7 +298,7 @@ const HandleForStudent = (res) => {
     const daySchedule = []
     var num = new Date().getDay();
     num += 1;
-    let today = num.toString()
+    let today ='4'
     for (const element of storage) {
         if (element[1] === today) {
             daySchedule.push(element);
@@ -518,8 +519,9 @@ const UserRow = (props, ref) => {
 
     return (
         <>
-            {/* USER INFOR */}
-            <ListItem >
+            {/* USER INFOR */} 
+
+            <ListItem sx={{ backgroundColor: props.user.working ? "#DEE9F3" : "white"}}>
 
                 {/* AVATATAR */}
                 <ListItemAvatar>
@@ -576,8 +578,8 @@ const UserRow = (props, ref) => {
             {/* ALERT */}
             {showAlert && 
             <Alert 
-                    sx={{ mt: 2, '& .MuiAlert-message': { fontSize: '1.7rem' }, '& .MuiAlert-icon': {marginTop: "4px", fontSize: "35px"} }} 
-                variant="outlined" 
+                sx={{ mt: 2, mb: 2, '& .MuiAlert-message': { fontSize: '1.7rem' }, '& .MuiAlert-icon': {marginTop: "4px", fontSize: "35px"} }} 
+                variant="standard" 
                 severity={props.user.Status === INVALID_ID ? "error" : "info"}>
                 {props.user.Status}
             </Alert>}
@@ -585,7 +587,6 @@ const UserRow = (props, ref) => {
             {/* SCHEDULE */}
             {showDay && <DaySchedule user={props.user}/>}
             {showWeek && <WeekSchedule user={props.user} /> }
-            
         </>
     )
 }; 
