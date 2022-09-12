@@ -9,12 +9,35 @@ import DirectionsIcon from '@mui/icons-material/Directions';
 //Global contents and dispatch from App
 import { context, dispatch } from "../../App"
 
+//http://map.mmlab.uit.edu.vn/map-wayfinding?from=A&to=A115
+
+
+const HandleRoom = (DaySchedule) => {
+    const room = DaySchedule[3]
+    if (room.startsWith('C'))
+    {
+        return room.split(' ')[0];
+    }
+    else if (room.startsWith('B'))
+    {
+        return room.split('.').join("");
+    }
+}
 const DaySchedule = (props) => {
 
     //Global contents and dispatch
     const Contents = useContext(context)
     const Actions = useContext(dispatch)
-
+    let DirectTo = 'http://map.mmlab.uit.edu.vn/map-wayfinding?from=A&to='
+    const HandleDirection = () => {
+        if (props.user.DaySchedule)
+        {
+            let rom = HandleRoom(props.user.DaySchedule[0]);
+            DirectTo += rom;
+            window.location.href = DirectTo;
+        }
+        console.log(DirectTo)
+    }
     return (
         <>
             <ListItem sx={{ backgroundColor: props.user.working ? "#ECEDEE" : "white", mt: 1, mb: 1 }}>
@@ -33,8 +56,8 @@ const DaySchedule = (props) => {
                 {props.user.DaySchedule.length != 0 && 
                 <ListItemIcon>
                     <Box sx={{ mr: -5, position: "relative" }}>
-                        <Fab sx={{ m: 4 }} color="info" variant="extended">
-                            <DirectionsIcon onClick={() => { console.log("Chỉ đường") }} sx={{ mr: 2 }} />
+                            <Fab sx={{ m: 4 }} color="info" variant="extended" onClick={HandleDirection}>
+                                <DirectionsIcon  sx={{ mr: 2 }} />
                             Chỉ đường
                         </Fab>
                     </Box>
