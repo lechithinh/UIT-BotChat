@@ -418,10 +418,8 @@ const UserRow = (props, ref) => {
                 data: data,
             };
             const res = await axios(config);
-            console.log("TKB raw: ", res.data['data'])
             const weekSchedule = HandleWeekSchedule(props,res);
             const daySchedule = HandleTodaySchedule(props,res);
-            console.log("Week: ", weekSchedule)
             return {"today": daySchedule, "week": weekSchedule};
         };
 
@@ -459,7 +457,7 @@ const UserRow = (props, ref) => {
             Actions.setUid(props.index, newUid);
 
             //Upload to API register
-            //HandleRegister(newName + ' - ' + email, props.user.path);
+            HandleRegister(newName + ' - ' + email, props.user.path);
             
             setShowAlert(false);
             setshowIcon(true);
