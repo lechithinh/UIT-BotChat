@@ -143,14 +143,14 @@ function App() {
       const sWidth = results.detections[0].boundingBox["width"] * size;
 
       // Show Notifications Condition
-      if (sHeight < 150 && sWidth < 110 && !inProcessRef.current) {
+      if (sHeight < 120 && sWidth < 90 && !inProcessRef.current) {
         setTimeout(() => {
           notiRef.current.setshowNoti(true);
         }, 1500);
       }
 
       //Process Condition
-      if (sHeight > 150 && sWidth > 110 && !inProcessRef.current) {
+      if (sHeight > 120 && sWidth > 90 && !inProcessRef.current) {
         inProcessRef.current = true;
         let file = DataURLtoFile(webCamRef.current.getScreenshot(), `${1}.jpeg`);
 
@@ -196,6 +196,7 @@ function App() {
               }
               notiRef.current.setshowNoti(false);
               modalRef.current.setshowModal(true);
+              modalRef.current.setStep(1);
               PlayAudio("schedule")
               ClearSleepTime(timeIDRef.current);
           }) 
@@ -226,7 +227,7 @@ function App() {
     faceDetection.setOptions({
       selfieMode: true,
       model: "short",
-      minDetectionConfidence: 0.7,
+      minDetectionConfidence: 0.5,
     });
 
     faceDetection.onResults(onResults);

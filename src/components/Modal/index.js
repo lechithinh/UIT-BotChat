@@ -34,12 +34,13 @@ const Modal = (props, ref) => {
     const Actions = useContext(dispatch)
 
     
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(0);
     const [render, setRender] = useState(false);
 
     // For App to use
     useImperativeHandle(ref, () => ({
         setshowModal,
+        setStep,
     }));
 
     const HandleClose = () => {
@@ -66,7 +67,7 @@ const Modal = (props, ref) => {
     return (
         <>
             {/* Main Modal */}
-            {showModal && <CustomStepper steps={steps} activeStep={step} setActiveStep={setStep} />}
+            <CustomStepper steps={steps} activeStep={step} setActiveStep={setStep} />
 
             <Dialog sx={{
                 zIndex: 0,
