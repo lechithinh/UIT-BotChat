@@ -14,7 +14,6 @@ const GetNameById = async (username) => {
     data: data,
   };
   const res = await axios(config);
-  console.log(res.data);
   return res.data;
 };
 

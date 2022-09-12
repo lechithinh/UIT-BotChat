@@ -16,21 +16,15 @@ import BackButton from "./components/BackButton";
 //Modules
 
 //Utils
-import DataURLtoFile from "./utils/DataURLtoFile";
-import PlayAudio from "./utils/PlayAudio";
-import axios from "axios";
+import DataURLtoFile from "./utils/DataURLtoFile"
+import PlayAudio from './utils/PlayAudio';
+import { ClearSleepTime,SetSleepTime } from './utils/Redirect';
+import axios from 'axios';
 
 export const context = createContext(null);
 export const dispatch = createContext(null);
 
-const InitData = {
-    "name": "Người mới",
-    "uid" : "MSSV/GV",
-    "path": "https://i.stack.imgur.com/l60Hf.png",
-    "DaySchedule": [],
-    "WeekSchedule": [],
-    "Status": "",
-  }
+
 
 
 function App() {
@@ -39,13 +33,13 @@ function App() {
 
   //Ref to control process
   const inProcessRef = useRef(false);
+  const timeIDRef = useRef(null);
 
   //Ref to control compoents
   const modalRef = useRef(null);
   const notiRef = useRef(null);
 
   //Ref to control data
-  const dataRef = useRef(InitData); 
   const data = useRef([]);
   
 
@@ -56,13 +50,19 @@ function App() {
 
   var camera = null;
 
+  useEffect(() => {
+    const time_id = SetSleepTime()
+    timeIDRef.current = time_id;
+  },[])
+ 
+
   // Contents and Dispatch
   const Contents = useRef({
     data,
-    dataRef,
     inProcessRef,
     notiRef,
-  });
+    timeIDRef,
+  })
 
   const Actions = {
     //Process
@@ -71,12 +71,9 @@ function App() {
     },
 
     //Message
-    setNotiMessage: (newNoti, newTime) => {
-      notiRef.current.setMessage(newNoti, newTime);
-    },
-    setNotiShow: (isShow) => {
-      notiRef.current.setshowNoti(isShow);
-    },
+    setTimeID: (newID) => {timeIDRef.current = newID},
+    setNotiMessage: (newNoti, newTime) => { notiRef.current.setMessage(newNoti, newTime)},
+    setNotiShow: (isShow) => { notiRef.current.setshowNoti(isShow)},
 
     setName: (index, newName) => { data.current[index].name = newName },
     setUid: (index, newUid) => { data.current[index].uid = newUid },
@@ -84,10 +81,24 @@ function App() {
     setStatus: (index, newStatus) => { data.current[index].Status = newStatus },
     setDaySchedule: (index, newDaySchedule) => { data.current[index].DaySchedule = [].concat(newDaySchedule) },
     setWeekSchedule: (index, newWeekSchedule) => { data.current[index].WeekSchedule = [].concat(newWeekSchedule) },
-
+    setWorkingValue: (index, value) => { data.current[index].working = value },
+    setCurrentWorking: (index, value) => {
+      for(const user of data.current)
+      {
+        if(user.uid == data.current[index].uid)
+        {
+          user.working = value;
+        }
+        else
+        {
+          user.working = false;
+        }
+      }
+    },
     ResetUser: () => {
       data.current.length = 0;
     }
+
   }
 
   async function onResults(results) {
@@ -141,55 +152,53 @@ function App() {
       //Process Condition
       if (sHeight > 150 && sWidth > 110 && !inProcessRef.current) {
         inProcessRef.current = true;
-        let file = DataURLtoFile(
-          webCamRef.current.getScreenshot(),
-          `${1}.jpeg`
-        );
-        console.log("file: ", file);
+        let file = DataURLtoFile(webCamRef.current.getScreenshot(), `${1}.jpeg`);
 
         //API Face Recognition
         const formData = new FormData();
         formData.append("files", file);
         axios
-          .post(
-            process.env.REACT_APP_RECOGNIZE_URL + "api/recognize",
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          )
-          .then((res) => {
-            console.log("Res", res);
-            if (res["data"][0]) {
-              if (res["data"][0]["name"] != "") {
-                dataRef.current.name = res["data"][0]["name"].split("-")[0];
-
-                const text = res["data"][0]["name"].split("-")[1];
-                let uid = "";
-                if (text) {
-                  for (let i = 1; i < text.length; i++) {
-                    uid += text[i];
-                    if (text[i + 1] == "@") {
-                      break;
+          .post(process.env.REACT_APP_RECOGNIZE_URL + "api/recognize", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }).then((res) => {
+              for(const user of res['data'])
+              {
+                let name_api = "Người mới";
+                let text = "";
+                let path = "https://api.mmlab.uit.edu.vn/face/" + user["path"];;
+                let uid = 'MSSV/GV';
+                if(user['name'] != '')
+                {
+                  name_api = user['name'].split('-')[0];
+                  text = user['name'].split('-')[1];
+                  uid = '';
+                  if (text) {
+                    for (let i = 1; i < text.length; i++) {
+                      uid += text[i];
+                      if (text[i + 1] == "@") { break }
                     }
                   }
-                  dataRef.current.uid = uid;
                   PlayAudio("schedule");
                 }
-              } else {
-                PlayAudio("makefriend");
+                data.current.push(
+                  {
+                    "name": name_api,
+                    "uid": uid,
+                    "path": path,
+                    "DaySchedule": [],
+                    "WeekSchedule": [],
+                    "Status": "",
+                    "working": false,
+                  }
+                )
               }
-              dataRef.current.path =
-                "https://api.mmlab.uit.edu.vn/face/" + res["data"][0]["path"];
-            } else {
-              PlayAudio("makefriend");
-            }
-
-            notiRef.current.setshowNoti(false);
-            modalRef.current.setshowModal(true);
-          });
+              notiRef.current.setshowNoti(false);
+              modalRef.current.setshowModal(true);
+              PlayAudio("schedule")
+              ClearSleepTime(timeIDRef.current);
+          }) 
       }
     }
 
@@ -243,12 +252,8 @@ function App() {
       <context.Provider value={Contents}>
         <dispatch.Provider value={Actions}>
           {/* Input Video */}
-          <Webcam
-            ref={webCamRef}
-            style={{ visibility: "hidden", position: "absolute" }}
-            mirrored={true}
-          />
-
+          <Webcam ref={webCamRef} style={{ visibility: "hidden", position: "absolute" }} mirrored={true} />
+          
           {/* Go Back Button */}
           <BackButton />
 

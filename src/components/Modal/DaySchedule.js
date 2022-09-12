@@ -15,18 +15,16 @@ const DaySchedule = (props) => {
     const Contents = useContext(context)
     const Actions = useContext(dispatch)
 
-    const Schedule = Contents.current.dataRef.current.DaySchedule;
-
     return (
         <>
-            <ListItem>
+            <ListItem sx={{ backgroundColor: props.user.working ? "#ECEDEE" : "white", mt: 1, mb: 1 }}>
                 
                 {props.user.DaySchedule ?
                     (props.user.DaySchedule.map((row, index) => (
                         <ListItemText
                             key={index}
                             primary={row[0]}
-                            secondary={"Tiết " + row[2] + "  |  " + row[3]}
+                            secondary={"Tiết " + row[2] + "  | Phòng " + row[3]}
                             sx={{ margin: "6px 15px 6px 15px", "& .MuiTypography-root": {fontSize: "1.6rem"} }}
                         />
                     ))) : <ListItem />} 
