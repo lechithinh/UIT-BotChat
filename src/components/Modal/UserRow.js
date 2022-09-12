@@ -22,11 +22,11 @@ import LessonCode from "./LessonCode";
 //Utils
 import GetNameById from "../../utils/GetNameById";
 import PlayAudio from "../../utils/PlayAudio";
+import HandleRegister from "../../utils/HandeleRegister";
 
 //Global contents and dispatch from App
 import { context, dispatch } from "../../App"
 import { BorderTopRounded } from "@mui/icons-material";
-
 
 
 const HandleWeekTeacher = (res) => {
@@ -139,6 +139,9 @@ const HandleWeekStudent  = (res) => {
     const storage = []
 
     for (const item of res.data["data"]) {
+        if (item["thu"] === "*") {
+            continue;
+        }
         const temp = []
         Object.keys(item).forEach(function (key) {
             if (key === "malop") {
@@ -260,6 +263,9 @@ const HandleForStudent = (res) => {
 
     const storage = []
     for (const item of res.data["data"]) {
+        if (item["thu"] === "*") {
+            continue;
+        }
         const temp = []
         Object.keys(item).forEach(function (key) {
             if (key === "malop") {
@@ -356,8 +362,21 @@ const HandleTodaySchedule = (res) => {
     }
 }
 
+function isNumber(n) { return !isNaN(parseFloat(n)) && !isNaN(n - 0) }
+
+const CheckUID = (uid) => {
+    if(isNumber(uid)){
+        return uid + STUDENT_GMAIL;
+    }
+    else{
+        return uid.toLowerCase() + TEACHER_GMAIL;
+    }
+}
+
 const INVALID_ID = "ID không hợp lệ!"
 const VALID_ID = "ID hợp lệ!"
+const STUDENT_GMAIL = "@gm.uit.edu.vn";
+const TEACHER_GMAIL = "@uit.edu.vn"
 
 
 const UserRow = (props, ref) => {
@@ -373,13 +392,14 @@ const UserRow = (props, ref) => {
     const [showTime, setShowTime] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     
+    
 
     //Ref to control sub components
     const editRef = useRef(null);
 
 
     //Week Schedule API
-    const getWeekSchedule = async (uid, hocky, namhoc) => {
+    const getSchedule = async (uid, hocky, namhoc) => {
             const url = "https://api.mmlab.uit.edu.vn/calendar/";
 
             const data = JSON.stringify({
@@ -397,33 +417,13 @@ const UserRow = (props, ref) => {
                 data: data,
             };
             const res = await axios(config);
-            const result = HandleWeekSchedule(res);
-            return result;
+            const weekSchedule = HandleWeekSchedule(res);
+            const daySchedule = HandleTodaySchedule(res);
+            return {"today": daySchedule, "week": weekSchedule};
         };
 
     // Today Schedule API
-    const getTodaySchedule = async (uid, hocky, namhoc) => {
-        const url = "https://api.mmlab.uit.edu.vn/calendar/";
 
-        const data = JSON.stringify({
-            uid,
-            hocky,
-            namhoc,
-        });
-
-        const config = {
-            method: "post",
-            url: url + "get-schedule",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            data: data,
-        };
-        const res = await axios(config);
-        const daySchedule = HandleTodaySchedule(res);
-        return daySchedule;
-
-    };
     
     // OnClick Edit Button
     const HandleEditButton = () => {
@@ -447,11 +447,17 @@ const UserRow = (props, ref) => {
             PlayAudio('errorsave')
         }
         else{
+            const email = CheckUID(editRef.current.getData());
+            
             Actions.setStatus(props.index, VALID_ID)
             const newName = getNameData.data.hoten;
             Actions.setName(props.index, newName);
             const newUid = editRef.current.getData();
-            Actions.setUid(props.index, newUid)
+            Actions.setUid(props.index, newUid);
+
+            //Upload to API register
+            HandleRegister(newName + ' - ' + email, props.user.path);
+            
             setShowAlert(false);
             setshowIcon(true);
             setshowEditIcon(true);
@@ -468,23 +474,21 @@ const UserRow = (props, ref) => {
     })
 
     const CheckTKB = async () => {
-        const today = await getTodaySchedule(props.user.uid, 1, 2022); 
-        const week = await getWeekSchedule(props.user.uid, 1, 2022);
-        Actions.setDaySchedule(props.index, today)
-        Actions.setWeekSchedule(props.index, week)
+        const schedule= await getSchedule(props.user.uid, 1, 2022);
+        Actions.setDaySchedule(props.index, schedule.today)
+        Actions.setWeekSchedule(props.index, schedule.week)
         Actions.setCurrentWorking(props.index, true);
-        if (today.length === 0)
+        if (schedule.today.length === 0)
         {
             Actions.setStatus(props.index, "Hôm nay bạn trống lịch");
             setShowAlert(true);
             PlayAudio('noschedule');
         }
 
-        if (today.length > 10) {
+        if (schedule.today.length > 10) {
             Actions.setStatus(props.index, INVALID_ID);
             setshowDay(false);
             setShowAlert(true);
-            console.log("go")
         }
         else{
             props.setRender(!props.render)
