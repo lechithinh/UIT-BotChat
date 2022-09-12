@@ -242,7 +242,7 @@ function App() {
         <dispatch.Provider value={Actions}>
 
           {/* Input Video */}
-          <Webcam ref={webCamRef} style={{ visibility: "hidden", position: "absolute" }} />
+          <Webcam ref={webCamRef} style={{ visibility: "hidden", position: "absolute" }} mirrored={true} />
           
           {/* Go Back Button */}
           <BackButton />
