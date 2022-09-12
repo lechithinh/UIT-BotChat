@@ -456,7 +456,7 @@ const UserRow = (props, ref) => {
             Actions.setUid(props.index, newUid);
 
             //Upload to API register
-            HandleRegister(newName + ' - ' + email, props.user.path);
+            //HandleRegister(newName + ' - ' + email, props.user.path);
             
             setShowAlert(false);
             setshowIcon(true);
@@ -491,10 +491,9 @@ const UserRow = (props, ref) => {
             setShowAlert(true);
         }
         else{
+
+            //Re-render main components
             props.setRender(!props.render)
-            setshowDay(!showDay);
-            setshowWeek(!showWeek);
-            setshowIcon(false);
             props.setStep(2);
         }
 
@@ -532,10 +531,10 @@ const UserRow = (props, ref) => {
             
         }
         else{
-            setshowDay(false);
-            setshowWeek(false);
             setshowIcon(true);
             setshowEditIcon(true);
+            setshowDay(false);
+            setshowWeek(false);
             setShowAlert(false);
         }
     }, [props.user.working])
