@@ -245,12 +245,12 @@ const HandleWeekStudent  = (res) => {
     return result;
 
 }
-const HandleWeekSchedule = (res) => {
-    if (res.data["data"][0].hasOwnProperty("tenmh")) {
-        return HandleWeekTeacher(res);
+const HandleWeekSchedule = (props,res) => {
+    if (isNumber(props.user.uid)) {
+        return HandleWeekStudent(res)
     }
     else {
-        return HandleWeekStudent(res);
+        return HandleWeekTeacher(res);
     }
 }
 
@@ -353,12 +353,12 @@ const HandleForTeacher = (res) => {
     return daySchedule;
 }
 
-const HandleTodaySchedule = (res) => {
-    if (res.data["data"][0].hasOwnProperty("tenmh") ){
-        return HandleForTeacher(res);
+const HandleTodaySchedule = (props,res) => {
+    if (isNumber(props.user.uid)) {
+        return HandleForStudent(res)
     }
     else {
-        return HandleForStudent(res);
+        return HandleForTeacher(res);
     }
 }
 
@@ -417,8 +417,10 @@ const UserRow = (props, ref) => {
                 data: data,
             };
             const res = await axios(config);
-            const weekSchedule = HandleWeekSchedule(res);
-            const daySchedule = HandleTodaySchedule(res);
+            console.log("TKB raw: ", res.data['data'])
+            const weekSchedule = HandleWeekSchedule(props,res);
+            const daySchedule = HandleTodaySchedule(props,res);
+            console.log("Week: ", weekSchedule)
             return {"today": daySchedule, "week": weekSchedule};
         };
 
