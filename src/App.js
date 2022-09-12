@@ -1,29 +1,26 @@
-import './App.css';
+import "./App.css";
 //Libaries
 import * as cam from "@mediapipe/camera_utils";
 import { drawLandmarks, drawRectangle } from "@mediapipe/drawing_utils";
 import Webcam from "react-webcam";
 import { FaceDetection } from "@mediapipe/face_detection";
 
-//React 
-import React from 'react';
-import {useEffect,useRef,useState, createContext} from 'react'
-
+//React
+import React from "react";
+import { useEffect, useRef, useState, createContext } from "react";
 
 //Components
-import Modal from './components/Modal';
-import Noti from './components/Notifications';
-import BackButton from './components/BackButton';
+import Modal from "./components/Modal";
+import Noti from "./components/Notifications";
+import BackButton from "./components/BackButton";
 //Modules
 
-
-
 //Utils
-import DataURLtoFile from "./utils/DataURLtoFile"
-import PlayAudio from './utils/PlayAudio';
-import axios from 'axios';
+import DataURLtoFile from "./utils/DataURLtoFile";
+import PlayAudio from "./utils/PlayAudio";
+import axios from "axios";
 
-export const context = createContext(null); 
+export const context = createContext(null);
 export const dispatch = createContext(null);
 
 const InitData = {
@@ -37,13 +34,11 @@ const InitData = {
 
 
 function App() {
-  
   const webCamRef = useRef(null);
   const canvasRef = useRef(null);
 
   //Ref to control process
   const inProcessRef = useRef(false);
-
 
   //Ref to control compoents
   const modalRef = useRef(null);
@@ -60,7 +55,6 @@ function App() {
   });
 
   var camera = null;
- 
 
   // Contents and Dispatch
   const Contents = useRef({
@@ -68,15 +62,21 @@ function App() {
     dataRef,
     inProcessRef,
     notiRef,
-  })
+  });
 
   const Actions = {
     //Process
-    setProcess: (newProcess) => { inProcessRef.current = newProcess},
+    setProcess: (newProcess) => {
+      inProcessRef.current = newProcess;
+    },
 
     //Message
-    setNotiMessage: (newNoti, newTime) => { notiRef.current.setMessage(newNoti, newTime)},
-    setNotiShow: (isShow) => { notiRef.current.setshowNoti(isShow)},
+    setNotiMessage: (newNoti, newTime) => {
+      notiRef.current.setMessage(newNoti, newTime);
+    },
+    setNotiShow: (isShow) => {
+      notiRef.current.setshowNoti(isShow);
+    },
 
     setName: (index, newName) => { data.current[index].name = newName },
     setUid: (index, newUid) => { data.current[index].uid = newUid },
@@ -90,7 +90,7 @@ function App() {
     }
   }
 
-  async function onResults(results){
+  async function onResults(results) {
     canvasRef.current.width = screenSize.current.width;
     canvasRef.current.height = screenSize.current.height;
     const canvasElement = canvasRef.current;
@@ -98,86 +98,102 @@ function App() {
 
     canvasCtx.save();
     canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+    canvasCtx.drawImage(
+      results.image,
+      0,
+      0,
+      canvasElement.width,
+      canvasElement.height
+    );
 
-    canvasCtx.drawImage(document.getElementById("img-frame"),0,0,canvasElement.width,canvasElement.height);
-    
+    canvasCtx.drawImage(
+      document.getElementById("img-frame"),
+      0,
+      0,
+      canvasElement.width,
+      canvasElement.height
+    );
 
     if (results.detections.length > 0) {
-      drawRectangle(canvasCtx, results.detections[0].boundingBox, { color: 'blue', lineWidth: 4, fillColor: '#00000000' });
-      drawLandmarks(canvasCtx, results.detections[0].landmarks, { color: 'red', radius: 5, });
+      drawRectangle(canvasCtx, results.detections[0].boundingBox, {
+        color: "blue",
+        lineWidth: 4,
+        fillColor: "#00000000",
+      });
+      drawLandmarks(canvasCtx, results.detections[0].landmarks, {
+        color: "red",
+        radius: 5,
+      });
     }
-
-  
 
     if (results.detections.length > 0) {
       const size = canvasElement.height;
       const sHeight = results.detections[0].boundingBox["height"] * size;
       const sWidth = results.detections[0].boundingBox["width"] * size;
-      
 
       // Show Notifications Condition
-      if (sHeight < 150 && sWidth < 110 && !inProcessRef.current){
-        setTimeout(()=>{
+      if (sHeight < 150 && sWidth < 110 && !inProcessRef.current) {
+        setTimeout(() => {
           notiRef.current.setshowNoti(true);
-        },1500);
-        
+        }, 1500);
       }
-      
+
       //Process Condition
       if (sHeight > 150 && sWidth > 110 && !inProcessRef.current) {
         inProcessRef.current = true;
-        let file = DataURLtoFile(webCamRef.current.getScreenshot(), `${1}.jpeg`);
-        console.log("file: ", file)
+        let file = DataURLtoFile(
+          webCamRef.current.getScreenshot(),
+          `${1}.jpeg`
+        );
+        console.log("file: ", file);
 
         //API Face Recognition
         const formData = new FormData();
         formData.append("files", file);
         axios
-          .post(process.env.REACT_APP_RECOGNIZE_URL + "api/recognize", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }).then((res) => {
-              console.log("Res", res)
-              for(const user of res['data'])
-              {
-                let name_api = "Người mới";
-                let text = "";
-                let path = "https://api.mmlab.uit.edu.vn/face/" + user["path"];;
-                let uid = 'MSSV/GV';
-                if(user['name'] != '')
-                {
-                  name_api = user['name'].split('-')[0];
-                  text = user['name'].split('-')[1];
-                  uid = '';
-                  if (text) {
-                    for (let i = 1; i < text.length; i++) {
-                      uid += text[i];
-                      if (text[i + 1] == "@") { break }
+          .post(
+            process.env.REACT_APP_RECOGNIZE_URL + "api/recognize",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          )
+          .then((res) => {
+            console.log("Res", res);
+            if (res["data"][0]) {
+              if (res["data"][0]["name"] != "") {
+                dataRef.current.name = res["data"][0]["name"].split("-")[0];
+
+                const text = res["data"][0]["name"].split("-")[1];
+                let uid = "";
+                if (text) {
+                  for (let i = 1; i < text.length; i++) {
+                    uid += text[i];
+                    if (text[i + 1] == "@") {
+                      break;
                     }
                   }
-                  
+                  dataRef.current.uid = uid;
+                  PlayAudio("schedule");
                 }
-                data.current.push(
-                  {
-                    "name": name_api,
-                    "uid": uid,
-                    "path": path,
-                    "DaySchedule": [],
-                    "WeekSchedule": [],
-                    "Status": "",
-                  }
-                )
+              } else {
+                PlayAudio("makefriend");
               }
-              notiRef.current.setshowNoti(false);
-              modalRef.current.setshowModal(true);
-              
-          }) 
+              dataRef.current.path =
+                "https://api.mmlab.uit.edu.vn/face/" + res["data"][0]["path"];
+            } else {
+              PlayAudio("makefriend");
+            }
+
+            notiRef.current.setshowNoti(false);
+            modalRef.current.setshowModal(true);
+          });
       }
     }
-  
-      // Auto Close Condiction (On Work)
+
+    // Auto Close Condiction (On Work)
     canvasCtx.restore();
   }
 
@@ -198,16 +214,18 @@ function App() {
       },
     });
 
-
     faceDetection.setOptions({
       selfieMode: true,
       model: "short",
-      minDetectionConfidence: 0.7
+      minDetectionConfidence: 0.7,
     });
 
     faceDetection.onResults(onResults);
 
-    if (typeof webCamRef.current !== "undefined" && webCamRef.current !== null) {
+    if (
+      typeof webCamRef.current !== "undefined" &&
+      webCamRef.current !== null
+    ) {
       camera = new cam.Camera(webCamRef.current.video, {
         onFrame: async () => {
           await faceDetection.send({ image: webCamRef.current.video });
@@ -215,37 +233,38 @@ function App() {
         width: 640,
         height: 480,
       });
-      
     }
 
     camera.start();
   }, []);
-  
-
 
   return (
     <div className="App">
       <context.Provider value={Contents}>
         <dispatch.Provider value={Actions}>
-
           {/* Input Video */}
-          <Webcam ref={webCamRef} style={{ visibility: "hidden", position: "absolute" }} />
-          
+          <Webcam
+            ref={webCamRef}
+            style={{ visibility: "hidden", position: "absolute" }}
+            mirrored={true}
+          />
+
           {/* Go Back Button */}
           <BackButton />
 
           {/* Output Video */}
-          <canvas ref={canvasRef} style={{ position: "absolute", top : "200px", left: "0"}}></canvas>
-         
+          <canvas
+            ref={canvasRef}
+            style={{ position: "absolute", top: "200px", left: "0" }}
+          ></canvas>
+
           {/* Notifications */}
           <Noti ref={notiRef} />
 
           {/* Main Modal */}
           <Modal ref={modalRef} />
-
         </dispatch.Provider>
       </context.Provider>
-
     </div>
   );
 }
