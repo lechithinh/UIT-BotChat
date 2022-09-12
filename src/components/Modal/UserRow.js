@@ -67,64 +67,65 @@ const HandleWeekTeacher = (res) => {
     }
 
     const result = [
-        ["2", 0, 1],
-        ["3", 0, 1],
-        ["4", 0, 1],
-        ["5", 0, 1],
-        ["6", 0, 1],
-        ["7", 0, 1],
+        ["2", [], []],
+        ["3", [], []],
+        ["4", [], []],
+        ["5", [], []],
+        ["6", [], []],
+        ["7", [], []],
     ]
 
     for (const ele of storage) {
         if (ele[1] === "2") {
             if (ele[2] === "Sáng") {
-                result[0][1] = ele[0];
+                result[0][1].push(ele[0]);
             }
             else {
-                result[0][2] = ele[0];
+                result[0][2].push(ele[0]);
             }
         }
         else if (ele[1] === "3") {
             if (ele[2] === "Sáng") {
-                result[1][1] = ele[0];
+                result[1][1].push(ele[0]);
             }
             else {
-                result[1][2] = ele[0];
+                result[1][2].push(ele[0]);
             }
         }
         else if (ele[1] === "4") {
             if (ele[2] === "Sáng") {
-                result[2][1] = ele[0];
+                result[2][1].push(ele[0]);
             }
             else {
-                result[2][2] = ele[0];
+                result[2][2].push(ele[0]);
             }
         }
         else if (ele[1] === "5") {
             if (ele[2] === "Sáng") {
-                result[3][1] = ele[0];
+                result[3][1].push(ele[0]);
             }
             else {
-                result[3][2] = ele[0];
+                result[3][2].push(ele[0]);
             }
         }
         else if (ele[1] === "6") {
             if (ele[2] === "Sáng") {
-                result[4][1] = ele[0];
+                result[4][1].push(ele[0]);
             }
             else {
-                result[4][2] = ele[0];
+                result[4][2].push(ele[0]);
             }
         }
         else if (ele[1] === "7") {
             if (ele[2] === "Sáng") {
-                result[5][1] = ele[0];
+                result[5][1].push(ele[0]);
             }
             else {
-                result[5][2] = ele[0];
+                result[5][2].push(ele[0]);
             }
         }
     }
+
 
     return result; 
 }
@@ -183,61 +184,61 @@ const HandleWeekStudent  = (res) => {
     }
 
     const result = [
-        ["2", 0, 1],
-        ["3", 0, 1],
-        ["4", 0, 1],
-        ["5", 0, 1],
-        ["6", 0, 1],
-        ["7", 0, 1],
+        ["2", [], []],
+        ["3", [], []],
+        ["4", [], []],
+        ["5", [], []],
+        ["6", [], []],
+        ["7", [], []],
     ]
 
     for (const ele of storage) {
         if (ele[1] === "2") {
             if (ele[2] === "Sáng") {
-                result[0][1] = ele[0];
+                result[0][1].push(ele[0]);
             }
             else {
-                result[0][2] = ele[0];
+                result[0][2].push(ele[0]);
             }
         }
         else if (ele[1] === "3") {
             if (ele[2] === "Sáng") {
-                result[1][1] = ele[0];
+                result[1][1].push(ele[0]);
             }
             else {
-                result[1][2] = ele[0];
+                result[1][2].push(ele[0]);
             }
         }
         else if (ele[1] === "4") {
             if (ele[2] === "Sáng") {
-                result[2][1] = ele[0];
+                result[2][1].push(ele[0]);
             }
             else {
-                result[2][2] = ele[0];
+                result[2][2].push(ele[0]);
             }
         }
         else if (ele[1] === "5") {
             if (ele[2] === "Sáng") {
-                result[3][1] = ele[0];
+                result[3][1].push(ele[0]);
             }
             else {
-                result[3][2] = ele[0];
+                result[3][2].push(ele[0]);
             }
         }
         else if (ele[1] === "6") {
             if (ele[2] === "Sáng") {
-                result[4][1] = ele[0];
+                result[4][1].push(ele[0]);
             }
             else {
-                result[4][2] = ele[0];
+                result[4][2].push(ele[0]);
             }
         }
         else if (ele[1] === "7") {
             if (ele[2] === "Sáng") {
-                result[5][1] = ele[0];
+                result[5][1].push(ele[0]);
             }
             else {
-                result[5][2] = ele[0];
+                result[5][2].push(ele[0]);
             }
         }
     }
