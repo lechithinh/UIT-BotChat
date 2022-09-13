@@ -22,6 +22,9 @@ const HandleRoom = (DaySchedule) => {
     {
         return room.split('.').join("");
     }
+    else{
+        return room;
+    }
 }
 const DaySchedule = (props) => {
 
@@ -32,6 +35,7 @@ const DaySchedule = (props) => {
     const HandleDirection = () => {
         if (props.user.DaySchedule)
         {
+            
             let rom = HandleRoom(props.user.DaySchedule[0]);
             DirectTo += rom;
             window.location.href = DirectTo;

@@ -261,7 +261,7 @@ function App() {
           {/* Output Video */}
           <canvas
             ref={canvasRef}
-            style={{ position: "absolute", top: "200px", left: "0" }}
+            style={{ position: "absolute", top: "300px", left: "0" }}
           ></canvas>
 
           {/* Notifications */}

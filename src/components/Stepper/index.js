@@ -9,6 +9,9 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import StepConnector, {
     stepConnectorClasses,
 } from "@mui/material/StepConnector";
+import { Typography } from "@mui/material";
+import { fontSize } from "@mui/system";
+
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -86,12 +89,12 @@ const CustomStepper = ({ steps, activeStep, setActiveStep }) => {
             alternativeLabel
             activeStep={activeStep}
             connector={<ColorlibConnector />}
-            style={{ marginTop: "100px", width: "100%", marginLeft: "70px" }}
+            style={{ marginTop: "100px", width: "950px", marginLeft: "50px"}}
         >
             {steps.map((label,index) => (
                 <Step key={label}>
                     <StepLabel StepIconComponent={ColorlibStepIcon} onClick={() => {HandleProgress(index)}}>
-                        <h3><b>{label}</b></h3>
+                        <h1 style={{fontSize: "40px"}}><b>{label}</b></h1>   
                     </StepLabel>
                 </Step>
             ))}
