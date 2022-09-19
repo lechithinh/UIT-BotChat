@@ -196,7 +196,7 @@ function App() {
                       if (text[i + 1] == "@") { break }
                     }
                   }
-                  //PlayAudio("schedule");
+                  PlayAudio("schedule");
                 }
                 data.current.push(
                   {
@@ -209,18 +209,11 @@ function App() {
                     "working": false,
                   }
                 )
-                var name = data.current[0].name.trim().split(" ").slice(-1).join(' ');
-                PlayAudio(ClearName(name))
-                setTimeout(() => {
-                  PlayAudio("schedule");
-                }, 1000);
-                
-                
               }
               notiRef.current.setshowNoti(false);
               modalRef.current.setshowModal(true);
               modalRef.current.setStep(1);
-              
+            PlayAudio("schedule");
               ClearSleepTime(timeIDRef.current);
           }) 
       }
