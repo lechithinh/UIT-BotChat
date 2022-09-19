@@ -385,7 +385,7 @@ const LessonCode = {
     MSIS4523: "Hệ truyền thông dữ liệu",
     NHJP1: "Tiếng Nhật Sơ cấp 1",
     NHJP2: "Tiếng Nhật Sơ cấp 2",
-    NT005:"Giới thiệu ngành Mạng máy tính và Truyền thông dữ liệu",
+    NT005: "Giới thiệu ngành Mạng máy tính và Truyền thông dữ liệu",
     NT015: "Giới thiệu ngành An toàn Thông tin",
     NT101: "An toàn mạng máy tính",
     NT103: "Hệ điều hành Linux",

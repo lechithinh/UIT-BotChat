@@ -1,5 +1,5 @@
 //React
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState, useImperativeHandle, forwardRef, useContext } from "react";
 
 //Compoents
@@ -13,11 +13,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import CancelIcon from '@mui/icons-material/Cancel';
 //Sub components itself
 import UserRow from "./UserRow";
+import GetSchedule from "../../utils/GetSchedule";
 
 //Global contents and dispatch from App
 import { context, dispatch } from "../../App"
 import PlayAudio from "../../utils/PlayAudio";
 import { SetSleepTime } from "../../utils/Redirect";
+
 const steps = [
     "1. Nhận diện.",
     "2. Kiểm tra thông tin.",
@@ -37,6 +39,22 @@ const Modal = (props, ref) => {
     const [step, setStep] = useState(0);
     const [render, setRender] = useState(false);
 
+    
+
+    
+    useEffect(() => {
+        async function fetchData() {
+            let i = 0;
+            for (const user of Contents.current.data.current) {
+                const schedule = await GetSchedule(user.uid, 1, 2022);
+                Actions.setDaySchedule(i, schedule.today)
+                Actions.setWeekSchedule(i, schedule.week)
+                i = i + 1;
+            }
+        }
+        fetchData();
+    }, [showModal]);
+    
     // For App to use
     useImperativeHandle(ref, () => ({
         setshowModal,
