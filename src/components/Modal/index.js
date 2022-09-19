@@ -68,12 +68,12 @@ const Modal = (props, ref) => {
         Actions.ResetUser();
         Actions.setNotiMessage("Hãy đợi 3 giây để bắt đầu lại!", 3000);
         //Reset step
-        setStep(1)
+        setStep(0)
         //Reset data
         Actions.setNotiShow(true);
         setshowModal(!showModal)
         setTimeout(() => {
-           
+            
             Actions.setProcess(false);
             Actions.setNotiMessage("Xin hãy lại gần hơn!", 1000);
             Actions.setNotiShow(false);

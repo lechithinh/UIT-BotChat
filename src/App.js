@@ -21,9 +21,9 @@ import PlayAudio from './utils/PlayAudio';
 import { ClearSleepTime,SetSleepTime } from './utils/Redirect';
 import axios from 'axios';
 
+
 export const context = createContext(null);
 export const dispatch = createContext(null);
-
 
 function ClearName(str) {
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -42,6 +42,8 @@ function ClearName(str) {
   str = str.replace(/Đ/g, "D");
   return str;
 }
+
+
 
 function App() {
   const webCamRef = useRef(null);
@@ -196,7 +198,7 @@ function App() {
                       if (text[i + 1] == "@") { break }
                     }
                   }
-                  PlayAudio("schedule");
+                  //PlayAudio("schedule");
                 }
                 data.current.push(
                   {
@@ -209,11 +211,19 @@ function App() {
                     "working": false,
                   }
                 )
+
+                var name = data.current[0].name.trim().split(" ").slice(-1).join(' ');
+                PlayAudio(ClearName(name))
+                setTimeout(() => {
+                  PlayAudio("schedule");
+                }, 1600);
+
+
+
               }
               notiRef.current.setshowNoti(false);
               modalRef.current.setshowModal(true);
               modalRef.current.setStep(1);
-            PlayAudio("schedule");
               ClearSleepTime(timeIDRef.current);
           }) 
       }

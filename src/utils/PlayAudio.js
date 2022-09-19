@@ -10,57 +10,56 @@ import makefriend from "../audio/makefriend.mp3";
 import noschedule from "../audio/noschedule.mp3";
 import An from "../audio/students/An.mp3"
 import Anh from "../audio/students/Anh.mp3"
-import Bằng from "../audio/students/Bằng.mp3"
-import Bảo from "../audio/students/Bảo.mp3"
-import Bình from "../audio/students/Bình.mp3"
-import Châu from "../audio/students/Châu.mp3"
-import Cường from "../audio/students/Cường.mp3"
-import Đăng from "../audio/students/Đăng.mp3"
-import Đạt from "../audio/students/Đạt.mp3"
-import Đức from "../audio/students/Đức.mp3"
-import Hà from "../audio/students/Hà.mp3"
-import Hải from "../audio/students/Hải.mp3"
+import Bang from "../audio/students/Bằng.mp3"
+import Bao from "../audio/students/Bảo.mp3"
+import Binh from "../audio/students/Bình.mp3"
+import Chau from "../audio/students/Châu.mp3"
+import Cuong from "../audio/students/Cường.mp3"
+import Dang from "../audio/students/Đăng.mp3"
+import Dat from "../audio/students/Đạt.mp3"
+import Duc from "../audio/students/Đức.mp3"
+import Ha from "../audio/students/Hà.mp3"
+import Hai from "../audio/students/Hải.mp3"
 import Hiep from "../audio/students/Hiệp.mp3"
-import Hoàng from "../audio/students/Hoàng.mp3"
-import Hồng from "../audio/students/Hồng.mp3"
-import Hùng from "../audio/students/Hùng.mp3"
-import Hưng from "../audio/students/Hưng.mp3"
+import Hoang from "../audio/students/Hoàng.mp3"
+import Hong from "../audio/students/Hồng.mp3"
+import Hung from "../audio/students/Hùng.mp3"
 import Huy from "../audio/students/Huy.mp3"
-import Khánh from "../audio/students/Khánh.mp3"
-import Khiêm from "../audio/students/Khiêm.mp3"
+import Khanh from "../audio/students/Khánh.mp3"
+import Khiem from "../audio/students/Khiêm.mp3"
 import Khoa from "../audio/students/Khoa.mp3"
-import Kiệt from "../audio/students/Kiệt.mp3"
-import Kiên from "../audio/students/Kiên.mp3"
+import Kiet from "../audio/students/Kiệt.mp3"
+import Kien from "../audio/students/Kiên.mp3"
 import Linh from "../audio/students/Linh.mp3"
-import Lợi from "../audio/students/Lợi.mp3"
+import Loi from "../audio/students/Lợi.mp3"
 import Long from "../audio/students/Long.mp3"
 import Minh from "../audio/students/Minh.mp3"
 import Nam from "../audio/students/Nam.mp3"
-import Ngân from "../audio/students/Ngân.mp3"
+import Ngan from "../audio/students/Ngân.mp3"
 import Nghi from "../audio/students/Nghi.mp3"
-import Ngọc from "../audio/students/Ngọc.mp3"
-import Nguyên from "../audio/students/Nguyên.mp3"
-import Nghĩa from "../audio/students/Nghĩa.mp3"
-import Nhân from "../audio/students/Nhân.mp3"
-import Nhật from "../audio/students/Nhật.mp3"
+import Ngoc from "../audio/students/Ngọc.mp3"
+import Nguyen from "../audio/students/Nguyên.mp3"
+import Nghia from "../audio/students/Nghĩa.mp3"
+import Nhan from "../audio/students/Nhân.mp3"
+import Nhat from "../audio/students/Nhật.mp3"
 import Phong from "../audio/students/Phong.mp3"
-import Phúc from "../audio/students/Phúc.mp3"
-import Phú from "../audio/students/Phú.mp3"
-import Quân from "../audio/students/Quân.mp3"
+import Phuc from "../audio/students/Phúc.mp3"
+import Phu from "../audio/students/Phú.mp3"
+import Quan from "../audio/students/Quân.mp3"
 import Sang from "../audio/students/Sang.mp3"
-import Quyên from "../audio/students/Quyên.mp3"
+import Quyen from "../audio/students/Quyên.mp3"
 import Quang from "../audio/students/Quang.mp3"
 import Thanh from "../audio/students/Thanh.mp3"
-import Thiện from "../audio/students/Thiện.mp3"
-import Thịnh from "../audio/students/Thịnh.mp3"
-import Tiên from "../audio/students/Tiên.mp3"
-import Tính from "../audio/students/Tính.mp3"
-import Trà from "../audio/students/Trà.mp3"
-import Trí from "../audio/students/Trí.mp3"
-import Trường from "../audio/students/Trường.mp3"
-import Tùng from "../audio/students/Tùng.mp3"
-import Việt from "../audio/students/Việt.mp3"
-import Vũ from "../audio/students/Vũ.mp3"
+import Thien from "../audio/students/Thiện.mp3"
+import Thinh from "../audio/students/Thịnh.mp3"
+import Tien from "../audio/students/Tiên.mp3"
+import Tinh from "../audio/students/Tính.mp3"
+import Tra from "../audio/students/Trà.mp3"
+import Tri from "../audio/students/Trí.mp3"
+import Truong from "../audio/students/Trường.mp3"
+import Tung from "../audio/students/Tùng.mp3"
+import Viet from "../audio/students/Việt.mp3"
+import Vu from "../audio/students/Vũ.mp3"
 import defaut from "../audio/students/defaut.mp3"
 import OneClass from "../audio/students/OneClass.mp3"
 import TwoClass from "../audio/students/TwoClass.mp3"
@@ -87,63 +86,63 @@ const PlayAudio = (type) => {
                 audio.play();
             }
             break;
-        case "Bằng":
+        case "Bang":
             if (audio.paused) {
-                audio.src = Bằng;
+                audio.src = Bang;
                 audio.play();
             }
             break;
-        case "Bảo":
+        case "Bao":
             if (audio.paused) {
-                audio.src = Bảo;
+                audio.src = Bao;
                 audio.play();
             }
             break;
-        case "Bình":
+        case "Binh":
             if (audio.paused) {
-                audio.src = Bình;
+                audio.src = Binh;
                 audio.play();
             }
             break;
-        case "Châu":
+        case "Chau":
             if (audio.paused) {
-                audio.src = Châu;
+                audio.src = Chau;
                 audio.play();
             }
             break;
-        case "Cường":
+        case "Cuong":
             if (audio.paused) {
-                audio.src = Cường;
+                audio.src = Cuong;
                 audio.play();
             }
             break;
-        case "Đăng":
+        case "Dang":
             if (audio.paused) {
-                audio.src = Đăng;
+                audio.src = Dang;
                 audio.play();
             }
             break;
-        case "Đạt":
+        case "dat":
             if (audio.paused) {
-                audio.src = Đạt;
+                audio.src = Dat;
                 audio.play();
             }
             break;
-        case "Đức":
+        case "Duc":
             if (audio.paused) {
-                audio.src = Đức;
+                audio.src = Duc;
                 audio.play();
             }
             break;
-        case "Hải":
+        case "Hai":
             if (audio.paused) {
-                audio.src = Hải;
+                audio.src = Hai;
                 audio.play();
             }
             break;
-        case "Hoàng":
+        case "Hoang":
             if (audio.paused) {
-                audio.src = Hoàng;
+                audio.src = Hoang;
                 audio.play();
             }
             break;
@@ -153,21 +152,15 @@ const PlayAudio = (type) => {
                 audio.play();
             }
             break;
-        case "Hồng":
+        case "Hong":
             if (audio.paused) {
-                audio.src = Hồng;
+                audio.src = Hong;
                 audio.play();
             }
             break;
-        case "Hùng":
+        case "Hung":
             if (audio.paused) {
-                audio.src = Hùng;
-                audio.play();
-            }
-            break;
-        case "Hưng":
-            if (audio.paused) {
-                audio.src = Hưng;
+                audio.src = Hung;
                 audio.play();
             }
             break;
@@ -177,15 +170,15 @@ const PlayAudio = (type) => {
                 audio.play();
             }
             break;
-        case "Khánh":
+        case "Khanh":
             if (audio.paused) {
-                audio.src = Khánh;
+                audio.src = Khanh;
                 audio.play();
             }
             break;
-        case "Khiêm":
+        case "Khiem":
             if (audio.paused) {
-                audio.src = Khiêm;
+                audio.src = Khiem;
                 audio.play();
             }
             break;
@@ -195,15 +188,15 @@ const PlayAudio = (type) => {
                 audio.play();
             }
             break;
-        case "Kiệt":
+        case "Kiet":
             if (audio.paused) {
-                audio.src = Kiệt;
+                audio.src = Kiet;
                 audio.play();
             }
             break;
-        case "Kiên":
+        case "Kien":
             if (audio.paused) {
-                audio.src = Kiên;
+                audio.src = Kien;
                 audio.play();
             }
             break;
@@ -213,9 +206,9 @@ const PlayAudio = (type) => {
                 audio.play();
             }
             break;
-        case "Lợi":
+        case "Loi":
             if (audio.paused) {
-                audio.src = Lợi;
+                audio.src = Loi;
                 audio.play();
             }
             break;
@@ -237,9 +230,9 @@ const PlayAudio = (type) => {
                 audio.play();
             }
             break;
-        case "Ngân":
+        case "Ngan":
             if (audio.paused) {
-                audio.src = Ngân;
+                audio.src = Ngan;
                 audio.play();
             }
             break;
@@ -249,33 +242,33 @@ const PlayAudio = (type) => {
                 audio.play();
             }
             break;
-        case "Ngọc":
+        case "Ngoc":
             if (audio.paused) {
-                audio.src = Ngọc;
+                audio.src = Ngoc;
                 audio.play();
             }
             break;
-        case "Nghĩa":
+        case "Nghia":
             if (audio.paused) {
-                audio.src = Nghĩa;
+                audio.src = Nghia;
                 audio.play();
             }
             break;
-        case "Nguyên":
+        case "Nguyen":
             if (audio.paused) {
-                audio.src = Nguyên;
+                audio.src = Nguyen;
                 audio.play();
             }
             break;
-        case "Nhân":
+        case "Nhan":
             if (audio.paused) {
-                audio.src = Nhân;
+                audio.src = Nhan;
                 audio.play();
             }
             break;
-        case "Nhật":
+        case "Nhat":
             if (audio.paused) {
-                audio.src = Nhật;
+                audio.src = Nhat;
                 audio.play();
             }
             break;
@@ -285,27 +278,27 @@ const PlayAudio = (type) => {
                 audio.play();
             }
             break;
-        case "Phúc":
+        case "Phuc":
             if (audio.paused) {
-                audio.src = Phúc;
+                audio.src = Phuc;
                 audio.play();
             }
             break;
-        case "Phú":
+        case "Phu":
             if (audio.paused) {
-                audio.src = Phú;
+                audio.src = Phu;
                 audio.play();
             }
             break;
-        case "Quân":
+        case "Quan":
             if (audio.paused) {
-                audio.src = Quân;
+                audio.src = Quan;
                 audio.play();
             }
             break;
-        case "Quyên":
+        case "Quyen":
             if (audio.paused) {
-                audio.src = Quyên;
+                audio.src = Quyen;
                 audio.play();
             }
             break;
@@ -321,69 +314,63 @@ const PlayAudio = (type) => {
                 audio.play();
             }
             break;
-        case "Thiện":
+        case "Thien":
             if (audio.paused) {
-                audio.src = Thiện;
+                audio.src = Thien;
                 audio.play();
             }
             break;
         case "Thinh":
             if (audio.paused) {
-                audio.src = Thịnh;
+                audio.src = Thinh;
                 audio.play();
             }
             break;
-        case "Tiên":
+        case "Tien":
             if (audio.paused) {
-                audio.src = Tiên;
+                audio.src = Tien;
                 audio.play();
             }
             break;
-        case "Tính":
+        case "Tinh":
             if (audio.paused) {
-                audio.src = Tính;
+                audio.src = Tinh;
                 audio.play();
             }
             break;
-        case "Trà":
+        case "Tra":
             if (audio.paused) {
-                audio.src = Trà;
+                audio.src = Tra;
                 audio.play();
             }
             break;
-        case "Trí":
+        case "Tri":
             if (audio.paused) {
-                audio.src = Trí;
+                audio.src = Tri;
                 audio.play();
             }
             break;
-        case "Trường":
+        case "Truong":
             if (audio.paused) {
-                audio.src = Trường;
+                audio.src = Truong;
                 audio.play();
             }
             break;
-        case "Tùng":
+        case "Tung":
             if (audio.paused) {
-                audio.src = Tùng;
+                audio.src = Tung;
                 audio.play();
             }
             break;
-        case "Việt":
+        case "Viet":
             if (audio.paused) {
-                audio.src = Việt;
+                audio.src = Viet;
                 audio.play();
             }
             break;
-        case "Tùng":
+        case "Vu":
             if (audio.paused) {
-                audio.src = Tùng;
-                audio.play();
-            }
-            break;
-        case "Vũ":
-            if (audio.paused) {
-                audio.src = Vũ;
+                audio.src = Vu;
                 audio.play();
             }
             break; 
