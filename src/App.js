@@ -21,29 +21,9 @@ import PlayAudio from './utils/PlayAudio';
 import { ClearSleepTime,SetSleepTime } from './utils/Redirect';
 import axios from 'axios';
 
-
+//Contexts
 export const context = createContext(null);
 export const dispatch = createContext(null);
-
-function ClearName(str) {
-  str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
-  str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
-  str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
-  str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
-  str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
-  str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
-  str = str.replace(/đ/g, "d");
-  str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
-  str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
-  str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
-  str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
-  str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
-  str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
-  str = str.replace(/Đ/g, "D");
-  return str;
-}
-
-
 
 function App() {
   const webCamRef = useRef(null);
@@ -103,12 +83,10 @@ function App() {
     setCurrentWorking: (index, value) => {
       for(const user of data.current)
       {
-        if(user.uid == data.current[index].uid)
-        {
+        if(user.uid == data.current[index].uid) {
           user.working = value;
         }
-        else
-        {
+        else {
           user.working = false;
         }
       }
@@ -198,7 +176,7 @@ function App() {
                       if (text[i + 1] == "@") { break }
                     }
                   }
-                  //PlayAudio("schedule");
+                  PlayAudio("schedule");
                 }
                 data.current.push(
                   {
@@ -211,15 +189,7 @@ function App() {
                     "working": false,
                   }
                 )
-
-                var name = data.current[0].name.trim().split(" ").slice(-1).join(' ');
-                PlayAudio(ClearName(name))
-                setTimeout(() => {
-                  PlayAudio("schedule");
-                }, 1600);
-
-
-
+                PlayAudio("schedule");
               }
               notiRef.current.setshowNoti(false);
               modalRef.current.setshowModal(true);
@@ -229,7 +199,7 @@ function App() {
       }
     }
 
-    // Auto Close Condiction (On Work)
+    
     canvasCtx.restore();
   }
 

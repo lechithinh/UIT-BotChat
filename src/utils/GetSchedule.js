@@ -1,7 +1,13 @@
-
 import axios from "axios";
 import LessonCode from './LessonCode';
 
+const removeDuplicates = (arr = []) => {
+    const map = new Map();
+    arr.forEach((x) => map.set(JSON.stringify(x), x));
+    arr = [...map.values()];
+    return arr;
+};
+//Week
 const HandleWeekTeacher = (res) => {
     const storage = []
 
@@ -32,10 +38,10 @@ const HandleWeekTeacher = (res) => {
 
     for (const subarr of storage) {
         if (subarr[2][0] === "1" || subarr[2][0] === "2" || subarr[2][0] === "3" || subarr[2][0] === "4" || subarr[2][0] === "5") {
-            subarr[2] = "Sáng";
+            subarr[2] = "S";
         }
         else {
-            subarr[2] = "Chiều";
+            subarr[2] = "C";
         }
     }
 
@@ -48,9 +54,11 @@ const HandleWeekTeacher = (res) => {
         ["7", [], []],
     ]
 
-    for (const ele of storage) {
+    let storage_new = removeDuplicates(storage)
+
+    for (const ele of storage_new) {
         if (ele[1] === "2") {
-            if (ele[2] === "Sáng") {
+            if (ele[2] === "S") {
                 result[0][1].push(ele[0]);
             }
             else {
@@ -58,7 +66,7 @@ const HandleWeekTeacher = (res) => {
             }
         }
         else if (ele[1] === "3") {
-            if (ele[2] === "Sáng") {
+            if (ele[2] === "S") {
                 result[1][1].push(ele[0]);
             }
             else {
@@ -66,7 +74,7 @@ const HandleWeekTeacher = (res) => {
             }
         }
         else if (ele[1] === "4") {
-            if (ele[2] === "Sáng") {
+            if (ele[2] === "S") {
                 result[2][1].push(ele[0]);
             }
             else {
@@ -74,7 +82,7 @@ const HandleWeekTeacher = (res) => {
             }
         }
         else if (ele[1] === "5") {
-            if (ele[2] === "Sáng") {
+            if (ele[2] === "S") {
                 result[3][1].push(ele[0]);
             }
             else {
@@ -82,7 +90,7 @@ const HandleWeekTeacher = (res) => {
             }
         }
         else if (ele[1] === "6") {
-            if (ele[2] === "Sáng") {
+            if (ele[2] === "S") {
                 result[4][1].push(ele[0]);
             }
             else {
@@ -90,7 +98,7 @@ const HandleWeekTeacher = (res) => {
             }
         }
         else if (ele[1] === "7") {
-            if (ele[2] === "Sáng") {
+            if (ele[2] === "S") {
                 result[5][1].push(ele[0]);
             }
             else {
@@ -102,13 +110,11 @@ const HandleWeekTeacher = (res) => {
 
     return result;
 }
-
 const HandleWeekStudent = (res) => {
     Array.prototype.move = function (from, to) {
         this.splice(to, 0, this.splice(from, 1)[0]);
         return this;
     };
-
 
     const storage = []
 
@@ -149,12 +155,15 @@ const HandleWeekStudent = (res) => {
 
     for (const subarr of storage) {
         if (subarr[2][0] === "1" || subarr[2][0] === "2" || subarr[2][0] === "3" || subarr[2][0] === "4" || subarr[2][0] === "5") {
-            subarr[2] = "Sáng";
+            subarr[2] = "S";
         }
         else {
-            subarr[2] = "Chiều";
+            subarr[2] = "C";
         }
     }
+
+    // remove duplicate data
+    let storage_new = removeDuplicates(storage)
 
     const result = [
         ["2", [], []],
@@ -165,9 +174,9 @@ const HandleWeekStudent = (res) => {
         ["7", [], []],
     ]
 
-    for (const ele of storage) {
+    for (const ele of storage_new) {
         if (ele[1] === "2") {
-            if (ele[2] === "Sáng") {
+            if (ele[2] === "S") {
                 result[0][1].push(ele[0]);
             }
             else {
@@ -175,7 +184,7 @@ const HandleWeekStudent = (res) => {
             }
         }
         else if (ele[1] === "3") {
-            if (ele[2] === "Sáng") {
+            if (ele[2] === "S") {
                 result[1][1].push(ele[0]);
             }
             else {
@@ -183,7 +192,7 @@ const HandleWeekStudent = (res) => {
             }
         }
         else if (ele[1] === "4") {
-            if (ele[2] === "Sáng") {
+            if (ele[2] === "S") {
                 result[2][1].push(ele[0]);
             }
             else {
@@ -191,7 +200,7 @@ const HandleWeekStudent = (res) => {
             }
         }
         else if (ele[1] === "5") {
-            if (ele[2] === "Sáng") {
+            if (ele[2] === "S") {
                 result[3][1].push(ele[0]);
             }
             else {
@@ -199,7 +208,7 @@ const HandleWeekStudent = (res) => {
             }
         }
         else if (ele[1] === "6") {
-            if (ele[2] === "Sáng") {
+            if (ele[2] === "S") {
                 result[4][1].push(ele[0]);
             }
             else {
@@ -207,7 +216,7 @@ const HandleWeekStudent = (res) => {
             }
         }
         else if (ele[1] === "7") {
-            if (ele[2] === "Sáng") {
+            if (ele[2] === "S") {
                 result[5][1].push(ele[0]);
             }
             else {
@@ -228,6 +237,7 @@ const HandleWeekSchedule = (uid, res) => {
     }
 }
 
+//Day
 const HandleForStudent = (res) => {
     Array.prototype.move = function (from, to) {
         this.splice(to, 0, this.splice(from, 1)[0]);
@@ -279,11 +289,14 @@ const HandleForStudent = (res) => {
     var num = new Date().getDay();
     num += 1;
     let today = num.toString()
-    for (const element of storage) {
+    let storage_new = removeDuplicates(storage)
+    for (const element of storage_new) {
         if (element[1] === today) {
             daySchedule.push(element);
         }
     }
+
+    console.log("day", daySchedule)
     return daySchedule;
 }
 const HandleForTeacher = (res) => {
@@ -318,7 +331,8 @@ const HandleForTeacher = (res) => {
     var num = new Date().getDay();
     num += 1;
     let today = num.toString()
-    for (const element of storage) {
+    let storage_new = removeDuplicates(storage)
+    for (const element of storage_new) {
         if (element[1] === today) {
             daySchedule.push(element);
         }
