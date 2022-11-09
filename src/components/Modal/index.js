@@ -20,6 +20,12 @@ import { context, dispatch } from "../../App"
 import PlayAudio from "../../utils/PlayAudio";
 import { SetSleepTime } from "../../utils/Redirect";
 
+//keyboard
+import Keyboard from "react-simple-keyboard";
+import "react-simple-keyboard/build/css/index.css";
+
+
+
 const steps = [
     "1. Nhận diện.",
     "2. Kiểm tra thông tin.",
@@ -31,6 +37,10 @@ const steps = [
 const Modal = (props, ref) => {
     const [showModal, setshowModal] = useState(false);
 
+
+    //keyboard
+    const [showKeyBoard, setKeyBoard] = useState(false)
+    const keyboardRef= useRef(null);
     //Global contents and dispatch
     const Contents = useContext(context)
     const Actions = useContext(dispatch)
@@ -39,8 +49,11 @@ const Modal = (props, ref) => {
     const [step, setStep] = useState(0);
     const [render, setRender] = useState(false);
 
-    
-
+    //handle keyboard
+    const HandleChange = (event) => {
+        keyboardRef.current.setData(event);
+        
+    };
     
     useEffect(() => {
         async function fetchData() {
@@ -62,6 +75,7 @@ const Modal = (props, ref) => {
     }));
 
     const HandleClose = () => {
+        setKeyBoard(false);
         const time_id = SetSleepTime();
         Actions.setTimeID(time_id);
         PlayAudio("thankyou");
@@ -84,6 +98,13 @@ const Modal = (props, ref) => {
 
     return (
         <>
+            {/* keyboard*/}
+            {showKeyBoard &&
+            <div style={{ position: 'absolute', top: '77vh', width: '100vw', zIndex: '1000' }}>
+                    <Keyboard onChange={HandleChange} />
+            </div>
+            }
+            
             {/* Main Modal */}
             <CustomStepper steps={steps} activeStep={step} setActiveStep={setStep} />
 
@@ -123,11 +144,14 @@ const Modal = (props, ref) => {
                 {/* Content Modal */}
                 <DialogContent sx={{ width: "570px", padding: "40px", '& .MuiDialogContent-root': {width: "500px"} }}>        
                     {Contents.current.data.current.map((user, index) => (
-                        <UserRow key={index} user={user} index={index} render={render} setRender={setRender} setStep={setStep}/>
+                        <UserRow key={index} user={user} index={index} render={render} setRender={setRender} setStep={setStep} setKeyBoard={setKeyBoard} ref={keyboardRef}/>
                     ))}
                 </DialogContent>
 
             </Dialog>
+
+            
+            
         </>
     )
 };

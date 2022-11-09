@@ -81,12 +81,17 @@ const UserRow = (props, ref) => {
     //Ref to control sub components
     const editRef = useRef(null);
    
-
+    //ref from index to update name
+    useImperativeHandle(ref, () => ({
+        setData: (value) => editRef.current.setData(value),
+        HandleChange: (event) => editRef.current.HandleChange(event),
+    }));
     
-    // OnClick Edit Button
+    // OnClick Edit Button - event keyboard 
     const HandleEditButton = () => {
         Actions.setName(props.index, "")
-        editRef.current.toggleEdit(true); 
+        editRef.current.toggleEdit(true);
+        props.setKeyBoard(true)   // open keyboard - how to control indexing
         setshowIcon(true);
         setshowEditIcon(false);
         setShowAlert(false);
@@ -131,6 +136,7 @@ const UserRow = (props, ref) => {
             
             
         }
+        props.setKeyBoard(false)
         editRef.current.toggleEdit(false);
         
     }
@@ -287,4 +293,4 @@ const UserRow = (props, ref) => {
     )
 }; 
 
-export default UserRow;
+export default forwardRef(UserRow);
