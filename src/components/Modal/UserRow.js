@@ -21,7 +21,7 @@ import WeekSchedule from "./WeekSchedule"
 import GetNameById from "../../utils/GetNameById";
 import PlayAudio from "../../utils/PlayAudio";
 import GetSchedule from "../../utils/GetSchedule";
-
+import HandleRegister from "../../utils/HandeleRegister";
 //Global contents and dispatch from App
 import { context, dispatch } from "../../App"
 
@@ -116,7 +116,7 @@ const UserRow = (props, ref) => {
             PlayAudio(ClearName(name))
 
             //Upload to API register
-            HandleRegister(newName + ' - ' + email, props.user.path);
+            //HandleRegister(newName + ' - ' + email, props.user.path);
             
             setShowAlert(false);
             setshowIcon(true);
