@@ -13,6 +13,7 @@ import { useEffect, useRef, useState, createContext } from "react";
 import Modal from "./components/Modal";
 import Noti from "./components/Notifications";
 import BackButton from "./components/BackButton";
+import KeyBoard from "./components/KeyBoard"
 //Modules
 
 //Utils
@@ -36,7 +37,7 @@ function App() {
   //Ref to control compoents
   const modalRef = useRef(null);
   const notiRef = useRef(null);
-
+  const KeyboardRef = useRef(null);
   //Ref to control data
   const data = useRef([]);
   
@@ -91,9 +92,14 @@ function App() {
         }
       }
     },
-    ResetUser: () => {
-      data.current.length = 0;
-    }
+    ResetUser: () => { data.current.length = 0},
+    //for keyboard
+    setShowKeyBoard: (val) => {
+      KeyboardRef.current.setShow(val);
+    },
+    setKeyBoardInputCallBack: (cb, curText) => {
+      KeyboardRef.current.setUpdateCb(cb, curText);
+    },
 
   }
 
@@ -265,6 +271,10 @@ function App() {
 
           {/* Main Modal */}
           <Modal ref={modalRef} />
+
+          {/*Key board*/}
+          <KeyBoard ref={KeyboardRef} />
+
         </dispatch.Provider>
       </context.Provider>
     </div>

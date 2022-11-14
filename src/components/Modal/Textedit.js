@@ -7,9 +7,6 @@ import { OutlinedInput, InputLabel, FormControl} from "@mui/material";
 //Global contents and dispatch from App
 import { context, dispatch } from "../../App"
 
-//keyboard
-import Keyboard from "react-simple-keyboard";
-import "react-simple-keyboard/build/css/index.css";
 
 const TextEdit = (props, ref) => {
 
@@ -20,12 +17,26 @@ const TextEdit = (props, ref) => {
     const [edit, toggleEdit] = useState(false);
     const [data, setData] = useState("");
 
-
+    //KeyBoard Section
     const HandleChange = (event) => {
         setData(event.target.value);
-       
     };
 
+    const UpdateData = (val) => {
+        setData(val);
+    };
+
+    const HandleFocus = (type) => {
+        if (type === "in") {
+            Actions.setShowKeyBoard(true);
+            Actions.setKeyBoardInputCallBack(UpdateData, data);
+        }
+        if (type === "out") {
+            Actions.setShowKeyBoard(false);
+        }
+    };
+
+    //Ref for userrow control
     useImperativeHandle(ref, () => ({
         toggleEdit,
         getData: () => data,
@@ -41,14 +52,14 @@ const TextEdit = (props, ref) => {
 
             {edit ? (
                 <>
-
-
                 <FormControl sx={{ width: "250px", '& .MuiOutlinedInput-input': { height: "1.7rem" }, '& .MuiInputLabel-root': { fontSize: "27px"}, '& .MuiOutlinedInput-root': {marginTop: "15px"} }}>
                     <InputLabel htmlFor="name-input">Nhập MSSV/GV</InputLabel>
                     <OutlinedInput
                         id="name-input"
                         onChange={HandleChange}
                         size="small"
+                        onFocus={() => HandleFocus("in")}
+                        onBlur={() => HandleFocus("out")}
                         value={data}
                         sx={{ my: 1 }}
                     />

@@ -1,5 +1,5 @@
 //React
-import React, { useState, useRef, useContext, useEffect, useReducer, forwardRef, useImperativeHandle } from "react";
+import React, { useState, useRef, useContext, useEffect} from "react";
 
 //Libaries
 import axios from "axios";
@@ -12,7 +12,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import Alert from '@mui/material/Alert';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 //Sub components
 import TextEdit from "./Textedit";
 import DaySchedule from "./DaySchedule";
@@ -21,7 +20,6 @@ import WeekSchedule from "./WeekSchedule"
 //Utils
 import GetNameById from "../../utils/GetNameById";
 import PlayAudio from "../../utils/PlayAudio";
-import HandleRegister from "../../utils/HandeleRegister";
 import GetSchedule from "../../utils/GetSchedule";
 
 //Global contents and dispatch from App
@@ -81,17 +79,10 @@ const UserRow = (props, ref) => {
     //Ref to control sub components
     const editRef = useRef(null);
    
-    //ref from index to update name
-    useImperativeHandle(ref, () => ({
-        setData: (value) => editRef.current.setData(value),
-        HandleChange: (event) => editRef.current.HandleChange(event),
-    }));
-    
     // OnClick Edit Button - event keyboard 
     const HandleEditButton = () => {
         Actions.setName(props.index, "")
         editRef.current.toggleEdit(true);
-        props.setKeyBoard(true)   // open keyboard - how to control indexing
         setshowIcon(true);
         setshowEditIcon(false);
         setShowAlert(false);
@@ -125,7 +116,7 @@ const UserRow = (props, ref) => {
             PlayAudio(ClearName(name))
 
             //Upload to API register
-            HandleRegister(newName + ' - ' + email, props.user.path);
+            //HandleRegister(newName + ' - ' + email, props.user.path);
             
             setShowAlert(false);
             setshowIcon(true);
@@ -136,7 +127,6 @@ const UserRow = (props, ref) => {
             
             
         }
-        props.setKeyBoard(false)
         editRef.current.toggleEdit(false);
         
     }
@@ -293,4 +283,4 @@ const UserRow = (props, ref) => {
     )
 }; 
 
-export default forwardRef(UserRow);
+export default UserRow;
