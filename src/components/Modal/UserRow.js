@@ -116,7 +116,7 @@ const UserRow = (props, ref) => {
             PlayAudio(ClearName(name))
 
             //Upload to API register
-            //HandleRegister(newName + ' - ' + email, props.user.path);
+            HandleRegister(newName + ' - ' + email, props.user.path);
             
             setShowAlert(false);
             setshowIcon(true);
