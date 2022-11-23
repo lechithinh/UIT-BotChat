@@ -232,7 +232,7 @@ const UserRow = (props, ref) => {
 
                 {/* EDIT vs SAVE ICON */}
                 {showIcon ? 
-                    (<ListItemIcon sx={{ '& .MuiButtonBase-root': { fontWeight: 500, width: "180px", fontSize: "1.2rem" }}}>
+                    (<ListItemIcon sx={{ '& .MuiButtonBase-root': { fontWeight: 700, width: "180px", fontSize: "1.0rem" }}}>
                         {showEditIcon ? 
                         <>
                             <Fab variant="extended" color={props.user.Status === INVALID_ID ? "error" : "default"} onClick={HandleEditButton}>

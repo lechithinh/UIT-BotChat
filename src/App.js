@@ -229,7 +229,7 @@ function App() {
     faceDetection.setOptions({
       selfieMode: true,
       model: "short",
-      minDetectionConfidence: 0.5,
+      minDetectionConfidence: 0.65,
     });
 
     faceDetection.onResults(onResults);
