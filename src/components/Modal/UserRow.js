@@ -219,7 +219,7 @@ const UserRow = (props, ref) => {
                 <ListItemAvatar>
                     <Avatar
                         src={props.user.path}
-                        sx={{ width: 56, height: 56 }}
+                        sx={{ width: 90, height: 90 }}
                     />
                 </ListItemAvatar>
 
@@ -227,12 +227,12 @@ const UserRow = (props, ref) => {
                 <ListItemText
                     primary={props.user.name} 
                     secondary={<TextEdit user={props.user} ref={editRef}/>} 
-                    sx={{ margin: "5px 15px 2px 20px", '& .MuiTypography-root':{fontSize: "25px", fontWeight: 600}}}
+                    sx={{ margin: "5px 15px 2px 20px", '& .MuiTypography-root':{fontSize: "40px", fontWeight: 600}}}
                 />
 
                 {/* EDIT vs SAVE ICON */}
                 {showIcon ? 
-                    (<ListItemIcon sx={{ '& .MuiButtonBase-root': { fontWeight: 700, width: "180px", fontSize: "1.0rem" }}}>
+                    (<ListItemIcon sx={{ '& .MuiButtonBase-root': { fontWeight: 700, width: "280px", fontSize: "2.0rem" }}}>
                         {showEditIcon ? 
                         <>
                             <Fab variant="extended" color={props.user.Status === INVALID_ID ? "error" : "default"} onClick={HandleEditButton}>
@@ -246,13 +246,13 @@ const UserRow = (props, ref) => {
                         </Fab>
                         </>
                         :  
-                        <Fab variant="extended" color={"success"} sx={{ padding: "20px" }} onClick={HandleSaveButton}>
+                        <Fab variant="extended" color={"success"} sx={{ padding: "30px" }} onClick={HandleSaveButton}>
                             <SaveIcon sx={{ mr: 2 }} />
                             Lưu
                         </Fab>}
                 </ListItemIcon>)
                 :
-                <ListItemIcon sx={{ '& .MuiButtonBase-root': { fontWeight: 500, width: "150px" } }}>
+                    <ListItemIcon sx={{ '& .MuiButtonBase-root': { fontWeight: 500, width: "250px", fontSize: "1.7rem" } }}>
                         <Fab variant="extended" color={'success'} sx={{ ml: 3 }} onClick={HandleHide}>
                             <CalendarMonthIcon sx={{ mr: 1 }} />
                             Ẩn

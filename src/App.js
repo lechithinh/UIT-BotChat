@@ -260,17 +260,17 @@ function App() {
           {/* Go Back Button */}
           <BackButton />
 
+          {/* Main Modal */}
+          <Modal ref={modalRef} />
+
           {/* Output Video */}
           <canvas
             ref={canvasRef}
-            style={{ position: "absolute", top: "300px", left: "0" }}
+            style={{ marginTop: "3vh" }}
           ></canvas>
 
           {/* Notifications */}
           <Noti ref={notiRef} />
-
-          {/* Main Modal */}
-          <Modal ref={modalRef} />
 
           {/*Key board*/}
           <KeyBoard ref={KeyboardRef} />

@@ -96,18 +96,19 @@ const Modal = (props, ref) => {
           
 
             {/* Main Modal */}
+            <div style={{display: "flex", justifyContent: 'center', width: "100%"}}>
             <CustomStepper steps={steps} activeStep={step} setActiveStep={setStep} />
-
+            </div>
             <Dialog sx={{
                 zIndex: 0,
                 '& .MuiDialog-paper': {
                     borderRadius: '35px',
-                    maxWidth: "900px",
+                    maxWidth: "1400px",
                 },
 
-                '& .MuiDialogContent-root': {width: "750px"}, 
+                '& .MuiDialogContent-root': {width: "1150px"}, 
                 
-                '& .MuiListItem-root': {borderRadius: "40px"},
+                '& .MuiListItem-root': {borderRadius: "40px", width: "99%"},
 
                 '& .MuiTableContainer-root': { borderRadius: "20px" },
 
@@ -117,7 +118,7 @@ const Modal = (props, ref) => {
                 
                 <DialogTitle id="id">
                     <Box display="flex" alignItems="center">
-                        <Box flexGrow={1} sx={{ mb: 2, position: "relative", mt: 2,ml: 4, '& .MuiTab-root': { fontSize: "23px", fontWeight: "700" } }}>
+                        <Box flexGrow={1} sx={{ mb: 2, position: "relative", mt: 2,ml: 4, '& .MuiTab-root': { fontSize: "40px", fontWeight: "700" } }}>
                             <Tabs value={0} centered>
                                 <Tab label="Thời khóa biểu" />
                             </Tabs>
@@ -132,7 +133,7 @@ const Modal = (props, ref) => {
                 </DialogTitle>
 
                 {/* Content Modal */}
-                <DialogContent sx={{ width: "570px", padding: "40px", '& .MuiDialogContent-root': {width: "500px"} }}>        
+                <DialogContent sx={{ width: "670px", padding: "40px", '& .MuiDialogContent-root': {width: "500"} }}>        
                     {Contents.current.data.current.map((user, index) => (
                         <UserRow key={index} 
                                 user={user} 

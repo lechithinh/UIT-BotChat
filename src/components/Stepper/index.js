@@ -89,7 +89,7 @@ const CustomStepper = ({ steps, activeStep, setActiveStep }) => {
             alternativeLabel
             activeStep={activeStep}
             connector={<ColorlibConnector />}
-            style={{ marginTop: "100px", width: "950px", marginLeft: "50px"}}
+            style={{marginTop: "100px", width: "950px", marginLeft: "50px"}}
         >
             {steps.map((label,index) => (
                 <Step key={label}>

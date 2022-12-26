@@ -59,7 +59,7 @@ const DaySchedule = (props) => {
 
                 {props.user.DaySchedule.length != 0 && 
                 <ListItemIcon>
-                    <Box sx={{ mr: -5, position: "relative" }}>
+                        <Box sx={{ mr: -5, position: "relative", width: "250px", fontSize: "1.7rem" }}>
                             <Fab sx={{ m: 4 }} color="info" variant="extended" onClick={HandleDirection}>
                                 <DirectionsIcon  sx={{ mr: 2 }} />
                             Chỉ đường
