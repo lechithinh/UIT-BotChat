@@ -219,7 +219,7 @@ const UserRow = (props, ref) => {
                 <ListItemAvatar>
                     <Avatar
                         src={props.user.path}
-                        sx={{ width: 90, height: 90 }}
+                        sx={{ width: 70, height: 70 }}
                     />
                 </ListItemAvatar>
 
@@ -227,12 +227,12 @@ const UserRow = (props, ref) => {
                 <ListItemText
                     primary={props.user.name} 
                     secondary={<TextEdit user={props.user} ref={editRef}/>} 
-                    sx={{ margin: "5px 15px 2px 20px", '& .MuiTypography-root':{fontSize: "40px", fontWeight: 600}}}
+                    sx={{ margin: "5px 15px 2px 20px", '& .MuiTypography-root':{fontSize: "26px", fontWeight: 600}}}
                 />
 
                 {/* EDIT vs SAVE ICON */}
                 {showIcon ? 
-                    (<ListItemIcon sx={{ '& .MuiButtonBase-root': { fontWeight: 700, width: "280px", fontSize: "2.0rem" }}}>
+                    (<ListItemIcon sx={{ '& .MuiButtonBase-root': { fontWeight: 700, width: "190px", fontSize: "1.2rem" }}}>
                         {showEditIcon ? 
                         <>
                             <Fab variant="extended" color={props.user.Status === INVALID_ID ? "error" : "default"} onClick={HandleEditButton}>

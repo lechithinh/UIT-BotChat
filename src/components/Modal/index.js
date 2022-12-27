@@ -96,9 +96,10 @@ const Modal = (props, ref) => {
           
 
             {/* Main Modal */}
-            <div style={{display: "flex", justifyContent: 'center', width: "100%"}}>
+            <div style={{ position: "absolute", top: "30px", left: "20px" }}>
             <CustomStepper steps={steps} activeStep={step} setActiveStep={setStep} />
             </div>
+
             <Dialog sx={{
                 zIndex: 0,
                 '& .MuiDialog-paper': {
@@ -106,7 +107,7 @@ const Modal = (props, ref) => {
                     maxWidth: "1400px",
                 },
 
-                '& .MuiDialogContent-root': {width: "1150px"}, 
+                '& .MuiDialogContent-root': {width: "850px"}, 
                 
                 '& .MuiListItem-root': {borderRadius: "40px", width: "99%"},
 
@@ -118,7 +119,7 @@ const Modal = (props, ref) => {
                 
                 <DialogTitle id="id">
                     <Box display="flex" alignItems="center">
-                        <Box flexGrow={1} sx={{ mb: 2, position: "relative", mt: 2,ml: 4, '& .MuiTab-root': { fontSize: "40px", fontWeight: "700" } }}>
+                        <Box flexGrow={1} sx={{ mb: 2, position: "relative", mt: 2,ml: 4, '& .MuiTab-root': { fontSize: "35px", fontWeight: "700" } }}>
                             <Tabs value={0} centered>
                                 <Tab label="Thời khóa biểu" />
                             </Tabs>

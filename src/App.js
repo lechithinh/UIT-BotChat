@@ -266,7 +266,7 @@ function App() {
           {/* Output Video */}
           <canvas
             ref={canvasRef}
-            style={{ marginTop: "3vh" }}
+            style={{ marginTop: "35%" }}
           ></canvas>
 
           {/* Notifications */}
