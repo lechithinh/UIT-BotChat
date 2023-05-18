@@ -59,7 +59,7 @@ const INVALID_ID = "ID không hợp lệ!"
 const VALID_ID = "ID hợp lệ!"
 const STUDENT_GMAIL = "@gm.uit.edu.vn";
 const TEACHER_GMAIL = "@uit.edu.vn"
-
+const HOCKY = 2
 
 const UserRow = (props, ref) => {
     
@@ -108,8 +108,8 @@ const UserRow = (props, ref) => {
             const newUid = editRef.current.getData();
             Actions.setUid(props.index, newUid);
 
-            //Call API Schedule
-            const schedule = await GetSchedule(props.user.uid, 1, 2022);
+            //Call API Schedule 
+            const schedule = await GetSchedule(props.user.uid, HOCKY, 2022);
             Actions.setDaySchedule(props.index, schedule.today)
             Actions.setWeekSchedule(props.index, schedule.week)
             var name = newName.trim().split(" ").slice(-1).join(' ');

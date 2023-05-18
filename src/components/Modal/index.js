@@ -33,7 +33,7 @@ const steps = [
     "3. Thời khóa biểu.",
 ];
 
-
+const HOCKY = 2
 
 const Modal = (props, ref) => {
     const [showModal, setshowModal] = useState(false);
@@ -52,7 +52,7 @@ const Modal = (props, ref) => {
         async function fetchData() {
             let i = 0;
             for (const user of Contents.current.data.current) {
-                const schedule = await GetSchedule(user.uid, 1, 2022);
+                const schedule = await GetSchedule(user.uid, HOCKY, 2022);
                 Actions.setDaySchedule(i, schedule.today)
                 Actions.setWeekSchedule(i, schedule.week)
                 i = i + 1;
@@ -90,11 +90,7 @@ const Modal = (props, ref) => {
 
     return (
         <>
-            
-
-            
-          
-
+        
             {/* Main Modal */}
             <div style={{ position: "absolute", top: "30px", left: "20px" }}>
             <CustomStepper steps={steps} activeStep={step} setActiveStep={setStep} />
